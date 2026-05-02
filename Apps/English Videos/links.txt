@@ -1,0 +1,37 @@
+window.LINKS_DATA = `
+# Mind Your Language Season 1
+Mind Your Language Season 1 Episode 1 The First Lesson | https://youtu.be/s92y5GqYW7k
+Mind Your Language Season 1 Episode 2 "An Inspector Calls" | https://youtu.be/x6eD9L5Ntas
+Mind Your Language Season 1 Episode 3 "A Fate Worse Than Death" | https://youtu.be/ZHEpa4SijIw
+Mind Your Language Season 1 Episode 4 "Great Expectations" | https://youtu.be/8XbN8nZbhqg
+Mind Your Language Season 1 Episode 5 The First Lesson | https://youtu.be/2as7XM5wpdo
+Mind Your Language Season 1 Episode 6 "An Inspector Calls" | https://youtu.be/K1h7T_1mC8s
+Mind Your Language Season 1 Episode 7 "A Fate Worse Than Death" | https://youtu.be/G2wdfoEpsn4
+Mind Your Language Season 1 Episode 8 "Great Expectations" | https://youtu.be/EhemCwv1T6Q
+Mind Your Language Season 1 Episode 9 The First Lesson | https://youtu.be/G6DtOMo8e40
+Mind Your Language Season 1 Episode 10 "An Inspector Calls" | https://youtu.be/v2aU7usTHI0
+Mind Your Language Season 1 Episode 11 "A Fate Worse Than Death" | https://youtu.be/Faeq6h5mLHA
+Mind Your Language Season 1 Episode 12 "Great Expectations" | https://youtu.be/KCde1dCzmoo
+Mind Your Language Season 1 Episode 13 The First Lesson | https://youtu.be/DXtHAjOw9kk
+
+# Mind Your Language Season 2
+Mind Your Language Season 2 Episode 1 All Present If Not Correct | https://youtu.be/H977fcWqDW8
+Mind Your Language Season 2 Episode 2 Queen For A Day | https://youtu.be/gBVnT30_s84
+Mind Your Language Season 2 Episode 3 Brief Re Encounter | https://youtu.be/AMM9EoXLHrA
+Mind Your Language Season 2 Episode 4 Many Happy Returns | https://youtu.be/ae7DB-le3ZU
+Mind Your Language Season 2 Episode 5 Don't Forget the Driver | https://youtu.be/FM1Mvn-kzM4
+Mind Your LanguageSeason 2 Episode 6 A Hard Days Night | https://youtu.be/SRnC-YDAF1E
+Mind Your Language Season 2 Episode 7 Take Your Partners | https://youtu.be/NDUPHYcm_Pg
+Mind Your Language Season 2 Episode 8 After Three | https://youtu.be/8yH8T32sjOE
+
+# Mind Your Language Season 3
+Mind Your Language Season 3 Episode 1 Belong To Glasgow | https://youtu.be/a27YiK3csy4
+Mind Your Language Season 3 Episode 2 Who Loves Ya Baby | https://youtu.be/lP9_IlXGnFI
+Mind Your Language Season 3 Episode 3 No Flowers By Request | https://youtu.be/oWSzYrkC3rI
+Mind Your Language Season 3 Episode 4 Just The Job | https://youtu.be/7pJN41LEgtE
+Mind Your Language Season 3 Episode 5 Guilty Or Not Guilty | https://youtu.be/3T9iyF_OPWw
+Mind Your Language Season 3 Episode 6 Repent At Leisure | https://youtu.be/CzE-rNgOm50
+Mind Your Language Season 3 Episode 7 The School Fete | https://youtu.be/AyZb37tPaG4
+Mind Your Language Season 3 Episode 8 What A Tangled Web | https://youtu.be/wXQzVz_n5wA
+
+`;
