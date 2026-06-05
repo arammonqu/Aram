@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Statement Analysis | Bilingual Module</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Main scroll happens in the wrapper */
+            background-color: #f8fafc;
+        }
+        /* Arabic Font support for the RTL sections */
+        .rtl-container {
+            font-family: 'Tajawal', 'Cairo', system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        .fade-in {
+            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .slide-up {
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom Scrollbar for the unified scroller */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Math formatting */
+        .math-block {
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: -0.5px;
+        }
+
+        /* Table formatting */
+        .quiz-table { width: 100%; border-collapse: collapse; margin-top: 1rem; margin-bottom: 1.5rem; font-size: 0.875rem; text-align: left; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.5rem; overflow: hidden; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); }
+        .rtl-container .quiz-table { text-align: right; }
+        .quiz-table thead { background-color: #f8fafc; border-bottom: 2px solid #cbd5e1; }
+        .quiz-table th { padding: 0.75rem 1rem; font-weight: 700; color: #475569; }
+        .quiz-table td { border-bottom: 1px solid #e2e8f0; padding: 0.75rem 1rem; color: #334155; font-variant-numeric: tabular-nums; }
+        .quiz-table tr:last-child td { border-bottom: none; }
+        .quiz-table tr:hover { background-color: #f8fafc; }
+        
+        /* Table alignment helpers */
+        .text-right-en { text-align: right; }
+        .text-left-ar { text-align: left; }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col text-slate-800 bg-slate-50">
+
+    <!-- Full-Width Header (Split Screen) -->
+    <div class="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 text-white px-6 md:px-10 py-4 shadow-md z-20 shrink-0 border-b-4 border-blue-500 relative">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-7xl mx-auto items-center relative">
+            <!-- English Header Left -->
+            <div dir="ltr" class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-tight">Financial Statement Analysis</h1>
+                    <p class="text-blue-200 mt-1 text-xs md:text-sm font-medium"><i class="fas fa-book-open mr-2"></i>Interactive Module</p>
+                </div>
+                <div id="header-stats-en" class="hidden text-right bg-black/20 px-4 py-2 rounded-lg border border-white/10 shadow-inner">
+                    <div class="text-xl font-mono font-bold text-yellow-300 tracking-wider leading-none timer-display">00:00</div>
+                    <div class="text-[10px] text-blue-200 uppercase tracking-widest mt-1 font-bold">Elapsed Time</div>
+                </div>
+            </div>
+
+            <!-- Vertical Divider (Desktop only) -->
+            <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-blue-500/50 transform -translate-x-1/2"></div>
+
+            <!-- Arabic Header Right -->
+            <div dir="rtl" class="rtl-container flex justify-between items-center">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-tight">تحليل البيانات المالية</h1>
+                    <p class="text-blue-200 mt-1 text-xs md:text-sm font-medium"><i class="fas fa-book-open ml-2"></i>وحدة تفاعلية</p>
+                </div>
+                <div id="header-stats-ar" class="hidden text-left bg-black/20 px-4 py-2 rounded-lg border border-white/10 shadow-inner">
+                    <div class="text-xl font-mono font-bold text-yellow-300 tracking-wider leading-none timer-display">00:00</div>
+                    <div class="text-[10px] text-blue-200 uppercase tracking-widest mt-1 font-bold">الوقت المنقضي</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full-Width Dynamic Content Container (Unified Scroller) -->
+    <div id="scroll-wrapper" class="flex-grow overflow-y-auto w-full relative">
+        <!-- We use max-w-7xl to give ample room for side-by-side -->
+        <div id="quiz-container" class="max-w-screen-2xl mx-auto w-full p-6 md:p-10 pb-24">
+            <!-- Content injected by JS -->
+        </div>
+    </div>
+
+    <script>
+        // Topic Group Definitions (Bilingual)
+        const topicGroups = [
+            { id: 'foundations', name: 'Foundations & Reporting', nameAr: 'الأساسيات وإعداد التقارير', icon: 'fa-landmark', color: 'text-purple-600', bg: 'bg-purple-100', border: 'border-purple-200' },
+            { id: 'liquidity_activity', name: 'Liquidity & Activity Ratios', nameAr: 'نسب السيولة والنشاط', icon: 'fa-water', color: 'text-blue-600', bg: 'bg-blue-100', border: 'border-blue-200' },
+            { id: 'leverage_coverage', name: 'Leverage & Coverage Ratios', nameAr: 'نسب الرافعة المالية والتغطية', icon: 'fa-shield-alt', color: 'text-emerald-600', bg: 'bg-emerald-100', border: 'border-emerald-200' },
+            { id: 'profitability_dupont', name: 'Profitability & DuPont', nameAr: 'الربحية وتحليل دوبونت', icon: 'fa-chart-pie', color: 'text-amber-600', bg: 'bg-amber-100', border: 'border-amber-200' },
+            { id: 'analysis_methods', name: 'Trend & Common-Size Analysis', nameAr: 'تحليل الاتجاه والتحليل الرأسي', icon: 'fa-search-dollar', color: 'text-rose-600', bg: 'bg-rose-100', border: 'border-rose-200' }
+        ];
+
+        // 40 Enhanced Questions (Bilingual)
+        const questions = [
+            // --- GROUP 1: Foundations & Reporting ---
+            {
+                topicGroupId: 'foundations', type: 'mc',
+                category: 'General Concepts', categoryAr: 'المفاهيم العامة',
+                question: 'What is the primary role of financial statement analysis according to the text?',
+                questionAr: 'ما هو الدور الأساسي لتحليل البيانات المالية وفقاً للنص؟',
+                options: [
+                    'To prepare the company\'s tax returns accurately.',
+                    'To evaluate past, current, and prospective performance and position for making economic decisions.',
+                    'To guarantee that a company will not go bankrupt.',
+                    'To calculate the exact market value of a company\'s stock.'
+                ],
+                optionsAr: [
+                    'إعداد الإقرارات الضريبية للشركة بدقة.',
+                    'تقييم الأداء والوضع المالي في الماضي والحاضر والمستقبل لاتخاذ القرارات الاقتصادية.',
+                    'ضمان عدم إفلاس الشركة.',
+                    'حساب القيمة السوقية الدقيقة لسهم الشركة.'
+                ],
+                correctAnswer: 1,
+                explanation: {
+                    core: "The primary role is to take financial reports, combined with other information, to evaluate past, current, and prospective performance.",
+                    context: "This evaluation is critical for making informed economic decisions. Internal managers use it to plan and control operations, while external users (like creditors and investors) use it to decide whether to supply capital to the firm."
+                },
+                explanationAr: {
+                    core: "الدور الأساسي هو أخذ التقارير المالية، إلى جانب معلومات أخرى، لتقييم الأداء الماضي والحالي والمستقبلي.",
+                    context: "هذا التقييم بالغ الأهمية لاتخاذ قرارات اقتصادية مستنيرة. يستخدمه المديرون الداخليون لتخطيط ومراقبة العمليات، بينما يستخدمه المستخدمون الخارجيون (مثل الدائنين والمستثمرين) لتقرير ما إذا كانوا سيوفرون رأس المال للشركة."
+                }
+            },
+            {
+                topicGroupId: 'foundations', type: 'mc',
+                category: 'Accounting Standards', categoryAr: 'المعايير المحاسبية',
+                question: 'Which organization is responsible for determining US Generally Accepted Accounting Principles (US GAAP)?',
+                questionAr: 'أي منظمة مسؤولة عن تحديد المبادئ المحاسبية المقبولة عموماً في الولايات المتحدة (US GAAP)؟',
+                options: ['IASB', 'SEC', 'FASB', 'IFRS'],
+                optionsAr: ['مجلس معايير المحاسبة الدولية (IASB)', 'هيئة الأوراق المالية والبورصات (SEC)', 'مجلس معايير المحاسبة المالية (FASB)', 'المعايير الدولية لإعداد التقارير المالية (IFRS)'],
+                correctAnswer: 2,
+                explanation: {
+                    core: "The Financial Accounting Standards Board (FASB) determines the accounting standards for financial statements under US GAAP.",
+                    context: "Understanding who sets the rules is important, especially in global finance. While FASB handles US GAAP, the IASB handles IFRS. 'Convergence' is the ongoing effort to narrow the differences between these two major frameworks."
+                },
+                explanationAr: {
+                    core: "يحدد مجلس معايير المحاسبة المالية (FASB) المعايير المحاسبية للبيانات المالية بموجب US GAAP.",
+                    context: "إن فهم من يضع القواعد أمر مهم، خاصة في التمويل العالمي. بينما يتعامل FASB مع US GAAP، يتعامل IASB مع IFRS. 'التقارب' هو الجهد المستمر لتضييق الاختلافات بين هذين الإطارين الرئيسيين."
+                }
+            },
+            {
+                topicGroupId: 'foundations', type: 'mc',
+                category: 'Users of Analysis', categoryAr: 'مستخدمو التحليل',
+                question: 'According to the text, which external user group primarily focuses on the long-term cash flow of the firm?',
+                questionAr: 'وفقاً للنص، أي مجموعة من المستخدمين الخارجيين تركز بشكل أساسي على التدفق النقدي طويل الأجل للشركة؟',
+                options: ['Trade Creditors', 'Bondholders', 'Shareholders', 'Internal Management'],
+                optionsAr: ['الدائنون التجاريون', 'حملة السندات', 'المساهمون', 'الإدارة الداخلية'],
+                correctAnswer: 1,
+                explanation: {
+                    core: "Different external users have different analytical focuses. Bondholders specifically focus on the long-term cash flow of the firm.",
+                    context: "Trade creditors care mostly about short-term liquidity. Shareholders care about profitability. Bondholders, however, lend money for 10-30 years, so they need to ensure the firm generates reliable cash flow over the long haul to pay interest and principal."
+                },
+                explanationAr: {
+                    core: "للمستخدمين الخارجيين المختلفين بؤر تحليلية مختلفة. يركز حملة السندات بشكل خاص على التدفق النقدي طويل الأجل للشركة.",
+                    context: "يهتم الدائنون التجاريون في الغالب بالسيولة قصيرة الأجل. ويهتم المساهمون بالربحية. ومع ذلك، يُقرض حملة السندات أموالاً لمدة تتراوح بين 10 و30 عاماً، لذا فهم بحاجة إلى التأكد من أن الشركة تولد تدفقاً نقدياً موثوقاً على المدى الطويل لدفع الفائدة وأصل الدين."
+                }
+            },
+            {
+                topicGroupId: 'foundations', type: 'mc',
+                category: 'Internal Analysis', categoryAr: 'التحليل الداخلي',
+                question: 'Which internal use of statement analysis focuses on assessing the current financial position and evaluating potential firm opportunities?',
+                questionAr: 'أي استخدام داخلي لتحليل البيانات يركز على تقييم الوضع المالي الحالي وتقييم الفرص المحتملة للشركة؟',
+                options: ['Control', 'Understand', 'Plan', 'Liquidate'],
+                optionsAr: ['الرقابة', 'الفهم', 'التخطيط', 'التصفية'],
+                correctAnswer: 2,
+                explanation: {
+                    core: "Planning focuses on assessing the current position to evaluate future opportunities.",
+                    context: "Managers use internal analysis for three main reasons: Plan (future opportunities), Control (evaluating ROI and efficiency of current assets), and Understand (seeing how outside suppliers of funds view the firm)."
+                },
+                explanationAr: {
+                    core: "يركز التخطيط على تقييم الوضع الحالي لتقييم الفرص المستقبلية.",
+                    context: "يستخدم المديرون التحليل الداخلي لثلاثة أسباب رئيسية: التخطيط (الفرص المستقبلية)، والرقابة (تقييم العائد على الاستثمار وكفاءة الأصول الحالية)، والفهم (رؤية كيف ينظر الموردون الخارجيون للأموال إلى الشركة)."
+                }
+            },
+            {
+                topicGroupId: 'foundations', type: 'mc',
+                category: 'Framework for Analysis', categoryAr: 'إطار التحليل',
+                question: 'According to the 6-step Framework for Financial Analysis outlined in the text, what is the final (6th) step?',
+                questionAr: 'وفقاً لإطار العمل المكون من 6 خطوات للتحليل المالي الموضح في النص، ما هي الخطوة السادسة والأخيرة؟',
+                options: [
+                    'Collect data from financial statements.',
+                    'Analyze and interpret the processed data.',
+                    'Develop and communicate conclusions and recommendations.',
+                    'Follow up (Review).'
+                ],
+                optionsAr: [
+                    'جمع البيانات من البيانات المالية.',
+                    'تحليل وتفسير البيانات المعالجة.',
+                    'تطوير وتوصيل الاستنتاجات والتوصيات.',
+                    'المتابعة (المراجعة).'
+                ],
+                correctAnswer: 3,
+                explanation: {
+                    core: "The final step in the analytical framework is to Follow up (Review).",
+                    context: "Financial analysis is an ongoing, dynamic process, not a one-time event. Analysts must periodically gather updated information to check whether the conclusions reached earlier need any revisions."
+                },
+                explanationAr: {
+                    core: "الخطوة الأخيرة في الإطار التحليلي هي المتابعة (المراجعة).",
+                    context: "التحليل المالي هو عملية ديناميكية مستمرة وليس حدثاً لمرة واحدة. يجب على المحللين جمع معلومات محدثة بشكل دوري للتحقق مما إذا كانت الاستنتاجات التي تم التوصل إليها سابقاً تحتاج إلى أي مراجعات."
+                }
+            },
+            {
+                topicGroupId: 'foundations', type: 'mc',
+                category: 'Framework for Analysis', categoryAr: 'إطار التحليل',
+                question: 'In the framework for financial analysis, which of the following is considered an example of "Business Risk" (as opposed to Financial Risk)?',
+                questionAr: 'في إطار التحليل المالي، أي مما يلي يُعتبر مثالاً على "مخاطر الأعمال" (على عكس المخاطر المالية)؟',
+                options: [
+                    'A highly leveraged Debt-to-Equity ratio',
+                    'Proximity to the break-even point',
+                    'Changing interest rates on corporate bonds',
+                    'A declining Quick (Acid-Test) Ratio'
+                ],
+                optionsAr: [
+                    'نسبة عالية من الديون إلى حقوق الملكية',
+                    'القرب من نقطة التعادل',
+                    'تغير أسعار الفائدة على سندات الشركات',
+                    'انخفاض نسبة السيولة السريعة'
+                ],
+                correctAnswer: 1,
+                explanation: {
+                    core: "Business risk relates strictly to the risk inherent in the actual operations of the firm, such as proximity to the break-even point, volatility in sales, or volatility in costs.",
+                    context: "Financial risk deals with how the firm is financed (debt vs. equity). Business risk deals with the fundamental mechanics of the business: making and selling products profitably."
+                },
+                explanationAr: {
+                    core: "تتعلق مخاطر الأعمال بشكل صارم بالمخاطر الكامنة في العمليات الفعلية للشركة، مثل القرب من نقطة التعادل، وتقلب المبيعات، أو تقلب التكاليف.",
+                    context: "تتعامل المخاطر المالية مع كيفية تمويل الشركة (الديون مقابل حقوق الملكية). تتعامل مخاطر الأعمال مع الآليات الأساسية للأعمال: صنع وبيع المنتجات بشكل مربح."
+                }
+            },
+            {
+                topicGroupId: 'foundations', type: 'mc',
+                category: 'Financial Statements', categoryAr: 'البيانات المالية',
+                question: 'What type of information must Management\'s Discussion and Analysis (MD&A) provide?',
+                questionAr: 'ما نوع المعلومات التي يجب أن يوفرها قسم مناقشة وتحليل الإدارة (MD&A)؟',
+                options: [
+                    'Strictly numerical data regarding the upcoming year\'s budget.',
+                    'Information about the effects of inflation, changing prices, or other material events and uncertainties.',
+                    'The detailed resumes and compensation packages of the executive board.',
+                    'A guarantee of the company\'s future profitability.'
+                ],
+                optionsAr: [
+                    'بيانات رقمية صارمة تتعلق بميزانية العام القادم.',
+                    'معلومات حول آثار التضخم وتغير الأسعار أو الأحداث المادية الأخرى وحالات عدم اليقين.',
+                    'السير الذاتية المفصلة وحزم التعويضات للمجلس التنفيذي.',
+                    'ضمان لربحية الشركة المستقبلية.'
+                ],
+                correctAnswer: 1,
+                explanation: {
+                    core: "MD&A provides explanatory information that goes beyond the raw numbers, detailing material events, uncertainties, and the effects of inflation.",
+                    context: "Financial statements alone are backwards-looking and rigid. The MD&A section allows management to explain the 'why' behind the numbers and warn investors about future uncertainties."
+                },
+                explanationAr: {
+                    core: "يوفر MD&A معلومات توضيحية تتجاوز الأرقام المجردة، وتفصل الأحداث المادية وحالات عدم اليقين وآثار التضخم.",
+                    context: "البيانات المالية وحدها تنظر إلى الوراء وصارمة. يسمح قسم MD&A للإدارة بشرح 'السبب' وراء الأرقام وتحذير المستثمرين من عدم اليقين في المستقبل."
+                }
+            },
+            {
+                topicGroupId: 'foundations', type: 'mc',
+                category: 'Financial Statements', categoryAr: 'البيانات المالية',
+                question: 'What is the primary purpose of the Statement of Changes in Owners\' Equity?',
+                questionAr: 'ما هو الغرض الأساسي من قائمة التغيرات في حقوق الملكية؟',
+                options: [
+                    'To reflect information about the increases or decreases to a company\'s owners\' equity over time.',
+                    'To provide a measure of the company\'s operational success over a period.',
+                    'To show exactly what a company owns and owes on a specific date.',
+                    'To disclose the exact sources and uses of cash from operations.'
+                ],
+                optionsAr: [
+                    'لتعكس معلومات حول الزيادات أو النقصان في حقوق ملكية الشركة بمرور الوقت.',
+                    'لتوفير مقياس لنجاح الشركة التشغيلي خلال فترة معينة.',
+                    'لإظهار ما تملكه الشركة وتدين به بالضبط في تاريخ محدد.',
+                    'للكشف عن المصادر والاستخدامات الدقيقة للنقد من العمليات.'
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    core: "It serves to report changes in the owners' investment in the business over time.",
+                    context: "This statement acts as the crucial bridge between the Income Statement (which generates Net Income) and the Balance Sheet (where that income lands as Retained Earnings). It shows dividends paid out and new stock issued."
+                },
+                explanationAr: {
+                    core: "تعمل على الإبلاغ عن التغييرات في استثمار الملاك في الأعمال بمرور الوقت.",
+                    context: "تعمل هذه القائمة كجسر حاسم بين قائمة الدخل (التي تولد صافي الدخل) والميزانية العمومية (حيث يهبط هذا الدخل كأرباح محتجزة). وتوضح أرباح الأسهم المدفوعة والأسهم الجديدة المصدرة."
+                }
+            },
+            {
+                topicGroupId: 'foundations', type: 'mc',
+                category: 'Income Statement', categoryAr: 'قائمة الدخل',
+                question: 'What is the definition of "Comprehensive Net Income"?',
+                questionAr: 'ما هو تعريف "صافي الدخل الشامل"؟',
+                options: [
+                    'Total revenues minus cost of goods sold.',
+                    'Net income plus or minus changes in shareholders\' equity from other than net income or transactions with owners.',
+                    'Earnings before interest, taxes, depreciation, and amortization.',
+                    'The sum of operating income and extraordinary gains.'
+                ],
+                optionsAr: [
+                    'إجمالي الإيرادات ناقص تكلفة البضاعة المباعة.',
+                    'صافي الدخل زائد أو ناقص التغيرات في حقوق المساهمين من غير صافي الدخل أو المعاملات مع الملاك.',
+                    'الأرباح قبل الفوائد والضرائب والإهلاك والاستهلاك.',
+                    'مجموع الدخل التشغيلي والمكاسب الاستثنائية.'
+                ],
+                correctAnswer: 1,
+                explanation: {
+                    core: "Comprehensive Net Income captures all changes in equity during a period except those resulting from investments by owners and distributions to owners.",
+                    context: "This captures 'hidden' gains and losses that bypass the traditional income statement, such as unrealized gains/losses on certain investments or foreign currency translation adjustments."
+                },
+                explanationAr: {
+                    core: "يسجل صافي الدخل الشامل جميع التغيرات في حقوق الملكية خلال فترة معينة باستثناء تلك الناتجة عن استثمارات الملاك والتوزيعات للملاك.",
+                    context: "يسجل هذا المكاسب والخسائر 'الخفية' التي تتجاوز قائمة الدخل التقليدية، مثل المكاسب/الخسائر غير المحققة في بعض الاستثمارات أو تسويات ترجمة العملات الأجنبية."
+                }
+            },
+            {
+                topicGroupId: 'foundations', type: 'mc',
+                category: 'Cash Flows', categoryAr: 'التدفقات النقدية',
+                question: 'According to US GAAP guidelines, how are "Dividends Paid" classified on the Statement of Cash Flows?',
+                questionAr: 'وفقاً لإرشادات US GAAP، كيف يتم تصنيف "توزيعات الأرباح المدفوعة" في قائمة التدفقات النقدية؟',
+                options: ['Operating Activities', 'Investing Activities', 'Financing Activities', 'Other Income'],
+                optionsAr: ['الأنشطة التشغيلية', 'الأنشطة الاستثمارية', 'الأنشطة التمويلية', 'إيرادات أخرى'],
+                correctAnswer: 2,
+                explanation: {
+                    core: "Under US GAAP, Dividends Paid are strictly classified as Financing Activities.",
+                    context: "Dividends are payments made to shareholders (owners). Since generating equity capital is a financing activity, distributing cash back to those owners is also classified under financing."
+                },
+                explanationAr: {
+                    core: "بموجب US GAAP، تُصنف توزيعات الأرباح المدفوعة بشكل صارم كأنشطة تمويلية.",
+                    context: "توزيعات الأرباح هي مدفوعات تتم للمساهمين (الملاك). نظراً لأن توليد رأس مال حقوق الملكية هو نشاط تمويلي، فإن توزيع النقد مرة أخرى على هؤلاء الملاك يُصنف أيضاً ضمن التمويل."
+                }
+            },
+            {
+                topicGroupId: 'foundations', type: 'mc',
+                category: 'Cash Flows', categoryAr: 'التدفقات النقدية',
+                question: 'According to US GAAP guidelines, how is "Interest Paid" classified on the Statement of Cash Flows?',
+                questionAr: 'وفقاً لإرشادات US GAAP، كيف يتم تصنيف "الفائدة المدفوعة" في قائمة التدفقات النقدية؟',
+                options: ['Operating Activities', 'Investing Activities', 'Financing Activities', 'Other Expense'],
+                optionsAr: ['الأنشطة التشغيلية', 'الأنشطة الاستثمارية', 'الأنشطة التمويلية', 'مصاريف أخرى'],
+                correctAnswer: 0,
+                explanation: {
+                    core: "Under US GAAP, Interest Paid is classified under Operating Activities.",
+                    context: "The general rule of thumb under GAAP is that if an item affects Net Income on the Income Statement (like Interest Expense does), the cash associated with it belongs in the Operating Activities section."
+                },
+                explanationAr: {
+                    core: "بموجب US GAAP، تُصنف الفائدة المدفوعة ضمن الأنشطة التشغيلية.",
+                    context: "القاعدة العامة بموجب GAAP هي أنه إذا أثر عنصر ما على صافي الدخل في قائمة الدخل (كما تفعل مصاريف الفائدة)، فإن النقد المرتبط به ينتمي إلى قسم الأنشطة التشغيلية."
+                }
+            },
+            {
+                topicGroupId: 'foundations', type: 'mc',
+                category: 'Sources and Uses', categoryAr: 'المصادر والاستخدامات',
+                question: 'In a Sources and Uses Statement, how is a decrease in an asset account classified?',
+                questionAr: 'في قائمة المصادر والاستخدامات، كيف يتم تصنيف الانخفاض في حساب الأصول؟',
+                options: ['As a Use of funds', 'As a Source of funds', 'As a Dividend payment', 'As a Non-cash expense'],
+                optionsAr: ['كاستخدام للأموال', 'كمصدر للأموال', 'كدفع أرباح', 'كمصروف غير نقدي'],
+                correctAnswer: 1,
+                explanation: {
+                    core: "A decrease in an asset is classified as a Source of funds.",
+                    context: "Think of selling inventory or collecting accounts receivable. When an asset balance goes down, it means the firm has converted that asset into cash, thereby 'sourcing' funds for the business."
+                },
+                explanationAr: {
+                    core: "يُصنف الانخفاض في الأصل على أنه مصدر للأموال.",
+                    context: "فكر في بيع المخزون أو تحصيل الحسابات المدينة. عندما ينخفض رصيد الأصل، فهذا يعني أن الشركة قد حولت هذا الأصل إلى نقد، وبالتالي 'توفر' الأموال للشركة."
+                }
+            },
+            {
+                topicGroupId: 'foundations', type: 'mc',
+                category: 'Sources and Uses', categoryAr: 'المصادر والاستخدامات',
+                question: 'How is Depreciation treated on a Sources and Uses statement?',
+                questionAr: 'كيف يتم التعامل مع الإهلاك في قائمة المصادر والاستخدامات؟',
+                options: ['As a Use of funds', 'As an Investing Activity', 'As a Source of funds', 'It is not included'],
+                optionsAr: ['كاستخدام للأموال', 'كنشاط استثماري', 'كمصدر للأموال', 'لا يتم تضمينه'],
+                correctAnswer: 2,
+                explanation: {
+                    core: "Depreciation is treated as a Source of funds (it is added back to Net Income).",
+                    context: "Because depreciation is a non-cash expense that reduced Net Income on the income statement without actually consuming cash, it must be added back to determine the actual cash flow generated by operations."
+                },
+                explanationAr: {
+                    core: "يتم التعامل مع الإهلاك كمصدر للأموال (يتم إضافته مرة أخرى إلى صافي الدخل).",
+                    context: "نظراً لأن الإهلاك هو مصروف غير نقدي يقلل من صافي الدخل في قائمة الدخل دون استهلاك النقد فعلياً، فيجب إضافته مرة أخرى لتحديد التدفق النقدي الفعلي الناتج عن العمليات."
+                }
+            },
+            {
+                topicGroupId: 'foundations', type: 'mc',
+                category: 'Visual Concepts', categoryAr: 'المفاهيم المرئية',
+                question: 'In the Cash Flow statement visual analogy provided in the text, what do the "Trunk & Branches" of the tree represent?',
+                questionAr: 'في التشبيه المرئي لقائمة التدفقات النقدية الوارد في النص، ماذا يمثل "جذع وفروع" الشجرة؟',
+                options: ['Operating Activities', 'Investing Activities', 'Financing Activities', 'Net Income'],
+                optionsAr: ['الأنشطة التشغيلية', 'الأنشطة الاستثمارية', 'الأنشطة التمويلية', 'صافي الدخل'],
+                correctAnswer: 1,
+                explanation: {
+                    core: "In the tree analogy: Roots = Financing, Trunk & Branches = Investing, and Fruit = Operating Activities.",
+                    context: "Financing activities (roots) provide the foundational capital. This capital is used to purchase fixed assets like machinery and buildings (investing activities). Those assets are then used to generate core business revenues (operating activities / the fruit)."
+                },
+                explanationAr: {
+                    core: "في تشبيه الشجرة: الجذور = التمويل، الجذع والفروع = الاستثمار، والثمار = الأنشطة التشغيلية.",
+                    context: "توفر الأنشطة التمويلية (الجذور) رأس المال التأسيسي. يُستخدم رأس المال هذا لشراء أصول ثابتة مثل الآلات والمباني (الأنشطة الاستثمارية). ثم تُستخدم هذه الأصول لتوليد إيرادات الأعمال الأساسية (الأنشطة التشغيلية / الثمار)."
+                }
+            },
+
+            // --- GROUP 2: Liquidity & Activity ---
+            {
+                topicGroupId: 'liquidity_activity', type: 'calc',
+                category: 'Liquidity Ratios', categoryAr: 'نسب السيولة',
+                question: 'A firm has Current Assets of $1,195 and Current Liabilities of $500. Calculate the Current Ratio. (Enter up to 2 decimal places)',
+                questionAr: 'شركة لديها أصول متداولة بقيمة 1,195 دولاراً وخصوم متداولة بقيمة 500 دولار. احسب نسبة التداول. (أدخل حتى منزلتين عشريتين)',
+                correctAnswer: 2.39,
+                tolerance: 0.05,
+                explanation: {
+                    core: "The Current Ratio measures a firm's ability to cover its short-term liabilities with its short-term assets.",
+                    formula: "Current Ratio = Current Assets ÷ Current Liabilities",
+                    calculation: "$1,195 ÷ $500 = 2.39",
+                    context: "A ratio greater than 1.0 indicates that the firm has enough liquid assets to cover obligations due within the next year."
+                },
+                explanationAr: {
+                    core: "تقيس نسبة التداول قدرة الشركة على تغطية التزاماتها قصيرة الأجل بأصولها قصيرة الأجل.",
+                    formula: "نسبة التداول = الأصول المتداولة ÷ الخصوم المتداولة",
+                    calculation: "1,195 دولار ÷ 500 دولار = 2.39",
+                    context: "تشير النسبة الأكبر من 1.0 إلى أن الشركة لديها أصول سائلة كافية لتغطية الالتزامات المستحقة خلال العام المقبل."
+                }
+            },
+            {
+                topicGroupId: 'liquidity_activity', type: 'calc',
+                category: 'Liquidity Ratios', categoryAr: 'نسب السيولة',
+                question: 'If a firm has Current Assets of $1,195, Inventory of $696, and Current Liabilities of $500, what is its Acid-Test (Quick) Ratio? (Enter up to 2 decimal places)',
+                questionAr: 'إذا كانت الشركة تمتلك أصولاً متداولة بقيمة 1,195 دولاراً، ومخزوناً بقيمة 696 دولاراً، وخصوماً متداولة بقيمة 500 دولار، فما هي نسبة السيولة السريعة؟ (أدخل حتى منزلتين عشريتين)',
+                correctAnswer: 1.00,
+                tolerance: 0.05,
+                explanation: {
+                    core: "The Acid-Test (Quick) Ratio is a stricter measure of liquidity than the Current Ratio because it excludes inventory.",
+                    formula: "Acid-Test Ratio = (Current Assets - Inventory) ÷ Current Liabilities",
+                    calculation: "($1,195 - $696) ÷ $500 = $499 ÷ $500 = 0.998 (Rounds to 1.00)",
+                    context: "Inventory is often the least liquid current asset. By removing it, analysts get a 'worst-case scenario' view of a company's immediate debt-paying ability."
+                },
+                explanationAr: {
+                    core: "تعد نسبة السيولة السريعة مقياساً أكثر صرامة للسيولة من نسبة التداول لأنها تستبعد المخزون.",
+                    formula: "نسبة السيولة السريعة = (الأصول المتداولة - المخزون) ÷ الخصوم المتداولة",
+                    calculation: "(1,195 دولار - 696 دولار) ÷ 500 دولار = 499 دولار ÷ 500 دولار = 0.998 (تقرب إلى 1.00)",
+                    context: "غالباً ما يكون المخزون هو الأصل المتداول الأقل سيولة. بإزالته، يحصل المحللون على نظرة 'لأسوأ سيناريو' للقدرة الفورية للشركة على سداد الديون."
+                }
+            },
+            {
+                topicGroupId: 'liquidity_activity', type: 'mc',
+                category: 'Interpreting Trends', categoryAr: 'تفسير الاتجاهات',
+                question: 'If a firm\'s Current Ratio has been rising over three years, but its Acid-Test (Quick) Ratio has been steadily declining, what is the most likely problem?',
+                questionAr: 'إذا كانت نسبة التداول للشركة ترتفع على مدى ثلاث سنوات، ولكن نسبة السيولة السريعة تتراجع بشكل مطرد، فما هي المشكلة الأكثر احتمالاً؟',
+                options: [
+                    'The firm is paying off its long-term debt too quickly.',
+                    'The firm is experiencing a significant problem with mounting inventories.',
+                    'The firm\'s accounts receivable are being collected too efficiently.',
+                    'The firm has too much cash on hand.'
+                ],
+                optionsAr: [
+                    'الشركة تسدد ديونها طويلة الأجل بسرعة كبيرة.',
+                    'الشركة تعاني من مشكلة كبيرة تتمثل في تزايد المخزون.',
+                    'يتم تحصيل حسابات الشركة المدينة بكفاءة عالية جداً.',
+                    'الشركة لديها الكثير من النقد في متناول اليد.'
+                ],
+                correctAnswer: 1,
+                explanation: {
+                    core: "A rising current ratio combined with a falling quick ratio strongly indicates that inventory is building up.",
+                    context: "Because the only difference between the Current Ratio and the Acid-Test Ratio is the exclusion of Inventory, a divergence in their trends means Inventory is growing much faster than the rest of the liquid assets."
+                },
+                explanationAr: {
+                    core: "يشير ارتفاع نسبة التداول مقترناً بانخفاض نسبة السيولة السريعة بقوة إلى تراكم المخزون.",
+                    context: "نظراً لأن الاختلاف الوحيد بين نسبة التداول ونسبة السيولة السريعة هو استبعاد المخزون، فإن الاختلاف في اتجاهاتهما يعني أن المخزون ينمو بشكل أسرع بكثير من بقية الأصول السائلة."
+                }
+            },
+            {
+                topicGroupId: 'liquidity_activity', type: 'calc',
+                category: 'Activity Ratios', categoryAr: 'نسب النشاط',
+                question: 'Assume all sales are credit sales. If Annual Net Credit Sales are $2,211 and Receivables are $394, what is the Receivable Turnover? (Enter up to 2 decimal places)',
+                questionAr: 'بافتراض أن جميع المبيعات هي مبيعات آجلة. إذا كان صافي المبيعات الآجلة السنوية 2,211 دولاراً والذمم المدينة 394 دولاراً، فما هو معدل دوران الذمم المدينة؟ (أدخل حتى منزلتين عشريتين)',
+                correctAnswer: 5.61,
+                tolerance: 0.05,
+                explanation: {
+                    core: "Receivable Turnover indicates how many times a business collects its average accounts receivable balance during a year.",
+                    formula: "Receivable Turnover = Annual Net Credit Sales ÷ Receivables",
+                    calculation: "$2,211 ÷ $394 = 5.61",
+                    context: "A higher ratio indicates that the firm's collection process is efficient and that customers pay their debts quickly."
+                },
+                explanationAr: {
+                    core: "يشير معدل دوران الذمم المدينة إلى عدد المرات التي تقوم فيها الشركة بتحصيل متوسط رصيد حساباتها المدينة خلال العام.",
+                    formula: "معدل دوران الذمم المدينة = صافي المبيعات الآجلة السنوية ÷ الذمم المدينة",
+                    calculation: "2,211 دولار ÷ 394 دولار = 5.61",
+                    context: "تشير النسبة الأعلى إلى أن عملية التحصيل في الشركة تتسم بالكفاءة وأن العملاء يسددون ديونهم بسرعة."
+                }
+            },
+            {
+                topicGroupId: 'liquidity_activity', type: 'calc',
+                category: 'Activity Ratios', categoryAr: 'نسب النشاط',
+                question: 'Based on a Receivable Turnover of 5.61 and a 365-day year, what is the Average Collection Period in days? (Enter whole number)',
+                questionAr: 'بناءً على معدل دوران الذمم المدينة البالغ 5.61 وسنة مكونة من 365 يوماً، ما هي فترة التحصيل بمتوسط الأيام؟ (أدخل رقماً صحيحاً)',
+                correctAnswer: 65,
+                tolerance: 1,
+                explanation: {
+                    core: "This translates the turnover ratio into a more easily understandable metric: days.",
+                    formula: "Average Collection Period = 365 days ÷ Receivable Turnover",
+                    calculation: "365 ÷ 5.61 = 65.06 days",
+                    context: "It takes this company roughly 65 days to collect cash after making a credit sale. Management would compare this against their official credit terms."
+                },
+                explanationAr: {
+                    core: "هذا يترجم نسبة الدوران إلى مقياس أسهل للفهم: الأيام.",
+                    formula: "متوسط فترة التحصيل = 365 يوماً ÷ معدل دوران الذمم المدينة",
+                    calculation: "365 ÷ 5.61 = 65.06 يوماً",
+                    context: "تستغرق هذه الشركة حوالي 65 يوماً لتحصيل النقد بعد إجراء بيع آجل. ستقوم الإدارة بمقارنة ذلك بشروط الائتمان الرسمية الخاصة بها."
+                }
+            },
+            {
+                topicGroupId: 'liquidity_activity', type: 'calc',
+                category: 'Activity Ratios', categoryAr: 'نسب النشاط',
+                question: 'Calculate the Payable Turnover ratio if Annual Credit Purchases are $1,551 and Accounts Payable are $94. (Enter up to 2 decimal places)',
+                questionAr: 'احسب معدل دوران الذمم الدائنة إذا كانت المشتريات الآجلة السنوية 1,551 دولاراً والحسابات الدائنة 94 دولاراً. (أدخل حتى منزلتين عشريتين)',
+                correctAnswer: 16.50,
+                tolerance: 0.1,
+                explanation: {
+                    core: "The Payable Turnover ratio indicates the promptness of payment to suppliers by the firm.",
+                    formula: "Payable Turnover = Annual Credit Purchases ÷ Accounts Payable",
+                    calculation: "$1,551 ÷ $94 = 16.50",
+                    context: "This tells analysts how many times a year a company pays off its accounts payable. A higher number means the company pays its suppliers quickly."
+                },
+                explanationAr: {
+                    core: "يشير معدل دوران الذمم الدائنة إلى سرعة الدفع للموردين من قبل الشركة.",
+                    formula: "معدل دوران الذمم الدائنة = المشتريات الآجلة السنوية ÷ الحسابات الدائنة",
+                    calculation: "1,551 دولار ÷ 94 دولار = 16.50",
+                    context: "يخبر هذا المحللين بعدد المرات التي تسدد فيها الشركة حساباتها الدائنة في العام. الرقم الأعلى يعني أن الشركة تدفع لمورديها بسرعة."
+                }
+            },
+            {
+                topicGroupId: 'liquidity_activity', type: 'calc',
+                category: 'Activity Ratios', categoryAr: 'نسب النشاط',
+                question: 'Calculate the Inventory Turnover ratio if Cost of Goods Sold is $1,599 and Inventory is $696. (Enter up to 2 decimal places)',
+                questionAr: 'احسب معدل دوران المخزون إذا كانت تكلفة البضاعة المباعة 1,599 دولاراً والمخزون 696 دولاراً. (أدخل حتى منزلتين عشريتين)',
+                correctAnswer: 2.30,
+                tolerance: 0.05,
+                explanation: {
+                    core: "Inventory Turnover measures how many times a company's inventory is sold and replaced over the year.",
+                    formula: "Inventory Turnover = Cost of Goods Sold ÷ Inventory",
+                    calculation: "$1,599 ÷ $696 = 2.297 (Rounds to 2.30)",
+                    context: "A low turnover ratio implies weak sales or excess inventory (overstocking), which ties up cash and increases the risk of goods becoming obsolete."
+                },
+                explanationAr: {
+                    core: "يقيس معدل دوران المخزون عدد المرات التي يتم فيها بيع مخزون الشركة واستبداله خلال العام.",
+                    formula: "معدل دوران المخزون = تكلفة البضاعة المباعة ÷ المخزون",
+                    calculation: "1,599 دولار ÷ 696 دولار = 2.297 (تقرب إلى 2.30)",
+                    context: "تعني نسبة الدوران المنخفضة ضعف المبيعات أو المخزون الزائد (تكدس المخزون)، مما يقيّد النقد ويزيد من خطر تقادم البضائع."
+                }
+            },
+            {
+                topicGroupId: 'liquidity_activity', type: 'calc',
+                category: 'Activity Ratios', categoryAr: 'نسب النشاط',
+                question: 'If Net Sales are $2,211 and Total Assets are $2,169, what is the Total Asset Turnover? (Enter up to 2 decimal places)',
+                questionAr: 'إذا كان صافي المبيعات 2,211 دولاراً وإجمالي الأصول 2,169 دولاراً، فما هو معدل دوران إجمالي الأصول؟ (أدخل حتى منزلتين عشريتين)',
+                correctAnswer: 1.02,
+                tolerance: 0.05,
+                explanation: {
+                    core: "Total Asset Turnover measures the overall effectiveness of the firm in utilizing its assets to generate sales revenue.",
+                    formula: "Total Asset Turnover = Net Sales ÷ Total Assets",
+                    calculation: "$2,211 ÷ $2,169 = 1.019 (Rounds to 1.02)",
+                    context: "This means the company generates $1.02 in sales for every $1.00 invested in assets. Firms with low profit margins typically need very high asset turnover to survive."
+                },
+                explanationAr: {
+                    core: "يقيس معدل دوران إجمالي الأصول الفعالية العامة للشركة في استخدام أصولها لتوليد إيرادات المبيعات.",
+                    formula: "معدل دوران إجمالي الأصول = صافي المبيعات ÷ إجمالي الأصول",
+                    calculation: "2,211 دولار ÷ 2,169 دولار = 1.019 (تقرب إلى 1.02)",
+                    context: "هذا يعني أن الشركة تولد 1.02 دولار من المبيعات مقابل كل 1.00 دولار مستثمر في الأصول. الشركات ذات هوامش الربح المنخفضة تحتاج عادةً إلى معدل دوران أصول مرتفع للغاية للبقاء."
+                }
+            },
+
+            // --- GROUP 3: Leverage & Coverage ---
+            {
+                topicGroupId: 'leverage_coverage', type: 'calc',
+                category: 'Financial Leverage', categoryAr: 'الرافعة المالية',
+                question: 'If Basket Wonders has Total Debt of $1,030 and Shareholders\' Equity of $1,139, what is their Debt-to-Equity ratio? (Enter up to 2 decimal places)',
+                questionAr: 'إذا كان إجمالي ديون شركة Basket Wonders 1,030 دولاراً وحقوق المساهمين 1,139 دولاراً، فما هي نسبة الديون إلى حقوق الملكية؟ (أدخل حتى منزلتين عشريتين)',
+                correctAnswer: 0.90,
+                tolerance: 0.02,
+                explanation: {
+                    core: "The Debt-to-Equity ratio shows the extent to which the firm is financed by debt relative to owner's equity.",
+                    formula: "Debt-to-Equity = Total Debt ÷ Shareholders' Equity",
+                    calculation: "$1,030 ÷ $1,139 = 0.904 (Rounds to 0.90)",
+                    context: "A ratio of 0.90 means that for every $1.00 of equity supplied by shareholders, creditors supply $0.90."
+                },
+                explanationAr: {
+                    core: "توضح نسبة الديون إلى حقوق الملكية مدى تمويل الشركة بالديون مقارنة بحقوق الملاك.",
+                    formula: "الديون إلى حقوق الملكية = إجمالي الديون ÷ حقوق المساهمين",
+                    calculation: "1,030 دولار ÷ 1,139 دولار = 0.904 (تقرب إلى 0.90)",
+                    context: "نسبة 0.90 تعني أنه مقابل كل 1.00 دولار من حقوق الملكية التي يوفرها المساهمون، يوفر الدائنون 0.90 دولار."
+                }
+            },
+            {
+                topicGroupId: 'leverage_coverage', type: 'calc',
+                category: 'Financial Leverage', categoryAr: 'الرافعة المالية',
+                question: 'With Total Debt of $1,030 and Total Assets of $2,169, what is the Debt-to-Total-Assets ratio? (Enter up to 2 decimal places)',
+                questionAr: 'مع إجمالي ديون قدره 1,030 دولاراً وإجمالي أصول قدره 2,169 دولاراً، ما هي نسبة الديون إلى إجمالي الأصول؟ (أدخل حتى منزلتين عشريتين)',
+                correctAnswer: 0.47,
+                tolerance: 0.02,
+                explanation: {
+                    core: "This ratio measures the exact percentage of the firm's total assets that are supported by debt financing.",
+                    formula: "Debt-to-Total-Assets = Total Debt ÷ Total Assets",
+                    calculation: "$1,030 ÷ $2,169 = 0.474 (Rounds to 0.47)",
+                    context: "A value of 0.47 indicates that 47% of the company's assets were purchased using borrowed money. Creditors prefer this number to be lower."
+                },
+                explanationAr: {
+                    core: "تقيس هذه النسبة النسبة المئوية الدقيقة لإجمالي أصول الشركة المدعومة بتمويل الديون.",
+                    formula: "الديون إلى إجمالي الأصول = إجمالي الديون ÷ إجمالي الأصول",
+                    calculation: "1,030 دولار ÷ 2,169 دولار = 0.474 (تقرب إلى 0.47)",
+                    context: "قيمة 0.47 تشير إلى أن 47% من أصول الشركة تم شراؤها باستخدام أموال مقترضة. يفضل الدائنون أن يكون هذا الرقم أقل."
+                }
+            },
+            {
+                topicGroupId: 'leverage_coverage', type: 'calc',
+                category: 'Financial Leverage', categoryAr: 'الرافعة المالية',
+                question: 'Given Total Debt of $1,030, Long-Term Debt of $530, and Shareholders\' Equity of $1,139, calculate the Total Capitalization Ratio. (Enter up to 2 decimal places)',
+                questionAr: 'بافتراض أن إجمالي الديون يبلغ 1,030 دولاراً، والديون طويلة الأجل 530 دولاراً، وحقوق المساهمين 1,139 دولاراً، احسب نسبة إجمالي الرسملة. (أدخل حتى منزلتين عشريتين)',
+                correctAnswer: 0.62,
+                tolerance: 0.02,
+                explanation: {
+                    core: "The Total Capitalization Ratio shows the relative importance of long-term debt to the long-term financing of the firm.",
+                    formula: "Total Cap Ratio = Total Debt ÷ Total Capitalization (where Total Cap = LT-Debt + Equity)",
+                    calculation: "$1,030 ÷ ($530 + $1,139) = $1,030 ÷ $1,669 = 0.617 (Rounds to 0.62)",
+                    context: "This ratio looks strictly at the permanent/long-term capital structure of the business, ignoring short-term operational liabilities."
+                },
+                explanationAr: {
+                    core: "توضح نسبة إجمالي الرسملة الأهمية النسبية للديون طويلة الأجل في التمويل طويل الأجل للشركة.",
+                    formula: "نسبة إجمالي الرسملة = إجمالي الديون ÷ إجمالي الرسملة (حيث إجمالي الرسملة = الديون طويلة الأجل + حقوق الملكية)",
+                    calculation: "1,030 دولار ÷ (530 دولار + 1,139 دولار) = 1,030 دولار ÷ 1,669 دولار = 0.617 (تقرب إلى 0.62)",
+                    context: "تنظر هذه النسبة بدقة إلى هيكل رأس المال الدائم/طويل الأجل للعمل، متجاهلة الالتزامات التشغيلية قصيرة الأجل."
+                }
+            },
+            {
+                topicGroupId: 'leverage_coverage', type: 'mc',
+                category: 'Coverage Ratios', categoryAr: 'نسب التغطية',
+                question: 'What is the purpose of the Interest Coverage Ratio?',
+                questionAr: 'ما هو الغرض من نسبة تغطية الفوائد؟',
+                options: [
+                    'To indicate how many days it takes to collect receivables.',
+                    'To show the relative importance of long-term debt.',
+                    'To indicate a firm\'s ability to cover interest charges using operating income.',
+                    'To measure success in using assets to generate earnings.'
+                ],
+                optionsAr: [
+                    'للإشارة إلى عدد الأيام التي يستغرقها تحصيل الذمم المدينة.',
+                    'لإظهار الأهمية النسبية للديون طويلة الأجل.',
+                    'للإشارة إلى قدرة الشركة على تغطية رسوم الفائدة باستخدام الدخل التشغيلي.',
+                    'لقياس النجاح في استخدام الأصول لتوليد الأرباح.'
+                ],
+                correctAnswer: 2,
+                explanation: {
+                    core: "The Interest Coverage Ratio evaluates how comfortably a firm can pay its interest expenses from its core operating profit.",
+                    context: "Also known as 'Times Interest Earned', a declining interest coverage ratio is an early warning sign that a company may be taking on too much debt or experiencing a drop in core operational profitability."
+                },
+                explanationAr: {
+                    core: "تقيم نسبة تغطية الفوائد مدى سهولة قيام الشركة بدفع نفقات الفائدة من أرباحها التشغيلية الأساسية.",
+                    context: "يُعرف أيضاً باسم 'عدد مرات كسب الفائدة'، ويعد انخفاض نسبة تغطية الفوائد علامة تحذير مبكرة على أن الشركة قد تتحمل الكثير من الديون أو تعاني من انخفاض في الربحية التشغيلية الأساسية."
+                }
+            },
+            {
+                topicGroupId: 'leverage_coverage', type: 'calc',
+                category: 'Coverage Ratios', categoryAr: 'نسب التغطية',
+                question: 'Calculate the Interest Coverage Ratio if a company has an EBIT of $210 and Interest Charges of $59. (Enter up to 2 decimal places)',
+                questionAr: 'احسب نسبة تغطية الفوائد إذا كان للشركة أرباح قبل الفوائد والضرائب (EBIT) بقيمة 210 دولارات ورسوم فائدة بقيمة 59 دولاراً. (أدخل حتى منزلتين عشريتين)',
+                correctAnswer: 3.56,
+                tolerance: 0.05,
+                explanation: {
+                    core: "This ratio divides Earnings Before Interest and Taxes (EBIT) by the Interest Charges.",
+                    formula: "Interest Coverage = EBIT ÷ Interest Charges",
+                    calculation: "$210 ÷ $59 = 3.559 (Rounds to 3.56)",
+                    context: "A result of 3.56 means the company generates operating income that is over 3.5 times higher than what it owes in interest. This provides a very safe margin of error."
+                },
+                explanationAr: {
+                    core: "تقسم هذه النسبة الأرباح قبل الفوائد والضرائب (EBIT) على رسوم الفائدة.",
+                    formula: "تغطية الفوائد = EBIT ÷ رسوم الفائدة",
+                    calculation: "210 دولار ÷ 59 دولار = 3.559 (تقرب إلى 3.56)",
+                    context: "تعني نتيجة 3.56 أن الشركة تولد دخلاً تشغيلياً أعلى بأكثر من 3.5 مرة مما تدين به كفائدة. هذا يوفر هامش خطأ آمناً للغاية."
+                }
+            },
+
+            // --- GROUP 4: Profitability & DuPont ---
+            {
+                topicGroupId: 'profitability_dupont', type: 'calc',
+                category: 'Profitability', categoryAr: 'الربحية',
+                question: 'Calculate the Gross Profit Margin (%) if Gross Profit is $612 and Net Sales is $2,211. (Enter percentage as a number up to 1 decimal place, e.g., 27.7)',
+                questionAr: 'احسب هامش إجمالي الربح (%) إذا كان إجمالي الربح 612 دولاراً وصافي المبيعات 2,211 دولاراً. (أدخل النسبة المئوية كرقم حتى منزلة عشرية واحدة، مثلاً 27.7)',
+                correctAnswer: 27.7,
+                tolerance: 0.5,
+                explanation: {
+                    core: "Gross Profit Margin shows the percentage of revenue that exceeds the cost of goods sold (COGS).",
+                    formula: "Gross Profit Margin = (Gross Profit ÷ Net Sales) × 100",
+                    calculation: "($612 ÷ $2,211) × 100 = 27.67% (Rounds to 27.7%)",
+                    context: "This ratio indicates the efficiency of the core production process and pricing policies. A 27.7% margin means the company retains 27.7 cents of every sales dollar to cover administration, interest, taxes, and profit."
+                },
+                explanationAr: {
+                    core: "يوضح هامش إجمالي الربح النسبة المئوية للإيرادات التي تتجاوز تكلفة البضاعة المباعة (COGS).",
+                    formula: "هامش إجمالي الربح = (إجمالي الربح ÷ صافي المبيعات) × 100",
+                    calculation: "(612 دولار ÷ 2,211 دولار) × 100 = 27.67% (تقرب إلى 27.7%)",
+                    context: "تشير هذه النسبة إلى كفاءة عملية الإنتاج الأساسية وسياسات التسعير. يعني هامش 27.7% أن الشركة تحتفظ بـ 27.7 سنتاً من كل دولار مبيعات لتغطية الإدارة والفوائد والضرائب والأرباح."
+                }
+            },
+            {
+                topicGroupId: 'profitability_dupont', type: 'calc',
+                category: 'Profitability', categoryAr: 'الربحية',
+                question: 'What is the Net Profit Margin (%) if Net Profit after Taxes is $91 and Net Sales is $2,211? (Enter up to 1 decimal place)',
+                questionAr: 'ما هو هامش صافي الربح (%) إذا كان صافي الربح بعد الضرائب 91 دولاراً وصافي المبيعات 2,211 دولاراً؟ (أدخل حتى منزلة عشرية واحدة)',
+                correctAnswer: 4.1,
+                tolerance: 0.2,
+                explanation: {
+                    core: "Net Profit Margin is the definitive 'bottom line' profitability ratio, accounting for all expenses, interest, and taxes.",
+                    formula: "Net Profit Margin = (Net Profit after Taxes ÷ Net Sales) × 100",
+                    calculation: "($91 ÷ $2,211) × 100 = 4.11% (Rounds to 4.1%)",
+                    context: "Out of every dollar of sales generated, the company keeps only 4.1 cents as pure profit. This is the ultimate measure of the company's overall operational, financial, and tax-management efficiency."
+                },
+                explanationAr: {
+                    core: "هامش صافي الربح هو نسبة الربحية 'النهائية' النهائية، حيث يأخذ في الاعتبار جميع النفقات والفوائد والضرائب.",
+                    formula: "هامش صافي الربح = (صافي الربح بعد الضرائب ÷ صافي المبيعات) × 100",
+                    calculation: "(91 دولار ÷ 2,211 دولار) × 100 = 4.11% (تقرب إلى 4.1%)",
+                    context: "من كل دولار من المبيعات التي تم إنشاؤها، تحتفظ الشركة بـ 4.1 سنت فقط كربح صافٍ. هذا هو المقياس النهائي للكفاءة التشغيلية والمالية والإدارية الضريبية للشركة بشكل عام."
+                }
+            },
+            {
+                topicGroupId: 'profitability_dupont', type: 'mc',
+                category: 'DuPont Analysis', categoryAr: 'تحليل دوبونت',
+                question: 'What is the formula for calculating Earning Power (Return on Asset) using the DuPont Approach?',
+                questionAr: 'ما هي معادلة حساب قوة الكسب (العائد على الأصول) باستخدام نهج دوبونت؟',
+                options: [
+                    'Net profit margin × Total asset turnover',
+                    'Net profit margin × Equity Multiplier',
+                    'Gross Profit Margin × Total asset turnover',
+                    'EBIT × Interest Coverage'
+                ],
+                optionsAr: [
+                    'هامش صافي الربح × معدل دوران إجمالي الأصول',
+                    'هامش صافي الربح × مضاعف حقوق الملكية',
+                    'هامش إجمالي الربح × معدل دوران إجمالي الأصول',
+                    'EBIT × تغطية الفوائد'
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    core: "The DuPont approach breaks ROA down into two distinct drivers: Sales Profitability and Asset Efficiency.",
+                    formula: "ROA = Net Profit Margin × Total Asset Turnover",
+                    context: "By separating ROA into these two components, managers can pinpoint exactly why a return is going up or down. A company could have a high ROA by having high margins OR by having high turnover."
+                },
+                explanationAr: {
+                    core: "يقسم نهج دوبونت العائد على الأصول (ROA) إلى محركين متميزين: ربحية المبيعات وكفاءة الأصول.",
+                    formula: "العائد على الأصول = هامش صافي الربح × معدل دوران إجمالي الأصول",
+                    context: "من خلال فصل ROA إلى هذين المكونين، يمكن للمديرين تحديد سبب ارتفاع أو انخفاض العائد بالضبط. يمكن أن يكون للشركة ROA مرتفع من خلال وجود هوامش عالية أو من خلال معدل دوران مرتفع."
+                }
+            },
+            {
+                topicGroupId: 'profitability_dupont', type: 'calc',
+                category: 'DuPont Analysis', categoryAr: 'تحليل دوبونت',
+                question: 'Using the DuPont Approach, calculate Return on Asset (ROA) in percentage (%) if Net profit margin is 4.1% and Total asset turnover is 1.02. (Enter up to 1 decimal place)',
+                questionAr: 'باستخدام نهج دوبونت، احسب العائد على الأصول (ROA) كنسبة مئوية (%) إذا كان هامش صافي الربح 4.1% ومعدل دوران إجمالي الأصول 1.02. (أدخل حتى منزلة عشرية واحدة)',
+                correctAnswer: 4.2,
+                tolerance: 0.2,
+                explanation: {
+                    core: "We calculate the exact earning power of the assets by multiplying the margin by the turnover.",
+                    formula: "ROA = Net Profit Margin × Total Asset Turnover",
+                    calculation: "4.1% × 1.02 = 4.182% (Rounds to 4.2%)",
+                    context: "This combined 4.2% return is the fundamental measure of how efficiently management is using the firm's assets to generate bottom-line profits."
+                },
+                explanationAr: {
+                    core: "نحسب قوة الكسب الدقيقة للأصول بضرب الهامش في معدل الدوران.",
+                    formula: "العائد على الأصول = هامش صافي الربح × معدل دوران إجمالي الأصول",
+                    calculation: "4.1% × 1.02 = 4.182% (تقرب إلى 4.2%)",
+                    context: "هذا العائد المجمع البالغ 4.2% هو المقياس الأساسي لمدى كفاءة الإدارة في استخدام أصول الشركة لتوليد الأرباح النهائية."
+                }
+            },
+            {
+                topicGroupId: 'profitability_dupont', type: 'calc',
+                category: 'DuPont Analysis', categoryAr: 'تحليل دوبونت',
+                question: 'Calculate Return on Equity (ROE) in percentage (%) using the DuPont Approach given: Net profit margin = 4.1%, Total asset turnover = 1.02, and Equity Multiplier = 1.90. (Enter up to 1 decimal place)',
+                questionAr: 'احسب العائد على حقوق الملكية (ROE) كنسبة مئوية (%) باستخدام نهج دوبونت بالمعطيات التالية: هامش صافي الربح = 4.1%، معدل دوران إجمالي الأصول = 1.02، ومضاعف حقوق الملكية = 1.90. (أدخل حتى منزلة عشرية واحدة)',
+                correctAnswer: 8.0,
+                tolerance: 0.3,
+                explanation: {
+                    core: "The extended DuPont model for ROE adds a third variable: Financial Leverage (the Equity Multiplier).",
+                    formula: "ROE = Net Profit Margin × Total Asset Turnover × Equity Multiplier",
+                    calculation: "4.1% × 1.02 × 1.90 = 7.945% (Rounds to 8.0%)",
+                    context: "Notice how the 4.2% Return on Assets is magnified to an 8.0% Return on Equity. This proves that by using debt financing (leverage), the company is boosting the final returns to its shareholders."
+                },
+                explanationAr: {
+                    core: "يضيف نموذج دوبونت الممتد لـ ROE متغيراً ثالثاً: الرافعة المالية (مضاعف حقوق الملكية).",
+                    formula: "العائد على حقوق الملكية = هامش صافي الربح × معدل دوران إجمالي الأصول × مضاعف حقوق الملكية",
+                    calculation: "4.1% × 1.02 × 1.90 = 7.945% (تقرب إلى 8.0%)",
+                    context: "لاحظ كيف يتضخم العائد على الأصول البالغ 4.2% ليصبح عائداً على حقوق الملكية بنسبة 8.0%. هذا يثبت أنه من خلال استخدام تمويل الديون (الرافعة المالية)، تقوم الشركة بتعزيز العوائد النهائية لمساهميها."
+                }
+            },
+            {
+                topicGroupId: 'profitability_dupont', type: 'calc',
+                category: 'Return on Investment', categoryAr: 'العائد على الاستثمار',
+                question: 'Calculate the Return on Investment (ROI) percentage (%) if the Gain from Investment is $1,500 and the Cost of Investment is $1,000. (Enter percentage without % sign)',
+                questionAr: 'احسب النسبة المئوية للعائد على الاستثمار (ROI) (%) إذا كان المكسب من الاستثمار 1,500 دولار وتكلفة الاستثمار 1,000 دولار. (أدخل النسبة المئوية بدون علامة %)',
+                correctAnswer: 50,
+                tolerance: 1,
+                explanation: {
+                    core: "ROI is the fundamental performance measure used to evaluate the absolute efficiency of an investment.",
+                    formula: "ROI = (Gain from Investment - Cost of Investment) ÷ Cost of Investment",
+                    calculation: "($1,500 - $1,000) ÷ $1,000 = $500 ÷ $1,000 = 0.50 (50%)",
+                    context: "By expressing profit relative to the cost of the investment, ROI allows analysts to compare the efficiency of wildly different investments on equal footing."
+                },
+                explanationAr: {
+                    core: "العائد على الاستثمار (ROI) هو مقياس الأداء الأساسي المستخدم لتقييم الكفاءة المطلقة للاستثمار.",
+                    formula: "العائد على الاستثمار = (المكسب من الاستثمار - تكلفة الاستثمار) ÷ تكلفة الاستثمار",
+                    calculation: "(1,500 دولار - 1,000 دولار) ÷ 1,000 دولار = 500 دولار ÷ 1,000 دولار = 0.50 (50%)",
+                    context: "من خلال التعبير عن الربح بالنسبة لتكلفة الاستثمار، يسمح العائد على الاستثمار للمحللين بمقارنة كفاءة الاستثمارات المختلفة تماماً على قدم المساواة."
+                }
+            },
+
+            // --- GROUP 5: Trend & Common-Size Analysis ---
+            {
+                topicGroupId: 'analysis_methods', type: 'mc',
+                category: 'Analysis Methods', categoryAr: 'طرق التحليل',
+                question: 'What does Vertical Analysis (Common-Size Analysis) of a Balance Sheet involve?',
+                questionAr: 'ماذا يتضمن التحليل الرأسي (تحليل الحجم المشترك) للميزانية العمومية؟',
+                options: [
+                    'Evaluating changes in account balances over time (base year vs current year).',
+                    'Dividing all balance sheet items by Total Liabilities.',
+                    'Dividing all balance sheet items by Total Assets so they are expressed as a percentage.',
+                    'Adjusting all historical costs to current fair market values.'
+                ],
+                optionsAr: [
+                    'تقييم التغيرات في أرصدة الحسابات بمرور الوقت (سنة الأساس مقابل السنة الحالية).',
+                    'قسمة جميع بنود الميزانية العمومية على إجمالي الخصوم.',
+                    'قسمة جميع بنود الميزانية العمومية على إجمالي الأصول بحيث يتم التعبير عنها كنسبة مئوية.',
+                    'تعديل جميع التكاليف التاريخية للقيم العادلة للسوق الحالية.'
+                ],
+                correctAnswer: 2,
+                explanation: {
+                    core: "In Vertical Analysis, every line item is expressed as a percentage of a significant base total.",
+                    context: "For the balance sheet, the base is Total Assets. For the Income Statement, the base is Net Sales. This converts absolute dollars into percentages, making it extremely easy to compare massive corporations against small local businesses."
+                },
+                explanationAr: {
+                    core: "في التحليل الرأسي، يتم التعبير عن كل بند كنسبة مئوية من إجمالي أساسي مهم.",
+                    context: "بالنسبة للميزانية العمومية، الأساس هو إجمالي الأصول. بالنسبة لقائمة الدخل، الأساس هو صافي المبيعات. يحول هذا الدولارات المطلقة إلى نسب مئوية، مما يجعل من السهل للغاية مقارنة الشركات الضخمة بالشركات المحلية الصغيرة."
+                }
+            },
+            {
+                topicGroupId: 'analysis_methods', type: 'mc',
+                category: 'Analysis Methods', categoryAr: 'طرق التحليل',
+                question: 'Which of the following is another name for Horizontal Analysis?',
+                questionAr: 'أي مما يلي يمثل اسماً آخر للتحليل الأفقي؟',
+                options: ['Common-Size Analysis', 'Trend Analysis', 'Index Analysis', 'DuPont Analysis'],
+                optionsAr: ['التحليل الرأسي (الحجم المشترك)', 'تحليل الاتجاه', 'تحليل المؤشر', 'تحليل دوبونت'],
+                correctAnswer: 1,
+                explanation: {
+                    core: "Horizontal analysis is synonymous with Trend Analysis.",
+                    context: "It involves looking at financial data horizontally across multiple years, quantifying the dollar and percentage changes over time. It is heavily used to spot positive or negative momentum in sales and expenses."
+                },
+                explanationAr: {
+                    core: "التحليل الأفقي مرادف لتحليل الاتجاه.",
+                    context: "يتضمن النظر إلى البيانات المالية أفقياً عبر سنوات متعددة، وتحديد التغيرات بالدولار والنسبة المئوية بمرور الوقت. يُستخدم بكثرة لاكتشاف الزخم الإيجابي أو السلبي في المبيعات والنفقات."
+                }
+            },
+            {
+                topicGroupId: 'analysis_methods', type: 'mc',
+                category: 'Analysis Methods', categoryAr: 'طرق التحليل',
+                question: 'In Index Analysis, what value is assigned to the financial statement items for the base year?',
+                questionAr: 'في تحليل المؤشر، ما هي القيمة المخصصة لبنود البيانات المالية لسنة الأساس؟',
+                options: ['0', '1', '10.0', '100.0'],
+                optionsAr: ['0', '1', '10.0', '100.0'],
+                correctAnswer: 3,
+                explanation: {
+                    core: "In Index Analysis, the base year is set to exactly 100.0 percent.",
+                    context: "By setting the base year to 100, any subsequent year acts as an index. If Sales were 100.0 in Year 1, and 179.0 in Year 3, you instantly know that sales have grown by 79% over that specific period."
+                },
+                explanationAr: {
+                    core: "في تحليل المؤشر، يتم تعيين سنة الأساس إلى 100.0 في المائة بالضبط.",
+                    context: "من خلال تعيين سنة الأساس إلى 100، تعمل أي سنة لاحقة كمؤشر. إذا كانت المبيعات 100.0 في السنة 1، و179.0 في السنة 3، فأنت تعلم على الفور أن المبيعات نمت بنسبة 79% خلال تلك الفترة المحددة."
+                }
+            },
+            {
+                topicGroupId: 'analysis_methods', type: 'mc',
+                category: 'Limitations', categoryAr: 'القيود',
+                question: 'Which of the following is considered a limitation of Ratio Analysis?',
+                questionAr: 'أي مما يلي يعتبر من قيود تحليل النسب؟',
+                options: [
+                    'It standardizes financial information for comparisons.',
+                    'Published averages are only guidelines and accounting practices differ across firms.',
+                    'It helps to evaluate current operations.',
+                    'It shows the connection between activities and performance.'
+                ],
+                optionsAr: [
+                    'إنه يوحد المعلومات المالية للمقارنات.',
+                    'المتوسطات المنشورة هي مجرد إرشادات وتختلف الممارسات المحاسبية عبر الشركات.',
+                    'يساعد في تقييم العمليات الحالية.',
+                    'يظهر العلاقة بين الأنشطة والأداء.'
+                ],
+                correctAnswer: 1,
+                explanation: {
+                    core: "Ratios are a starting point, not an end. The biggest limitation is that comparing ratios between firms can be misleading due to differing accounting practices.",
+                    context: "For example, two identical companies might show vastly different Inventory Turnover ratios simply because one uses FIFO accounting and the other uses LIFO. Seasonality and broad industry categories also make comparisons difficult."
+                },
+                explanationAr: {
+                    core: "النسب هي نقطة بداية، وليست غاية. أكبر قيد هو أن مقارنة النسب بين الشركات يمكن أن تكون مضللة بسبب اختلاف الممارسات المحاسبية.",
+                    context: "على سبيل المثال، قد تظهر شركتان متطابقتان نسب دوران مخزون مختلفة تماماً ببساطة لأن إحداهما تستخدم محاسبة ما يدخل أولاً يخرج أولاً (FIFO) والأخرى تستخدم ما يدخل أخيراً يخرج أولاً (LIFO). كما تجعل الموسمية وفئات الصناعة الواسعة المقارنات صعبة."
+                }
+            },
+            {
+                topicGroupId: 'analysis_methods', type: 'calc',
+                category: 'Horizontal Analysis', categoryAr: 'التحليل الأفقي',
+                question: 'Based on the horizontal analysis balance sheet snippet below, what is the percentage change for Cash from 2012 to 2013? (Enter as a percentage up to 2 decimal places, e.g., -9.68)',
+                questionAr: 'بناءً على مقتطف الميزانية العمومية للتحليل الأفقي أدناه، ما هي النسبة المئوية للتغير في النقدية من 2012 إلى 2013؟ (أدخل كنسبة مئوية حتى منزلتين عشريتين، مثلاً -9.68)',
+                table: `
+                    <table class="quiz-table">
+                        <thead>
+                            <tr>
+                                <th>Asset</th>
+                                <th class="text-right-en">2012</th>
+                                <th class="text-right-en">2013</th>
+                                <th class="text-right-en">Change ($)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Cash</td>
+                                <td class="text-right-en">62,000</td>
+                                <td class="text-right-en">56,000</td>
+                                <td class="text-right-en">(6,000)</td>
+                            </tr>
+                            <tr>
+                                <td>Accounts Rec.</td>
+                                <td class="text-right-en">168,000</td>
+                                <td class="text-right-en">224,000</td>
+                                <td class="text-right-en">56,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `,
+                tableAr: `
+                    <table class="quiz-table">
+                        <thead>
+                            <tr>
+                                <th>الأصل</th>
+                                <th class="text-left-ar">2012</th>
+                                <th class="text-left-ar">2013</th>
+                                <th class="text-left-ar">التغير ($)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>النقدية</td>
+                                <td class="text-left-ar">62,000</td>
+                                <td class="text-left-ar">56,000</td>
+                                <td class="text-left-ar">(6,000)</td>
+                            </tr>
+                            <tr>
+                                <td>الذمم المدينة</td>
+                                <td class="text-left-ar">168,000</td>
+                                <td class="text-left-ar">224,000</td>
+                                <td class="text-left-ar">56,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `,
+                correctAnswer: -9.68,
+                tolerance: 0.1,
+                explanation: {
+                    core: "Horizontal analysis measures the percentage change in an account balance from a base year to a current year.",
+                    formula: "Percent Change = [(Current Year - Base Year) ÷ Base Year] × 100",
+                    calculation: "[(56,000 - 62,000) ÷ 62,000] × 100 = (-6,000 ÷ 62,000) × 100 = -9.677%",
+                    context: "By converting the raw dollar change into a percentage, analysts can quickly spot unusual trends. Here, seeing a ~10% drop in cash prompts further investigation into the firm's liquidity."
+                },
+                explanationAr: {
+                    core: "يقيس التحليل الأفقي النسبة المئوية للتغير في رصيد الحساب من سنة الأساس إلى السنة الحالية.",
+                    formula: "النسبة المئوية للتغير = [(السنة الحالية - سنة الأساس) ÷ سنة الأساس] × 100",
+                    calculation: "[(56,000 - 62,000) ÷ 62,000] × 100 = (-6,000 ÷ 62,000) × 100 = -9.677%",
+                    context: "من خلال تحويل التغير بالدولار الخام إلى نسبة مئوية، يمكن للمحللين اكتشاف الاتجاهات غير المعتادة بسرعة. هنا، رؤية انخفاض بنسبة ~10% في النقد يدفع إلى مزيد من التحقيق في سيولة الشركة."
+                }
+            },
+            {
+                topicGroupId: 'analysis_methods', type: 'calc',
+                category: 'Vertical Analysis', categoryAr: 'التحليل الرأسي',
+                question: 'Using the partial income statement below, calculate the vertical analysis (common-size) ratio for Cost of Goods Sold relative to Net Sales. (Enter as a positive percentage without the % sign)',
+                questionAr: 'باستخدام قائمة الدخل الجزئية أدناه، احسب نسبة التحليل الرأسي (الحجم المشترك) لتكلفة البضاعة المباعة بالنسبة إلى صافي المبيعات. (أدخل كنسبة مئوية موجبة بدون علامة %)',
+                table: `
+                    <table class="quiz-table">
+                        <thead>
+                            <tr>
+                                <th>Income Statement Item</th>
+                                <th class="text-right-en">2012 ($)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Net Sales</td>
+                                <td class="text-right-en">364,000</td>
+                            </tr>
+                            <tr>
+                                <td>Cost of Goods Sold</td>
+                                <td class="text-right-en">218,400</td>
+                            </tr>
+                            <tr>
+                                <td>Gross Profit</td>
+                                <td class="text-right-en">145,600</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `,
+                tableAr: `
+                    <table class="quiz-table">
+                        <thead>
+                            <tr>
+                                <th>بند قائمة الدخل</th>
+                                <th class="text-left-ar">2012 ($)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>صافي المبيعات</td>
+                                <td class="text-left-ar">364,000</td>
+                            </tr>
+                            <tr>
+                                <td>تكلفة البضاعة المباعة</td>
+                                <td class="text-left-ar">218,400</td>
+                            </tr>
+                            <tr>
+                                <td>إجمالي الربح</td>
+                                <td class="text-left-ar">145,600</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `,
+                correctAnswer: 60.0,
+                tolerance: 0.5,
+                explanation: {
+                    core: "In Vertical Analysis of an Income Statement, every line item is expressed as a percentage of Net Sales.",
+                    formula: "Common-Size % = (Item Amount ÷ Net Sales) × 100",
+                    calculation: "(218,400 ÷ 364,000) × 100 = 60.0%",
+                    context: "This tells us that exactly 60 cents of every sales dollar goes toward the direct cost of producing the goods, leaving 40 cents (the Gross Profit margin) to cover all other expenses."
+                },
+                explanationAr: {
+                    core: "في التحليل الرأسي لقائمة الدخل، يتم التعبير عن كل بند كنسبة مئوية من صافي المبيعات.",
+                    formula: "% الحجم المشترك = (مبلغ البند ÷ صافي المبيعات) × 100",
+                    calculation: "(218,400 ÷ 364,000) × 100 = 60.0%",
+                    context: "يخبرنا هذا أن 60 سنتاً بالضبط من كل دولار مبيعات تذهب نحو التكلفة المباشرة لإنتاج البضائع، تاركاً 40 سنتاً (هامش إجمالي الربح) لتغطية جميع النفقات الأخرى."
+                }
+            },
+            {
+                topicGroupId: 'analysis_methods', type: 'mc',
+                category: 'Index Analysis', categoryAr: 'تحليل المؤشر',
+                question: 'Based on the Indexed Balance Sheet snippet below (where 2005 is the base year = 100.0), what does the 2007 index value of 216.1 for Inventory indicate?',
+                questionAr: 'بناءً على مقتطف الميزانية العمومية المفهرسة أدناه (حيث عام 2005 هو سنة الأساس = 100.0)، إلى ماذا تشير قيمة مؤشر عام 2007 البالغة 216.1 للمخزون؟',
+                table: `
+                    <table class="quiz-table">
+                        <thead>
+                            <tr>
+                                <th>Assets</th>
+                                <th class="text-right-en">2005</th>
+                                <th class="text-right-en">2006</th>
+                                <th class="text-right-en">2007</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Accounts Rec.</td>
+                                <td class="text-right-en">100.0</td>
+                                <td class="text-right-en">144.9</td>
+                                <td class="text-right-en">139.2</td>
+                            </tr>
+                            <tr>
+                                <td>Inventory</td>
+                                <td class="text-right-en">100.0</td>
+                                <td class="text-right-en">191.3</td>
+                                <td class="text-right-en">216.1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `,
+                tableAr: `
+                    <table class="quiz-table">
+                        <thead>
+                            <tr>
+                                <th>الأصول</th>
+                                <th class="text-left-ar">2005</th>
+                                <th class="text-left-ar">2006</th>
+                                <th class="text-left-ar">2007</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>الذمم المدينة</td>
+                                <td class="text-left-ar">100.0</td>
+                                <td class="text-left-ar">144.9</td>
+                                <td class="text-left-ar">139.2</td>
+                            </tr>
+                            <tr>
+                                <td>المخزون</td>
+                                <td class="text-left-ar">100.0</td>
+                                <td class="text-left-ar">191.3</td>
+                                <td class="text-left-ar">216.1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `,
+                options: [
+                    'Inventory decreased by 216.1% since 2005.',
+                    'Inventory in 2007 is 116.1% higher than it was in 2005.',
+                    'Inventory constitutes 21.6% of Total Assets.',
+                    'The firm sold 216.1 units of inventory.'
+                ],
+                optionsAr: [
+                    'انخفض المخزون بنسبة 216.1% منذ عام 2005.',
+                    'المخزون في عام 2007 أعلى بنسبة 116.1% عما كان عليه في عام 2005.',
+                    'يشكل المخزون 21.6% من إجمالي الأصول.',
+                    'باعت الشركة 216.1 وحدة من المخزون.'
+                ],
+                correctAnswer: 1,
+                explanation: {
+                    core: "Index analysis sets a base year to 100.0, and expresses subsequent years as a percentage of that base year.",
+                    calculation: "Index 216.1 = The value is 216.1% of the original 2005 amount. (216.1% - 100.0% base = 116.1% growth).",
+                    context: "If inventory more than doubled (116% growth) over two years, while Accounts Receivable only grew by 39%, management needs to investigate if they are severely overstocking or if sales are slowing down."
+                },
+                explanationAr: {
+                    core: "يحدد تحليل المؤشر سنة أساس عند 100.0، ويعبر عن السنوات اللاحقة كنسبة مئوية من سنة الأساس تلك.",
+                    calculation: "المؤشر 216.1 = القيمة هي 216.1% من المبلغ الأصلي لعام 2005. (216.1% - 100.0% الأساس = نمو 116.1%).",
+                    context: "إذا تضاعف المخزون بأكثر من الضعف (نمو 116%) على مدار عامين، في حين نمت الذمم المدينة بنسبة 39% فقط، تحتاج الإدارة إلى التحقيق لمعرفة ما إذا كانت تبالغ في التخزين بشدة أم أن المبيعات تتباطأ."
+                }
+            }
+        ];
+
+        let activeQuestions = [];
+        let currentTopic = null;
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+        let timerInterval;
+        let secondsElapsed = 0;
+        let userAnswersData = []; 
+
+        const quizContainer = document.getElementById('quiz-container');
+
+        // Keyboard support
+        window.addEventListener('keydown', (e) => {
+            if (document.getElementById('scroll-wrapper').classList.contains('review-mode') || activeQuestions.length === 0) return;
+
+            const submitBtn = document.getElementById('submit-btn');
+            const nextBtn = document.getElementById('next-btn');
+
+            if (submitBtn && !submitBtn.classList.contains('hidden')) {
+                // Number keys 1-4 for radio buttons
+                if (e.key >= '1' && e.key <= '4') {
+                    const idx = parseInt(e.key) - 1;
+                    const radios = document.querySelectorAll('input[type="radio"]');
+                    if (radios.length > 0 && !radios[0].disabled) {
+                        selectOption(idx);
+                    }
+                }
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    checkAnswer();
+                }
+            } else if (nextBtn && !nextBtn.classList.contains('hidden')) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    nextQuestion();
+                }
+            }
+        });
+
+        function createDualPanel(englishContent, arabicContent) {
+            return `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+                    <div dir="ltr" class="ltr-container pr-0 md:pr-4">${englishContent}</div>
+                    <div dir="rtl" class="rtl-container pl-0 md:pl-4 border-t-4 md:border-t-0 md:border-r-4 border-slate-200/60 pt-6 md:pt-0">${arabicContent}</div>
+                </div>
+            `;
+        }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function startTimer() {
+            document.getElementById('header-stats-en').classList.remove('hidden');
+            document.getElementById('header-stats-ar').classList.remove('hidden');
+            secondsElapsed = 0;
+            updateTimers();
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                updateTimers();
+            }, 1000);
+        }
+
+        function updateTimers() {
+            const timeStr = formatTime(secondsElapsed);
+            document.querySelectorAll('.timer-display').forEach(el => el.innerText = timeStr);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function initQuiz() {
+            document.getElementById('header-stats-en').classList.add('hidden');
+            document.getElementById('header-stats-ar').classList.add('hidden');
+            activeQuestions = [];
+            
+            let tocCardsEn = '';
+            let tocCardsAr = '';
+
+            topicGroups.forEach(group => {
+                const count = questions.filter(q => q.topicGroupId === group.id).length;
+                
+                // English Card
+                tocCardsEn += `
+                    <button onclick="startQuiz('${group.id}')" class="flex items-center p-4 bg-white border-2 border-slate-200 rounded-xl hover:${group.border} hover:shadow-md transition-all group text-left w-full focus:outline-none focus:ring-4 focus:ring-slate-200 mb-4">
+                        <div class="${group.bg} ${group.color} w-12 h-12 rounded-lg flex items-center justify-center text-xl shrink-0 mr-4 transition-transform group-hover:scale-110">
+                            <i class="fas ${group.icon}"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg group-hover:text-blue-700 transition-colors">${group.name}</h3>
+                            <p class="text-sm text-slate-500 font-medium">${count} Questions</p>
+                        </div>
+                        <div class="ml-auto text-slate-300 group-hover:text-blue-500"><i class="fas fa-chevron-right"></i></div>
+                    </button>
+                `;
+
+                // Arabic Card
+                tocCardsAr += `
+                    <button onclick="startQuiz('${group.id}')" class="flex items-center p-4 bg-white border-2 border-slate-200 rounded-xl hover:${group.border} hover:shadow-md transition-all group text-right w-full focus:outline-none focus:ring-4 focus:ring-slate-200 mb-4">
+                        <div class="${group.bg} ${group.color} w-12 h-12 rounded-lg flex items-center justify-center text-xl shrink-0 ml-4 transition-transform group-hover:scale-110">
+                            <i class="fas ${group.icon}"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg group-hover:text-blue-700 transition-colors">${group.nameAr}</h3>
+                            <p class="text-sm text-slate-500 font-medium">${count} أسئلة</p>
+                        </div>
+                        <div class="mr-auto text-slate-300 group-hover:text-blue-500"><i class="fas fa-chevron-left"></i></div>
+                    </button>
+                `;
+            });
+
+            const enHTML = `
+                <div class="text-left mb-8">
+                    <h2 class="text-3xl font-extrabold text-slate-800 mb-3 tracking-tight">Table of Contents</h2>
+                    <p class="text-slate-600 leading-relaxed">Select a specific topic to focus your study session, or take the comprehensive assessment covering all ${questions.length} concepts.</p>
+                </div>
+                <div>${tocCardsEn}</div>
+                <div class="text-center mt-8">
+                    <div class="flex items-center justify-center gap-4 text-sm text-slate-500 mb-6 bg-slate-50 py-2 px-4 rounded-lg inline-flex border border-slate-200">
+                        <span><i class="fas fa-keyboard mr-2 text-slate-400"></i> Hotkeys Enabled</span>
+                    </div><br>
+                    <button onclick="startQuiz(null)" class="bg-slate-900 hover:bg-blue-700 active:transform active:scale-95 text-white font-bold py-4 px-8 rounded-xl shadow-[0_6px_0_rgb(15,23,42)] hover:shadow-[0_3px_0_rgb(30,58,138)] hover:translate-y-1 transition-all duration-150 text-lg focus:outline-none">
+                        Start Comprehensive Exam <i class="fas fa-play ml-2"></i>
+                    </button>
+                </div>
+            `;
+
+            const arHTML = `
+                <div class="text-right mb-8">
+                    <h2 class="text-3xl font-extrabold text-slate-800 mb-3 tracking-tight">جدول المحتويات</h2>
+                    <p class="text-slate-600 leading-relaxed">حدد موضوعًا معينًا لتركيز جلسة الدراسة الخاصة بك، أو قم بإجراء التقييم الشامل الذي يغطي جميع المفاهيم البالغ عددها ${questions.length}.</p>
+                </div>
+                <div>${tocCardsAr}</div>
+                <div class="text-center mt-8">
+                    <div class="flex items-center justify-center gap-4 text-sm text-slate-500 mb-6 bg-slate-50 py-2 px-4 rounded-lg inline-flex border border-slate-200">
+                        <span><i class="fas fa-keyboard ml-2 text-slate-400"></i> مفاتيح الاختصار مفعلة</span>
+                    </div><br>
+                    <button onclick="startQuiz(null)" class="bg-slate-900 hover:bg-blue-700 active:transform active:scale-95 text-white font-bold py-4 px-8 rounded-xl shadow-[0_6px_0_rgb(15,23,42)] hover:shadow-[0_3px_0_rgb(30,58,138)] hover:translate-y-1 transition-all duration-150 text-lg focus:outline-none">
+                        ابدأ الامتحان الشامل <i class="fas fa-play mr-2"></i>
+                    </button>
+                </div>
+            `;
+
+            quizContainer.innerHTML = `
+                <div class="py-6 md:py-8 fade-in">
+                    ${createDualPanel(enHTML, arHTML)}
+                </div>
+            `;
+        }
+
+        function startQuiz(groupId = null) {
+            if (groupId) {
+                activeQuestions = questions.filter(q => q.topicGroupId === groupId);
+                currentTopic = topicGroups.find(g => g.id === groupId);
+            } else {
+                activeQuestions = questions;
+                currentTopic = { name: 'Comprehensive Exam', nameAr: 'الامتحان الشامل', color: 'text-blue-700', bg: 'bg-blue-100', border: 'border-blue-200' };
+            }
+            
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswersData = [];
+            document.getElementById('scroll-wrapper').classList.remove('review-mode');
+            startTimer();
+            renderQuestion();
+        }
+
+        function renderExplanationHTML(exp, isArabic = false) {
+            const langClass = isArabic ? "text-right" : "text-left";
+            const formulaText = isArabic ? "المعادلة" : "Formula";
+            const stepText = isArabic ? "خطوة بخطوة" : "Step-by-Step";
+            const matterText = isArabic ? "لماذا هذا مهم" : "Why it Matters";
+            const marginIcon = isArabic ? "ml-1" : "mr-1";
+            const marginIcon2 = isArabic ? "ml-2" : "mr-2";
+
+            let html = `<p class="text-slate-700 leading-relaxed mb-4 text-[15px] font-medium ${langClass}">${exp.core}</p>`;
+            
+            if (exp.formula || exp.calculation) {
+                html += `<div class="grid grid-cols-1 ${exp.formula && exp.calculation ? 'xl:grid-cols-2' : ''} gap-3 mb-4">`;
+                
+                if (exp.formula) {
+                    html += `
+                        <div class="bg-indigo-50/70 p-3 rounded-lg border border-indigo-100 ${langClass}">
+                            <div class="text-[10px] font-bold uppercase tracking-widest text-indigo-500 mb-1.5"><i class="fas fa-subscript ${marginIcon}"></i> ${formulaText}</div>
+                            <div class="math-block text-indigo-900 bg-white px-3 py-2 rounded-md shadow-sm border border-indigo-50 text-sm font-semibold" dir="ltr">${exp.formula}</div>
+                        </div>
+                    `;
+                }
+                if (exp.calculation) {
+                    html += `
+                        <div class="bg-emerald-50/70 p-3 rounded-lg border border-emerald-100 ${langClass}">
+                            <div class="text-[10px] font-bold uppercase tracking-widest text-emerald-600 mb-1.5"><i class="fas fa-calculator ${marginIcon}"></i> ${stepText}</div>
+                            <div class="math-block text-emerald-900 bg-white px-3 py-2 rounded-md shadow-sm border border-emerald-50 text-sm font-semibold" dir="ltr">${exp.calculation}</div>
+                        </div>
+                    `;
+                }
+                html += `</div>`;
+            }
+
+            if (exp.context) {
+                html += `
+                    <div class="bg-amber-50/50 p-4 rounded-lg border border-amber-100/60 mt-2 ${langClass}">
+                        <div class="text-xs font-bold uppercase tracking-widest text-amber-600 mb-2 flex items-center justify-${isArabic ? 'start' : 'start'}"><i class="fas fa-lightbulb ${marginIcon2} text-amber-500"></i> ${matterText}</div>
+                        <p class="text-amber-900 text-[14px] leading-relaxed">${exp.context}</p>
+                    </div>
+                `;
+            }
+            return html;
+        }
+
+        // Global selected value for custom click handlers
+        let currentSelectedValue = null;
+
+        // Custom function to sync English and Arabic selections
+        function selectOption(idx) {
+            if(document.querySelector('.hidden-radio').disabled) return;
+            
+            currentSelectedValue = idx;
+            
+            // Clear all styles
+            document.querySelectorAll('.mc-label-en').forEach(l => {
+                l.classList.remove('border-blue-500', 'bg-blue-50/50', 'ring-2', 'ring-blue-100', 'shadow-md');
+                l.querySelector('.mc-icon').classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+            });
+            document.querySelectorAll('.mc-label-ar').forEach(l => {
+                l.classList.remove('border-blue-500', 'bg-blue-50/50', 'ring-2', 'ring-blue-100', 'shadow-md');
+                l.querySelector('.mc-icon').classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+            });
+
+            // Set active style for English
+            const labelEn = document.getElementById(`label-en-${idx}`);
+            labelEn.classList.add('border-blue-500', 'bg-blue-50/50', 'ring-2', 'ring-blue-100', 'shadow-md');
+            labelEn.querySelector('.mc-icon').classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+            
+            // Set active style for Arabic
+            const labelAr = document.getElementById(`label-ar-${idx}`);
+            labelAr.classList.add('border-blue-500', 'bg-blue-50/50', 'ring-2', 'ring-blue-100', 'shadow-md');
+            labelAr.querySelector('.mc-icon').classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+        }
+
+        function syncCalcInput(val) {
+            document.getElementById('calc-answer-en').value = val;
+            document.getElementById('calc-answer-ar').value = val;
+        }
+
+        function renderQuestion() {
+            answered = false;
+            currentSelectedValue = null;
+            const q = activeQuestions[currentQuestionIndex];
+            const progress = ((currentQuestionIndex) / activeQuestions.length) * 100;
+            
+            const scrollWrapper = document.getElementById('scroll-wrapper');
+            if (scrollWrapper) scrollWrapper.scrollTop = 0;
+
+            let inputHtmlEn = '';
+            let inputHtmlAr = '';
+
+            if (q.type === 'mc') {
+                inputHtmlEn = `<div class="space-y-3 mt-6">`;
+                inputHtmlAr = `<div class="space-y-3 mt-6">`;
+                
+                q.options.forEach((opt, idx) => {
+                    inputHtmlEn += `
+                        <div onclick="selectOption(${idx})" class="mc-label-en flex items-center p-4 border-2 rounded-xl cursor-pointer hover:bg-slate-50 hover:border-blue-300 transition-all border-slate-200 group bg-white shadow-sm" id="label-en-${idx}">
+                            <div class="mc-icon flex items-center justify-center w-8 h-8 rounded-lg border-2 border-slate-300 group-hover:border-blue-400 mr-4 font-mono text-sm font-bold text-slate-400 group-hover:text-blue-500 bg-slate-50 shrink-0 transition-colors">
+                                ${idx + 1}
+                            </div>
+                            <input type="radio" name="answer-en" value="${idx}" class="hidden hidden-radio">
+                            <span class="text-slate-700 font-medium text-lg leading-snug">${opt}</span>
+                        </div>
+                    `;
+                    
+                    inputHtmlAr += `
+                        <div onclick="selectOption(${idx})" class="mc-label-ar flex items-center p-4 border-2 rounded-xl cursor-pointer hover:bg-slate-50 hover:border-blue-300 transition-all border-slate-200 group bg-white shadow-sm" id="label-ar-${idx}">
+                            <div class="mc-icon flex items-center justify-center w-8 h-8 rounded-lg border-2 border-slate-300 group-hover:border-blue-400 ml-4 font-mono text-sm font-bold text-slate-400 group-hover:text-blue-500 bg-slate-50 shrink-0 transition-colors">
+                                ${idx + 1}
+                            </div>
+                            <input type="radio" name="answer-ar" value="${idx}" class="hidden hidden-radio">
+                            <span class="text-slate-700 font-medium text-lg leading-snug">${q.optionsAr[idx]}</span>
+                        </div>
+                    `;
+                });
+                inputHtmlEn += `</div>`;
+                inputHtmlAr += `</div>`;
+            } else if (q.type === 'calc') {
+                inputHtmlEn = `
+                    <div class="mt-8 relative max-w-xl">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fas fa-keyboard text-slate-300 text-xl"></i></div>
+                        <input type="number" step="any" id="calc-answer-en" oninput="syncCalcInput(this.value)" placeholder="Enter numeric value..." class="w-full pl-12 p-5 border-2 border-slate-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none text-xl transition-all font-mono font-medium text-slate-800 shadow-inner bg-slate-50">
+                    </div>
+                `;
+                inputHtmlAr = `
+                    <div class="mt-8 relative max-w-xl">
+                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none"><i class="fas fa-keyboard text-slate-300 text-xl"></i></div>
+                        <input type="number" step="any" id="calc-answer-ar" oninput="syncCalcInput(this.value)" placeholder="أدخل القيمة الرقمية..." class="w-full pr-12 p-5 border-2 border-slate-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 focus:outline-none text-xl transition-all font-mono font-medium text-slate-800 shadow-inner bg-slate-50" dir="ltr" style="text-align: right;">
+                    </div>
+                `;
+            }
+
+            // Fallback for color if taking comprehensive exam
+            const groupColor = currentTopic.color || 'text-blue-700';
+            const groupBg = currentTopic.bg || 'bg-blue-100';
+            const groupBorder = currentTopic.border || 'border-blue-200';
+
+            const enHTML = `
+                <div class="flex justify-between items-end mb-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Question ${currentQuestionIndex + 1} of ${activeQuestions.length}</span>
+                    <span class="text-xs font-bold text-blue-700 bg-blue-100 border border-blue-200 px-3 py-1 rounded-md shadow-sm"><i class="fas fa-star text-yellow-500 mr-1"></i> Score: ${score}</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2.5 mb-8 overflow-hidden border border-slate-200">
+                    <div class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full rounded-full transition-all duration-700 ease-out relative" style="width: ${progress}%"></div>
+                </div>
+                <div class="inline-block ${groupBg} ${groupColor} border ${groupBorder} text-[11px] font-bold px-2.5 py-1 rounded-md uppercase tracking-widest mb-4 shadow-sm">
+                    ${currentTopic.name === 'Comprehensive Exam' ? q.category : currentTopic.name}
+                </div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 leading-snug mb-2">${q.question}</h2>
+                ${q.table ? `<div class="mt-4 mb-2 overflow-x-auto">${q.table}</div>` : ''}
+                ${inputHtmlEn}
+                <div id="feedback-en" class="mt-8 hidden rounded-xl p-6 shadow-sm border slide-up"></div>
+            `;
+
+            const arHTML = `
+                <div class="flex justify-between items-end mb-2" dir="rtl">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">السؤال ${currentQuestionIndex + 1} من ${activeQuestions.length}</span>
+                    <span class="text-xs font-bold text-blue-700 bg-blue-100 border border-blue-200 px-3 py-1 rounded-md shadow-sm"><i class="fas fa-star text-yellow-500 ml-1"></i> النتيجة: ${score}</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2.5 mb-8 overflow-hidden border border-slate-200" dir="rtl">
+                    <div class="bg-gradient-to-l from-blue-500 to-indigo-500 h-full rounded-full transition-all duration-700 ease-out relative" style="width: ${progress}%"></div>
+                </div>
+                <div class="inline-block ${groupBg} ${groupColor} border ${groupBorder} text-[11px] font-bold px-2.5 py-1 rounded-md uppercase tracking-widest mb-4 shadow-sm" dir="rtl">
+                    ${currentTopic.nameAr === 'الامتحان الشامل' ? q.categoryAr : currentTopic.nameAr}
+                </div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 leading-snug mb-2" dir="rtl">${q.questionAr}</h2>
+                ${q.tableAr ? `<div class="mt-4 mb-2 overflow-x-auto" dir="rtl">${q.tableAr}</div>` : (q.table ? `<div class="mt-4 mb-2 overflow-x-auto" dir="rtl">${q.table}</div>` : '')}
+                ${inputHtmlAr}
+                <div id="feedback-ar" class="mt-8 hidden rounded-xl p-6 shadow-sm border slide-up" dir="rtl"></div>
+            `;
+
+            const footerHTML = `
+                <div class="mt-8 flex justify-between items-center border-t border-slate-100 pt-6 px-4">
+                    <button onclick="initQuiz()" class="text-sm font-bold text-slate-400 hover:text-slate-700 transition-colors hidden sm:block"><i class="fas fa-home mr-1"></i> Back/عودة</button>
+                    <div class="ml-auto flex gap-3">
+                        <button id="submit-btn" onclick="checkAnswer()" class="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold py-3 px-10 rounded-xl shadow-md transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                            Submit / إرسال
+                        </button>
+                        <button id="next-btn" onclick="nextQuestion()" class="hidden bg-slate-900 hover:bg-black active:scale-95 text-white font-bold py-3 px-10 rounded-xl shadow-md transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-slate-300">
+                            Continue / متابعة <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            quizContainer.innerHTML = `
+                <div class="fade-in pb-10">
+                    ${createDualPanel(enHTML, arHTML)}
+                    ${footerHTML}
+                </div>
+            `;
+
+            if (q.type === 'calc') {
+                setTimeout(() => document.getElementById('calc-answer-en').focus(), 50);
+            }
+        }
+
+        function checkAnswer() {
+            if (answered) return;
+            const q = activeQuestions[currentQuestionIndex];
+            let isCorrect = false;
+            let userAnswerRaw = null;
+            let userAnswerDisplay = "";
+            let userAnswerDisplayAr = "";
+            let correctAnswerDisplay = "";
+            let correctAnswerDisplayAr = "";
+
+            if (q.type === 'mc') {
+                if (currentSelectedValue === null) {
+                    document.getElementById('submit-btn').classList.add('animate-pulse');
+                    setTimeout(() => document.getElementById('submit-btn').classList.remove('animate-pulse'), 500);
+                    return;
+                }
+                userAnswerRaw = currentSelectedValue;
+                isCorrect = (userAnswerRaw === q.correctAnswer);
+                userAnswerDisplay = q.options[userAnswerRaw];
+                userAnswerDisplayAr = q.optionsAr[userAnswerRaw];
+                correctAnswerDisplay = q.options[q.correctAnswer];
+                correctAnswerDisplayAr = q.optionsAr[q.correctAnswer];
+                
+                // Style English Correct
+                const correctLabelEn = document.getElementById(`label-en-${q.correctAnswer}`);
+                correctLabelEn.classList.remove('border-slate-200', 'hover:bg-slate-50', 'bg-blue-50/50', 'border-blue-500', 'ring-blue-100');
+                correctLabelEn.classList.add('bg-green-50', 'border-green-500', 'ring-2', 'ring-green-100', 'shadow-sm');
+                correctLabelEn.querySelector('.mc-icon').className = 'mc-icon flex items-center justify-center w-8 h-8 rounded-lg border-2 bg-green-500 text-white border-green-500 mr-4 shrink-0 shadow-sm';
+                correctLabelEn.querySelector('.mc-icon').innerHTML = '<i class="fas fa-check"></i>';
+                
+                // Style Arabic Correct
+                const correctLabelAr = document.getElementById(`label-ar-${q.correctAnswer}`);
+                correctLabelAr.classList.remove('border-slate-200', 'hover:bg-slate-50', 'bg-blue-50/50', 'border-blue-500', 'ring-blue-100');
+                correctLabelAr.classList.add('bg-green-50', 'border-green-500', 'ring-2', 'ring-green-100', 'shadow-sm');
+                correctLabelAr.querySelector('.mc-icon').className = 'mc-icon flex items-center justify-center w-8 h-8 rounded-lg border-2 bg-green-500 text-white border-green-500 ml-4 shrink-0 shadow-sm';
+                correctLabelAr.querySelector('.mc-icon').innerHTML = '<i class="fas fa-check"></i>';
+
+                if (!isCorrect) {
+                    // Style English Incorrect
+                    const incorrectLabelEn = document.getElementById(`label-en-${userAnswerRaw}`);
+                    incorrectLabelEn.classList.remove('border-blue-500', 'bg-blue-50/50', 'ring-blue-100');
+                    incorrectLabelEn.classList.add('bg-red-50', 'border-red-400', 'opacity-70');
+                    incorrectLabelEn.querySelector('.mc-icon').className = 'mc-icon flex items-center justify-center w-8 h-8 rounded-lg border-2 bg-red-500 text-white border-red-500 mr-4 shrink-0 shadow-sm';
+                    incorrectLabelEn.querySelector('.mc-icon').innerHTML = '<i class="fas fa-times"></i>';
+                    
+                    // Style Arabic Incorrect
+                    const incorrectLabelAr = document.getElementById(`label-ar-${userAnswerRaw}`);
+                    incorrectLabelAr.classList.remove('border-blue-500', 'bg-blue-50/50', 'ring-blue-100');
+                    incorrectLabelAr.classList.add('bg-red-50', 'border-red-400', 'opacity-70');
+                    incorrectLabelAr.querySelector('.mc-icon').className = 'mc-icon flex items-center justify-center w-8 h-8 rounded-lg border-2 bg-red-500 text-white border-red-500 ml-4 shrink-0 shadow-sm';
+                    incorrectLabelAr.querySelector('.mc-icon').innerHTML = '<i class="fas fa-times"></i>';
+                }
+                
+                // Disable hidden radios visually
+                document.querySelectorAll('.hidden-radio').forEach(el => el.disabled = true);
+
+            } else if (q.type === 'calc') {
+                const inputElEn = document.getElementById('calc-answer-en');
+                const inputElAr = document.getElementById('calc-answer-ar');
+                userAnswerRaw = parseFloat(inputElEn.value);
+                if (isNaN(userAnswerRaw)) {
+                    inputElEn.classList.add('border-red-400', 'ring-4', 'ring-red-100', 'bg-red-50');
+                    inputElAr.classList.add('border-red-400', 'ring-4', 'ring-red-100', 'bg-red-50');
+                    setTimeout(() => {
+                        inputElEn.classList.remove('border-red-400', 'ring-4', 'ring-red-100', 'bg-red-50');
+                        inputElAr.classList.remove('border-red-400', 'ring-4', 'ring-red-100', 'bg-red-50');
+                    }, 1000);
+                    return;
+                }
+                
+                isCorrect = Math.abs(userAnswerRaw - q.correctAnswer) <= q.tolerance;
+                userAnswerDisplay = userAnswerRaw.toString();
+                userAnswerDisplayAr = userAnswerDisplay;
+                correctAnswerDisplay = q.correctAnswer.toString();
+                correctAnswerDisplayAr = correctAnswerDisplay;
+
+                inputElEn.disabled = true;
+                inputElAr.disabled = true;
+                if (isCorrect) {
+                    inputElEn.className = "w-full pl-12 p-5 rounded-xl text-xl font-mono font-medium shadow-inner bg-green-50 border-green-500 text-green-800 ring-2 ring-green-200";
+                    inputElAr.className = "w-full pr-12 p-5 rounded-xl text-xl font-mono font-medium shadow-inner bg-green-50 border-green-500 text-green-800 ring-2 ring-green-200";
+                } else {
+                    inputElEn.className = "w-full pl-12 p-5 rounded-xl text-xl font-mono font-medium shadow-inner bg-red-50 border-red-500 text-red-800 ring-2 ring-red-200";
+                    inputElAr.className = "w-full pr-12 p-5 rounded-xl text-xl font-mono font-medium shadow-inner bg-red-50 border-red-500 text-red-800 ring-2 ring-red-200";
+                }
+            }
+
+            answered = true;
+            if (isCorrect) score++;
+
+            userAnswersData.push({
+                questionText: q.question,
+                questionTextAr: q.questionAr,
+                category: q.category,
+                categoryAr: q.categoryAr,
+                isCorrect: isCorrect,
+                userAnswerDisplay: userAnswerDisplay,
+                userAnswerDisplayAr: userAnswerDisplayAr,
+                correctAnswerDisplay: correctAnswerDisplay,
+                correctAnswerDisplayAr: correctAnswerDisplayAr,
+                explanation: q.explanation,
+                explanationAr: q.explanationAr
+            });
+
+            // Feedback Injection
+            const fbEn = document.getElementById('feedback-en');
+            const fbAr = document.getElementById('feedback-ar');
+            fbEn.classList.remove('hidden');
+            fbAr.classList.remove('hidden');
+            
+            const expHtmlEn = renderExplanationHTML(q.explanation, false);
+            const expHtmlAr = renderExplanationHTML(q.explanationAr, true);
+
+            if (isCorrect) {
+                fbEn.className = 'mt-8 rounded-xl p-6 shadow-sm border slide-up bg-white border-green-300 shadow-[0_0_15px_rgba(34,197,94,0.1)]';
+                fbAr.className = 'mt-8 rounded-xl p-6 shadow-sm border slide-up bg-white border-green-300 shadow-[0_0_15px_rgba(34,197,94,0.1)]';
+                
+                fbEn.innerHTML = `
+                    <div class="flex items-center mb-4 pb-4 border-b border-green-100">
+                        <div class="bg-green-100 text-green-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 shadow-inner shrink-0"><i class="fas fa-check text-xl"></i></div>
+                        <h3 class="font-extrabold text-green-800 text-xl tracking-tight">Correct!</h3>
+                    </div><div>${expHtmlEn}</div>`;
+                fbAr.innerHTML = `
+                    <div class="flex items-center mb-4 pb-4 border-b border-green-100">
+                        <div class="bg-green-100 text-green-600 rounded-full w-10 h-10 flex items-center justify-center ml-4 shadow-inner shrink-0"><i class="fas fa-check text-xl"></i></div>
+                        <h3 class="font-extrabold text-green-800 text-xl tracking-tight">إجابة صحيحة!</h3>
+                    </div><div>${expHtmlAr}</div>`;
+            } else {
+                fbEn.className = 'mt-8 rounded-xl p-6 shadow-sm border slide-up bg-white border-red-300 shadow-[0_0_15px_rgba(239,68,68,0.1)]';
+                fbAr.className = 'mt-8 rounded-xl p-6 shadow-sm border slide-up bg-white border-red-300 shadow-[0_0_15px_rgba(239,68,68,0.1)]';
+                
+                const incHeadEn = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 pb-4 border-b border-red-100 gap-3">
+                        <div class="flex items-center"><div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 shadow-inner shrink-0"><i class="fas fa-times text-xl"></i></div><h3 class="font-extrabold text-red-800 text-xl tracking-tight">Incorrect</h3></div>
+                        ${q.type === 'calc' ? `<div class="bg-red-50 border border-red-200 text-red-800 px-4 py-2 rounded-lg text-sm font-bold shadow-sm self-start">Correct Answer: <span class="font-mono text-base ml-1">${correctAnswerDisplay}</span></div>` : ''}
+                    </div>`;
+                const incHeadAr = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 pb-4 border-b border-red-100 gap-3">
+                        <div class="flex items-center"><div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center ml-4 shadow-inner shrink-0"><i class="fas fa-times text-xl"></i></div><h3 class="font-extrabold text-red-800 text-xl tracking-tight">إجابة خاطئة</h3></div>
+                        ${q.type === 'calc' ? `<div class="bg-red-50 border border-red-200 text-red-800 px-4 py-2 rounded-lg text-sm font-bold shadow-sm self-start">الإجابة الصحيحة: <span class="font-mono text-base mr-1" dir="ltr">${correctAnswerDisplayAr}</span></div>` : ''}
+                    </div>`;
+
+                fbEn.innerHTML = incHeadEn + `<div>${expHtmlEn}</div>`;
+                fbAr.innerHTML = incHeadAr + `<div>${expHtmlAr}</div>`;
+            }
+
+            document.getElementById('submit-btn').classList.add('hidden');
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.classList.remove('hidden');
+            
+            if (currentQuestionIndex === activeQuestions.length - 1) {
+                nextBtn.innerHTML = `Complete Assessment / اكتمل التقييم <i class="fas fa-flag-checkered ml-2"></i>`;
+                nextBtn.classList.replace('bg-slate-900', 'bg-green-600');
+                nextBtn.classList.replace('hover:bg-black', 'hover:bg-green-700');
+                nextBtn.classList.replace('focus:ring-slate-300', 'focus:ring-green-300');
+            }
+            setTimeout(() => nextBtn.focus(), 50);
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < activeQuestions.length) {
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            stopTimer();
+            const percentage = Math.round((score / activeQuestions.length) * 100);
+            
+            let msgEn, msgAr, colorClass, bgClass;
+            if (percentage >= 90) {
+                msgEn = "Outstanding! You have a firm grasp of the material. Excellent work.";
+                msgAr = "ممتاز! لديك فهم قوي للمواد. عمل رائع.";
+                colorClass = "text-green-500"; bgClass = "bg-green-50 text-green-800 border-green-200";
+            } else if (percentage >= 70) {
+                msgEn = "Great job! You have a solid understanding, with just a few areas to brush up on.";
+                msgAr = "عمل رائع! لديك فهم قوي، مع عدد قليل من المجالات التي تحتاج إلى مراجعة.";
+                colorClass = "text-blue-500"; bgClass = "bg-blue-50 text-blue-800 border-blue-200";
+            } else if (percentage >= 50) {
+                msgEn = "Good effort. Take some time to review the formulas and concepts in the Study Guide.";
+                msgAr = "جهد جيد. خذ بعض الوقت لمراجعة الصيغ والمفاهيم في دليل الدراسة.";
+                colorClass = "text-amber-500"; bgClass = "bg-amber-50 text-amber-800 border-amber-200";
+            } else {
+                msgEn = "Keep studying! Financial analysis involves many rules that take practice to master.";
+                msgAr = "استمر في الدراسة! يتضمن التحليل المالي العديد من القواعد التي تحتاج إلى الممارسة لإتقانها.";
+                colorClass = "text-red-500"; bgClass = "bg-red-50 text-red-800 border-red-200";
+            }
+
+            const circ = 2 * Math.PI * 56;
+            const offset = circ - (percentage / 100) * circ;
+            const timeStr = formatTime(secondsElapsed);
+
+            const sharedCircle = `
+                <div class="relative w-40 h-40 mb-6 drop-shadow-md mx-auto">
+                    <svg class="w-full h-full transform -rotate-90">
+                        <circle cx="80" cy="80" r="56" stroke="currentColor" stroke-width="12" fill="transparent" class="text-slate-100" />
+                        <circle cx="80" cy="80" r="56" stroke="currentColor" stroke-width="12" fill="transparent" 
+                            stroke-dasharray="${circ}" stroke-dashoffset="${circ}" 
+                            class="${colorClass} transition-all duration-1000 ease-out" id="score-ring" stroke-linecap="round"/>
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span class="text-4xl font-black text-slate-800">${percentage}%</span>
+                    </div>
+                </div>
+            `;
+
+            const enHTML = `
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-slate-900 mb-2">Assessment Complete</h2>
+                    <p class="text-slate-500 font-bold mb-8 uppercase tracking-widest">${currentTopic.name}</p>
+                    ${sharedCircle}
+                    <div class="flex justify-center gap-8 mb-8 mt-2">
+                        <div class="text-center bg-white border border-slate-200 shadow-sm rounded-xl px-6 py-4">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Final Score</p>
+                            <p class="text-2xl font-black text-slate-800">${score} <span class="text-lg text-slate-400">/ ${activeQuestions.length}</span></p>
+                        </div>
+                        <div class="text-center bg-white border border-slate-200 shadow-sm rounded-xl px-6 py-4">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Time Taken</p>
+                            <p class="text-2xl font-black text-slate-800">${timeStr}</p>
+                        </div>
+                    </div>
+                    <div class="rounded-xl p-6 mb-10 border shadow-sm ${bgClass}">
+                        <p class="font-medium text-base">${msgEn}</p>
+                    </div>
+                    <button onclick="showReview()" class="w-full mb-4 bg-white border-2 border-slate-300 hover:bg-slate-50 text-slate-800 font-bold py-4 px-6 rounded-xl shadow-sm transition-all focus:ring-4 focus:ring-slate-200">
+                        <i class="fas fa-list-check mr-2 text-blue-600"></i> Study Guide
+                    </button>
+                    <button onclick="initQuiz()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-md transition-all">
+                        <i class="fas fa-home mr-2"></i> Topic Menu
+                    </button>
+                </div>
+            `;
+
+            const arHTML = `
+                <div class="text-center rtl-container">
+                    <h2 class="text-3xl font-extrabold text-slate-900 mb-2">اكتمل التقييم</h2>
+                    <p class="text-slate-500 font-bold mb-8 uppercase tracking-widest">${currentTopic.nameAr}</p>
+                    <div class="h-40 mb-6 w-full"></div> <!-- Spacing to match circle on left -->
+                    <div class="flex justify-center gap-8 mb-8 mt-2" dir="rtl">
+                        <div class="text-center bg-white border border-slate-200 shadow-sm rounded-xl px-6 py-4">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">النتيجة النهائية</p>
+                            <p class="text-2xl font-black text-slate-800" dir="ltr">${score} <span class="text-lg text-slate-400">/ ${activeQuestions.length}</span></p>
+                        </div>
+                        <div class="text-center bg-white border border-slate-200 shadow-sm rounded-xl px-6 py-4">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">الوقت المستغرق</p>
+                            <p class="text-2xl font-black text-slate-800" dir="ltr">${timeStr}</p>
+                        </div>
+                    </div>
+                    <div class="rounded-xl p-6 mb-10 border shadow-sm ${bgClass}">
+                        <p class="font-medium text-base">${msgAr}</p>
+                    </div>
+                    <button onclick="showReview()" class="w-full mb-4 bg-white border-2 border-slate-300 hover:bg-slate-50 text-slate-800 font-bold py-4 px-6 rounded-xl shadow-sm transition-all focus:ring-4 focus:ring-slate-200">
+                        <i class="fas fa-list-check ml-2 text-blue-600"></i> دليل الدراسة
+                    </button>
+                    <button onclick="initQuiz()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-md transition-all">
+                        <i class="fas fa-home ml-2"></i> قائمة المواضيع
+                    </button>
+                </div>
+            `;
+
+            quizContainer.innerHTML = `
+                <div class="py-8 fade-in">
+                    ${createDualPanel(enHTML, arHTML)}
+                </div>
+            `;
+
+            setTimeout(() => {
+                const ring = document.getElementById('score-ring');
+                if(ring) ring.style.strokeDashoffset = offset;
+            }, 100);
+            
+            const scrollWrapper = document.getElementById('scroll-wrapper');
+            if (scrollWrapper) scrollWrapper.scrollTop = 0;
+        }
+
+        function showReview() {
+            document.getElementById('header-stats-en').classList.add('hidden');
+            document.getElementById('header-stats-ar').classList.add('hidden');
+            document.getElementById('scroll-wrapper').classList.add('review-mode'); 
+            
+            const headerEn = `
+                <div class="mb-8 border-b border-slate-200 pb-5">
+                    <h2 class="text-2xl font-extrabold text-slate-800"><i class="fas fa-book-reader mr-3 text-blue-600"></i>Detailed Study Guide</h2>
+                    <p class="text-sm text-slate-500 font-medium mt-1">Review your answers and learn from the core concepts.</p>
+                </div>
+            `;
+            const headerAr = `
+                <div class="mb-8 border-b border-slate-200 pb-5" dir="rtl">
+                    <h2 class="text-2xl font-extrabold text-slate-800"><i class="fas fa-book-reader ml-3 text-blue-600"></i>دليل الدراسة التفصيلي</h2>
+                    <p class="text-sm text-slate-500 font-medium mt-1">راجع إجاباتك وتعلم من المفاهيم الأساسية.</p>
+                </div>
+            `;
+
+            let reviewContentEn = '<div class="space-y-8">';
+            let reviewContentAr = '<div class="space-y-8" dir="rtl">';
+
+            userAnswersData.forEach((data, index) => {
+                const isCorrect = data.isCorrect;
+                
+                // English Card
+                let cardEn = '';
+                if (isCorrect) {
+                    cardEn = `
+                        <div class="bg-green-50/50 border border-green-200 rounded-lg p-3 mt-3 flex items-start gap-3">
+                            <div class="text-green-500 mt-0.5"><i class="fas fa-check-circle"></i></div>
+                            <div>
+                                <div class="text-[10px] uppercase font-bold text-green-600 tracking-wider mb-0.5">Your Correct Answer</div>
+                                <div class="text-sm font-semibold text-green-900">${data.userAnswerDisplay}</div>
+                            </div>
+                        </div>`;
+                } else {
+                    cardEn = `
+                        <div class="bg-red-50/50 border border-red-200 rounded-lg p-3 mt-3">
+                            <div class="flex items-start gap-3 mb-2 pb-2 border-b border-red-100">
+                                <div class="text-red-500 mt-0.5"><i class="fas fa-times-circle"></i></div>
+                                <div><div class="text-[10px] uppercase font-bold text-red-600 tracking-wider mb-0.5">Your Answer</div><div class="text-sm font-semibold text-red-900 line-through opacity-70">${data.userAnswerDisplay}</div></div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="text-green-500 mt-0.5"><i class="fas fa-check-circle"></i></div>
+                                <div><div class="text-[10px] uppercase font-bold text-green-600 tracking-wider mb-0.5">Correct Answer</div><div class="text-sm font-bold text-green-800">${data.correctAnswerDisplay}</div></div>
+                            </div>
+                        </div>`;
+                }
+                reviewContentEn += `
+                    <div class="border rounded-xl shadow-sm bg-white overflow-hidden ${isCorrect ? 'border-slate-200' : 'border-red-300 ring-1 ring-red-100'} relative">
+                        <div class="absolute top-0 left-0 w-1.5 h-full ${isCorrect ? 'bg-green-400' : 'bg-red-500'}"></div>
+                        <div class="p-5 pl-7">
+                            <div class="flex justify-between items-start mb-2"><span class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Question ${index + 1} &bull; ${data.category}</span></div>
+                            <h4 class="font-bold text-slate-900 text-lg leading-snug">${data.questionText}</h4>
+                            ${activeQuestions[index].table ? `<div class="mt-3 mb-2 overflow-x-auto opacity-90">${activeQuestions[index].table}</div>` : ''}
+                            ${cardEn}
+                            <div class="mt-6 pt-5 border-t border-slate-100">
+                                <div class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-3 flex items-center"><i class="fas fa-graduation-cap mr-2"></i> Learning Breakdown</div>
+                                ${renderExplanationHTML(data.explanation, false)}
+                            </div>
+                        </div>
+                    </div>`;
+
+                // Arabic Card
+                let cardAr = '';
+                if (isCorrect) {
+                    cardAr = `
+                        <div class="bg-green-50/50 border border-green-200 rounded-lg p-3 mt-3 flex items-start gap-3">
+                            <div class="text-green-500 mt-0.5"><i class="fas fa-check-circle"></i></div>
+                            <div>
+                                <div class="text-[10px] uppercase font-bold text-green-600 tracking-wider mb-0.5">إجابتك الصحيحة</div>
+                                <div class="text-sm font-semibold text-green-900">${data.userAnswerDisplayAr}</div>
+                            </div>
+                        </div>`;
+                } else {
+                    cardAr = `
+                        <div class="bg-red-50/50 border border-red-200 rounded-lg p-3 mt-3">
+                            <div class="flex items-start gap-3 mb-2 pb-2 border-b border-red-100">
+                                <div class="text-red-500 mt-0.5"><i class="fas fa-times-circle"></i></div>
+                                <div><div class="text-[10px] uppercase font-bold text-red-600 tracking-wider mb-0.5">إجابتك</div><div class="text-sm font-semibold text-red-900 line-through opacity-70">${data.userAnswerDisplayAr}</div></div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="text-green-500 mt-0.5"><i class="fas fa-check-circle"></i></div>
+                                <div><div class="text-[10px] uppercase font-bold text-green-600 tracking-wider mb-0.5">الإجابة الصحيحة</div><div class="text-sm font-bold text-green-800">${data.correctAnswerDisplayAr}</div></div>
+                            </div>
+                        </div>`;
+                }
+                reviewContentAr += `
+                    <div class="border rounded-xl shadow-sm bg-white overflow-hidden ${isCorrect ? 'border-slate-200' : 'border-red-300 ring-1 ring-red-100'} relative">
+                        <div class="absolute top-0 right-0 w-1.5 h-full ${isCorrect ? 'bg-green-400' : 'bg-red-500'}"></div>
+                        <div class="p-5 pr-7">
+                            <div class="flex justify-between items-start mb-2"><span class="text-[11px] font-bold uppercase tracking-widest text-slate-400">السؤال ${index + 1} &bull; ${data.categoryAr}</span></div>
+                            <h4 class="font-bold text-slate-900 text-lg leading-snug">${data.questionTextAr}</h4>
+                            ${activeQuestions[index].tableAr ? `<div class="mt-3 mb-2 overflow-x-auto opacity-90">${activeQuestions[index].tableAr}</div>` : (activeQuestions[index].table ? `<div class="mt-3 mb-2 overflow-x-auto opacity-90">${activeQuestions[index].table}</div>` : '')}
+                            ${cardAr}
+                            <div class="mt-6 pt-5 border-t border-slate-100">
+                                <div class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-3 flex items-center"><i class="fas fa-graduation-cap ml-2"></i> تحليل التعلم</div>
+                                ${renderExplanationHTML(data.explanationAr, true)}
+                            </div>
+                        </div>
+                    </div>`;
+            });
+
+            reviewContentEn += '</div>';
+            reviewContentAr += '</div>';
+
+            const footerEn = `
+                <div class="mt-12 mb-4 text-center">
+                    <button onclick="initQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-xl shadow-md transition-all outline-none">
+                        <i class="fas fa-home mr-2"></i> Back to Menu
+                    </button>
+                </div>`;
+            const footerAr = `
+                <div class="mt-12 mb-4 text-center">
+                    <button onclick="initQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-xl shadow-md transition-all outline-none">
+                        <i class="fas fa-home ml-2"></i> العودة للقائمة
+                    </button>
+                </div>`;
+
+            quizContainer.innerHTML = `
+                <div class="fade-in sticky top-0 bg-slate-50 z-20 shadow-sm border-b border-slate-200 mb-6">
+                    ${createDualPanel(
+                        `<button onclick="showResults()" class="my-4 text-slate-600 hover:text-slate-900 font-bold py-2.5 px-5 rounded-lg bg-white border border-slate-200 shadow-sm"><i class="fas fa-arrow-left mr-2"></i> Back to Score</button>`,
+                        `<button onclick="showResults()" class="my-4 text-slate-600 hover:text-slate-900 font-bold py-2.5 px-5 rounded-lg bg-white border border-slate-200 shadow-sm">العودة إلى النتيجة <i class="fas fa-arrow-right ml-2"></i></button>`
+                    )}
+                </div>
+                <div class="fade-in">
+                    ${createDualPanel(headerEn + reviewContentEn + footerEn, headerAr + reviewContentAr + footerAr)}
+                </div>
+            `;
+            document.getElementById('scroll-wrapper').scrollTop = 0;
+        }
+
+        // Initialize App
+        initQuiz();
+    </script>
+</body>
+</html>

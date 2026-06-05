@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحليل القوائم المالية - دليل شامل</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --font-sans: 'Tajawal', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Courier New', Courier, monospace;
+      
+      --color-background-primary: #ffffff;
+      --color-background-secondary: #f8fafc;
+      --color-background-tertiary: #f1f5f9;
+      
+      --color-text-primary: #0f172a;
+      --color-text-secondary: #475569;
+      
+      --color-border-primary: #94a3b8;
+      --color-border-secondary: #cbd5e1;
+      --color-border-tertiary: #e2e8f0;
+      
+      --border-radius-md: 8px;
+      --border-radius-lg: 12px;
+      
+      --color-background-info: #e0f2fe;
+      --color-text-info: #0369a1;
+      --color-border-info: #38bdf8;
+      
+      --color-background-success: #dcfce7;
+      --color-text-success: #15803d;
+      
+      --color-background-warning: #fef9c3;
+      --color-text-warning: #a16207;
+      --color-border-warning: #fde047;
+      
+      --color-background-danger: #fee2e2;
+      --color-text-danger: #b91c1c;
+      
+      --color-background-purple: #f3e8ff;
+      --color-text-purple: #7e22ce;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      direction: rtl; 
+      background-color: var(--color-background-tertiary); 
+      display: flex; 
+      justify-content: center;
+      line-height: 1.6;
+    }
+    
+    .wrap {
+      font-family: var(--font-sans);
+      color: var(--color-text-primary);
+      padding: 2rem 1rem;
+      direction: rtl;
+      width: 100%;
+      max-width: 950px; 
+    }
+    
+    .hero { background: var(--color-background-primary); border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 2rem; margin-bottom: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: center; }
+    .hero h1 { font-size: 28px; font-weight: 800; margin-bottom: 10px; color: var(--color-text-primary); }
+    .hero p { font-size: 16px; color: var(--color-text-secondary); }
+    
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; justify-content: center; }
+    .tab { padding: 8px 18px; border-radius: 999px; border: 1px solid var(--color-border-secondary); font-size: 14px; font-family: inherit; font-weight: 500; cursor: pointer; background: var(--color-background-primary); color: var(--color-text-secondary); transition: all .2s ease; }
+    .tab:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+    .tab.active { background: var(--color-text-primary); border-color: var(--color-text-primary); color: var(--color-background-primary); font-weight: 700; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    
+    .section { display: none; animation: fadeIn 0.4s ease; }
+    .section.active { display: block; }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card { background: var(--color-background-primary); border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.75rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .card-header { font-size: 18px; font-weight: 800; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; color: var(--color-text-primary); border-bottom: 2px solid var(--color-background-tertiary); padding-bottom: 0.75rem; }
+    
+    .formula { background: var(--color-background-secondary); border-right: 4px solid var(--color-border-info); border-radius: var(--border-radius-md); padding: 1rem 1.25rem; margin: 1rem 0; font-family: var(--font-sans); font-size: 15px; direction: ltr; text-align: right; color: var(--color-text-primary); font-weight: 500;}
+    
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1rem;}
+    .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem;}
+    
+    .stat { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1.25rem; border: 1px solid var(--color-border-tertiary); }
+    .stat-label { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 8px; font-weight: 500; }
+    .stat-value { font-size: 24px; font-weight: 800; color: var(--color-text-primary); }
+    .stat-note { font-size: 13px; color: var(--color-text-secondary); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--color-border-tertiary); }
+    
+    .row-good { color: var(--color-text-success); font-weight: 700; }
+    .row-bad { color: var(--color-text-danger); font-weight: 700; }
+    
+    .table-wrap { overflow-x: auto; margin: 1rem 0; border-radius: var(--border-radius-md); border: 1px solid var(--color-border-tertiary); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: right; }
+    th { background: var(--color-background-secondary); padding: 12px 16px; font-weight: 800; border-bottom: 2px solid var(--color-border-tertiary); color: var(--color-text-primary); white-space: nowrap;}
+    td { padding: 12px 16px; border-bottom: 1px solid var(--color-border-tertiary); color: var(--color-text-secondary); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--color-background-tertiary); }
+    
+    .step { display: flex; gap: 16px; margin-bottom: 1.25rem; align-items: flex-start; background: var(--color-background-secondary); padding: 1rem; border-radius: var(--border-radius-md); border: 1px solid var(--color-border-tertiary); }
+    .step-num { width: 36px; height: 36px; border-radius: 50%; background: var(--color-background-info); color: var(--color-text-info); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; flex-shrink: 0; }
+    .step-body h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--color-text-primary); }
+    .step-body p { font-size: 14px; color: var(--color-text-secondary); }
+    
+    .divider { border: none; border-top: 1px solid var(--color-border-tertiary); margin: 1.75rem 0; }
+    
+    .note { background: var(--color-background-info); border: 1px solid var(--color-border-info); border-radius: var(--border-radius-md); padding: 1.25rem; font-size: 14px; color: var(--color-text-info); margin: 1.25rem 0; display: flex; gap: 12px; align-items: flex-start;}
+    .note-warning { background: var(--color-background-warning); border-color: var(--color-border-warning); color: var(--color-text-warning); }
+    .note-icon { font-size: 20px; flex-shrink: 0; }
+    
+    .ratio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin: 1.25rem 0; }
+    .ratio-card { background: var(--color-background-primary); border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 1.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.2s; }
+    .ratio-card:hover { transform: translateY(-2px); border-color: var(--color-border-secondary); }
+    .ratio-name { font-size: 15px; font-weight: 800; margin-bottom: 8px; color: var(--color-text-primary); }
+    .ratio-formula { font-size: 13px; color: var(--color-text-secondary); direction: ltr; text-align: right; background: var(--color-background-secondary); padding: 6px; border-radius: 4px; margin-bottom: 8px; }
+    .ratio-result { font-size: 22px; font-weight: 800; margin: 10px 0; color: var(--color-text-primary); }
+    .ratio-compare { font-size: 13px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--color-border-secondary); }
+    
+    .en-term { display: inline-block; direction: ltr; font-family: var(--font-sans); font-size: 0.85em; color: #64748b; font-weight: 500; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; margin: 0 4px; border: 1px solid #e2e8f0; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
+
+    /* QUIZ STYLES */
+    .quiz-section { background: #faf5ff; border: 1px solid #e9d5ff; border-radius: var(--border-radius-lg); padding: 1.5rem; margin-top: 2rem; }
+    .quiz-header { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 800; color: var(--color-text-purple); margin-bottom: 1rem; border-bottom: 2px solid #f3e8ff; padding-bottom: 0.5rem; }
+    .quiz-scroller { max-height: 480px; overflow-y: auto; padding-right: 10px; padding-left: 10px; scrollbar-width: thin; scrollbar-color: #d8b4fe #f3e8ff; }
+    .quiz-scroller::-webkit-scrollbar { width: 8px; }
+    .quiz-scroller::-webkit-scrollbar-track { background: #f3e8ff; border-radius: 4px; }
+    .quiz-scroller::-webkit-scrollbar-thumb { background-color: #d8b4fe; border-radius: 4px; }
+    
+    .quiz-card-item { background: var(--color-background-primary); border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 1.25rem; margin-bottom: 1rem; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+    .bilingual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .bilingual-grid > div { line-height: 1.6; }
+    .text-en { direction: ltr; text-align: left; font-family: var(--font-sans); color: var(--color-text-secondary); font-size: 14px;}
+    .text-ar { direction: rtl; text-align: right; font-weight: 700; color: var(--color-text-primary); font-size: 15px;}
+    
+    /* Quiz Context/Tables */
+    .quiz-context { background: var(--color-background-tertiary); border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 12px; margin-bottom: 1rem; overflow-x: auto; }
+    .quiz-context table { width: 100%; min-width: 300px; border-collapse: collapse; font-size: 13px; font-family: var(--font-sans); }
+    .quiz-context th, .quiz-context td { border: 1px solid var(--color-border-secondary); padding: 8px; text-align: center; }
+    .quiz-context th { background: #e2e8f0; color: var(--color-text-primary); font-weight: 700; }
+    .quiz-context td { background: var(--color-background-primary); }
+
+    .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+    .quiz-btn { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; background: var(--color-background-secondary); border: 1px solid var(--color-border-secondary); padding: 10px 14px; border-radius: 6px; cursor: pointer; transition: all 0.2s; align-items: center; }
+    .quiz-btn:hover:not(:disabled) { background: var(--color-border-tertiary); }
+    .quiz-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+    
+    .quiz-btn.correct { background: var(--color-background-success); border-color: var(--color-text-success); color: var(--color-text-success); box-shadow: 0 0 0 1px var(--color-text-success); }
+    .quiz-btn.correct .text-en { color: var(--color-text-success); font-weight: 700;}
+    .quiz-btn.correct .text-ar { color: var(--color-text-success); }
+    
+    .quiz-btn.incorrect { background: var(--color-background-danger); border-color: var(--color-text-danger); color: var(--color-text-danger); }
+    .quiz-btn.incorrect .text-en { color: var(--color-text-danger); }
+    .quiz-btn.incorrect .text-ar { color: var(--color-text-danger); }
+    
+    .quiz-feedback { display: none; margin-top: 1rem; padding: 1.25rem; border-radius: var(--border-radius-md); animation: fadeIn 0.3s ease; }
+    .quiz-feedback.show { display: block; }
+    .feedback-status { font-weight: 800; font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 8px;}
+    .exp-content { line-height: 1.8; }
+    .exp-content strong { color: var(--color-text-primary); }
+    .math-step { display: block; margin: 4px 0; background: rgba(255,255,255,0.5); padding: 4px 8px; border-radius: 4px; font-family: var(--font-mono); font-size: 13px; direction: ltr; text-align: left; }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+  <h2 class="sr-only">شرح مادة تحليل القوائم المالية</h2>
+
+  <div class="hero">
+    <h1>📊 تحليل القوائم المالية <span class="en-term">Financial Statement Analysis</span></h1>
+    <p>ملخص موسع ومفصل لمادة تحليل القوائم المالية — إعداد أروم</p>
+  </div>
+
+  <div class="tabs" id="tabBar">
+    <button class="tab active" onclick="show('intro',this)">المقدمة والإطار العام</button>
+    <button class="tab" onclick="show('statements',this)">القوائم المالية ومعاييرها</button>
+    <button class="tab" onclick="show('liquidity',this)">نسب السيولة</button>
+    <button class="tab" onclick="show('leverage',this)">الرافعة والتغطية</button>
+    <button class="tab" onclick="show('activity',this)">نسب النشاط</button>
+    <button class="tab" onclick="show('profit',this)">الربحية والعائد (ROI)</button>
+    <button class="tab" onclick="show('analysis',this)">أدوات التحليل المتقدمة</button>
+    <button class="tab" onclick="show('dupont',this)">نموذج Du Pont</button>
+    <button class="tab" onclick="show('limits',this)">الملخص والمحدودية</button>
+  </div>
+
+  <!-- 1. INTRO & FRAMEWORK -->
+  <div id="intro" class="section active">
+    <div class="card">
+      <div class="card-header">🎯 مفاهيم أساسية والإطار العام <span class="en-term">Basic Concepts & Framework</span></div>
+      <p style="font-size:15px;color:var(--color-text-secondary); margin-bottom:1.5rem">
+        <strong>دور التقارير المالية <span class="en-term">Financial Reporting</span>:</strong> توفير معلومات حول الأداء، المركز المالي، والتغيرات للمساعدة في اتخاذ قرارات اقتصادية.<br>
+        <strong>دور التحليل المالي <span class="en-term">Financial Statement Analysis</span>:</strong> أخذ هذه التقارير ودمجها مع معلومات أخرى لتقييم الأداء الماضي، الحاضر، والمستقبلي. يعمل المحلل المالي كمستشار <span class="en-term">Adviser</span> يقدم توصيات مدروسة للعملاء ومستخدمي القوائم.
+      </p>
+      
+      <h3 style="font-size:16px; margin: 1.5rem 0 1rem; color:var(--color-text-primary)">إطار التحليل المالي <span class="en-term">Framework for Financial Analysis</span></h3>
+      <div class="grid3">
+        <div class="stat" style="border-top: 4px solid var(--color-border-info)">
+          <div class="stat-label">1. تحليل احتياجات الأموال <span class="en-term">Funds Needs Analysis</span></div>
+          <p style="font-size:13px; color:var(--color-text-secondary)">ما هو حجم التمويل المطلوب مستقبلاً؟ هل هناك تأثير موسمي <span class="en-term">Seasonal</span>؟ يتم استخدام الموازنات النقدية <span class="en-term">Cash Budgets</span> وقوائم التدفق.</p>
+        </div>
+        <div class="stat" style="border-top: 4px solid var(--color-text-success)">
+          <div class="stat-label">2. تحليل الوضع المالي والربحية <span class="en-term">Condition & Profitability</span></div>
+          <p style="font-size:13px; color:var(--color-text-secondary)">يتم باستخدام النسب المالية <span class="en-term">Financial Ratios</span> بشكل فردي، عبر الزمن <span class="en-term">Trend</span>، وبالمقارنة مع الصناعة <span class="en-term">Industry</span>.</p>
+        </div>
+        <div class="stat" style="border-top: 4px solid var(--color-text-warning)">
+          <div class="stat-label">3. تحليل مخاطر الأعمال <span class="en-term">Business Risk</span></div>
+          <p style="font-size:13px; color:var(--color-text-secondary)">المخاطر الكامنة في العمليات مثل: تقلب المبيعات، تقلب التكاليف، والقرب من نقطة التعادل <span class="en-term">Break-even point</span>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">📋 الخطوات الست للتحليل المالي <span class="en-term">Analysis Steps</span></div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>تحديد الهدف والسياق <span class="en-term">Articulate Purpose</span></h4><p>تحديد الخصائص الاقتصادية للصناعة واستراتيجيات الشركة.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>جمع البيانات <span class="en-term">Collect Data</span></h4><p>تجميع البيانات من القوائم الأساسية، الملاحظات <span class="en-term">Notes</span>، وتقارير الإدارة <span class="en-term">MD&A</span>.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>معالجة البيانات <span class="en-term">Process Data</span></h4><p>تنظيم البيانات وفرزها وإجراء الحسابات (مثل التحليل الأفقي والعمودي والنسب).</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>التحليل والتفسير <span class="en-term">Analyze/Interpret</span></h4><p>تقييم الربحية والمخاطر، واكتشاف نقاط الضعف والفرص.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><h4>التوصيات والتواصل <span class="en-term">Recommendations</span></h4><p>صياغة التقارير وإيصالها بوضوح. (المرحلة الأهم والأكثر مسؤولية).</p></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-body"><h4>المتابعة <span class="en-term">Follow up</span></h4><p>مراجعة المعلومات دورياً لتحديث الاستنتاجات والتوصيات عند الحاجة.</p></div></div>
+    </div>
+  </div>
+
+  <!-- 2. FINANCIAL STATEMENTS & STANDARDS -->
+  <div id="statements" class="section">
+    <div class="card">
+      <div class="card-header">🌐 معايير المحاسبة العالمية <span class="en-term">Global Accounting Standards</span></div>
+      <p style="font-size:15px; margin-bottom: 1rem">تهدف التقاربية <span class="en-term">Convergence</span> إلى تقليل الاختلافات بين المعايير المحاسبية لفهم أفضل. أهم المعايير:</p>
+      <div class="grid2">
+        <div class="stat">
+          <div class="stat-label" style="color:var(--color-text-primary); font-weight:700">المعايير الدولية <span class="en-term">IFRS</span></div>
+          <p style="font-size:14px; color:var(--color-text-secondary)">المعايير الدولية لإعداد التقارير المالية (تُصدرها IASB)، مُعتمدة في دول الاتحاد الأوروبي والعديد من الدول.</p>
+        </div>
+        <div class="stat">
+          <div class="stat-label" style="color:var(--color-text-primary); font-weight:700">المعايير الأمريكية <span class="en-term">US GAAP</span></div>
+          <p style="font-size:14px; color:var(--color-text-secondary)">المبادئ المحاسبية المقبولة عموماً في أمريكا (تُصدرها FASB).</p>
+        </div>
+      </div>
+      
+      <div class="note">
+        <span class="note-icon">💡</span>
+        <div><strong>ملاحظة هامة:</strong> الدخل الشامل <span class="en-term">Comprehensive Income</span> = صافي الدخل ± التغيرات في حقوق الملكية من غير العمليات مع الملاك (مثل فروق العملة، إعادة تقييم الأصول).</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">💸 مصادر واستخدامات الأموال <span class="en-term">Sources and Uses</span></div>
+      <p style="font-size:15px; margin-bottom:1rem">هذا المبدأ هو حجر الأساس لفهم كيفية تحرك النقدية (أساس قائمة التدفقات النقدية <span class="en-term">Cash Flow Statement</span>):</p>
+      <div class="grid2">
+        <div style="background: var(--color-background-secondary); padding: 1.5rem; border-radius: var(--border-radius-md); border-top: 4px solid var(--color-text-success)">
+          <p style="font-size:16px; color:var(--color-text-success); font-weight:800; margin-bottom:12px">✅ مصادر الأموال <span class="en-term">Sources</span></p>
+          <ul style="font-size:14px; color:var(--color-text-secondary); line-height:2; padding-right:20px; list-style-type: square;">
+            <li>صافي الربح بعد الضريبة <span class="en-term">EAT</span> + الاستهلاك <span class="en-term">Depreciation</span></li>
+            <li><strong>الزيادة</strong> في أي بند من بنود الالتزامات <span class="en-term">Liabilities</span> (مثل زيادة القروض)</li>
+            <li><strong>النقصان</strong> في أي بند من بنود الأصول <span class="en-term">Assets</span> (مثل بيع آلات أو تحصيل ذمم)</li>
+            <li>زيادة رأس المال <span class="en-term">Capital</span> (إصدار أسهم)</li>
+          </ul>
+        </div>
+        <div style="background: var(--color-background-secondary); padding: 1.5rem; border-radius: var(--border-radius-md); border-top: 4px solid var(--color-text-danger)">
+          <p style="font-size:16px; color:var(--color-text-danger); font-weight:800; margin-bottom:12px">❌ استخدامات الأموال <span class="en-term">Uses</span></p>
+          <ul style="font-size:14px; color:var(--color-text-secondary); line-height:2; padding-right:20px; list-style-type: square;">
+            <li>الخسارة الصافية <span class="en-term">Net Loss</span> + الاستهلاك <span class="en-term">Depreciation</span></li>
+            <li><strong>النقصان</strong> في أي بند من بنود الالتزامات <span class="en-term">Liabilities</span> (مثل سداد القروض)</li>
+            <li><strong>الزيادة</strong> في أي بند من بنود الأصول <span class="en-term">Assets</span> (مثل شراء مخزون أو آلات)</li>
+            <li>توزيعات الأرباح <span class="en-term">Dividends</span> وتخفيض رأس المال</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">⚖️ تصنيف التدفقات النقدية <span class="en-term">Cash Flows Classification</span></div>
+      <p style="font-size:14px; color:var(--color-text-secondary); margin-bottom:1rem">المعايير الدولية (IFRS) تعطي مرونة أكبر في التصنيف مقارنة بالمعايير الأمريكية (GAAP) الأكثر صرامة.</p>
+      <div class="table-wrap">
+        <table>
+          <tr>
+            <th>البند <span class="en-term">Item</span></th>
+            <th>بموجب <span class="en-term">IFRS</span> (أكثر مرونة)</th>
+            <th>بموجب <span class="en-term">US GAAP</span></th>
+          </tr>
+          <tr>
+            <td>الفوائد المدفوعة <span class="en-term">Interest paid</span></td>
+            <td>تشغيلي <span class="en-term">Operating</span> أو تمويلي <span class="en-term">Financing</span></td>
+            <td>تشغيلي <span class="en-term">Operating</span> حصراً</td>
+          </tr>
+          <tr>
+            <td>الفوائد المستلمة <span class="en-term">Interest received</span></td>
+            <td>تشغيلي <span class="en-term">Operating</span> أو استثماري <span class="en-term">Investing</span></td>
+            <td>تشغيلي <span class="en-term">Operating</span> حصراً</td>
+          </tr>
+          <tr>
+            <td>الأرباح الموزعة المدفوعة <span class="en-term">Dividends paid</span></td>
+            <td>تشغيلي <span class="en-term">Operating</span> أو تمويلي <span class="en-term">Financing</span></td>
+            <td>تمويلي <span class="en-term">Financing</span> حصراً</td>
+          </tr>
+          <tr>
+            <td>الأرباح المستلمة <span class="en-term">Dividends received</span></td>
+            <td>تشغيلي <span class="en-term">Operating</span> أو استثماري <span class="en-term">Investing</span></td>
+            <td>تشغيلي <span class="en-term">Operating</span> حصراً</td>
+          </tr>
+          <tr>
+            <td>الضرائب المدفوعة <span class="en-term">Taxes paid</span></td>
+            <td>تشغيلي (إلا إذا ارتبطت بعملية محددة)</td>
+            <td>تشغيلي <span class="en-term">Operating</span> حصراً</td>
+          </tr>
+        </table>
+      </div>
+      <p style="font-size:13px; color:var(--color-text-secondary); text-align:center; margin-top:8px"><em>ملاحظة: شجرة التدفقات النقدية: الثمار = أنشطة تشغيلية <span class="en-term">Operating</span>، الجذع والفروع = استثمارية <span class="en-term">Investing</span>، الجذور = تمويلية <span class="en-term">Financing</span>.</em></p>
+    </div>
+  </div>
+
+  <!-- 3. LIQUIDITY -->
+  <div id="liquidity" class="section">
+    <div class="card">
+      <div class="card-header">💧 نسب السيولة <span class="en-term">Liquidity Ratios</span></div>
+      <p style="font-size:15px;color:var(--color-text-secondary); margin-bottom:1rem">تقيس قدرة الشركة على الوفاء بالتزاماتها قصيرة الأجل <span class="en-term">Current Liabilities</span> باستخدام أصولها المتداولة <span class="en-term">Current Assets</span>.</p>
+
+      <div class="ratio-grid">
+        <div class="ratio-card">
+          <div class="ratio-name">نسبة التداول <span class="en-term">Current Ratio</span></div>
+          <div class="ratio-formula">الأصول المتداولة ÷ الالتزامات المتداولة</div>
+          <div class="ratio-result">1,195 ÷ 500 = <span class="row-good">2.39</span></div>
+          <div class="ratio-compare row-good">أعلى من المتوسط الصناعي (2.15) ✓</div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">نسبة السيولة السريعة <span class="en-term">Acid-Test / Quick Ratio</span></div>
+          <div class="ratio-formula">(الأصول المتداولة − المخزون) ÷ الالتزامات المتداولة</div>
+          <div class="ratio-result">(1,195 − 696) ÷ 500 = <span class="row-bad">1.00</span></div>
+          <div class="ratio-compare row-bad">أقل من المتوسط الصناعي (1.25) ✗</div>
+        </div>
+      </div>
+
+      <h4 style="margin:1.5rem 0 1rem; font-size:16px;">تحليل الاتجاه للسيولة <span class="en-term">Trend Analysis</span> شركة BW</h4>
+      <div class="table-wrap">
+      <table>
+        <tr><th>السنة</th><th>نسبة التداول <span class="en-term">Current Ratio</span></th><th>المتوسط الصناعي</th><th>النسبة السريعة <span class="en-term">Quick Ratio</span></th><th>المتوسط الصناعي</th></tr>
+        <tr><td>2005</td><td>1.91</td><td>2.01</td><td>1.11</td><td>1.25</td></tr>
+        <tr><td>2006</td><td>2.26</td><td>2.09</td><td>1.04</td><td>1.21</td></tr>
+        <tr><td>2007</td><td class="row-good">2.39</td><td>2.15</td><td class="row-bad">1.00</td><td>1.25</td></tr>
+      </table>
+      </div>
+      <div class="note note-warning">
+        <span class="note-icon">⚠️</span>
+        <div><strong>التشخيص المالي:</strong> تحليل الاتجاه يوضح أن نسبة التداول ترتفع باستمرار بينما تنخفض النسبة السريعة بمرور الزمن. هذا الانفراج يشير بشكل قاطع إلى وجود مشكلة تتراكم في <strong>المخزون <span class="en-term">Inventory</span></strong>. الشركة تربط سيولتها بمخزون لا يتحول إلى نقد بسرعة.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. LEVERAGE & COVERAGE -->
+  <div id="leverage" class="section">
+    <div class="card">
+      <div class="card-header">⚖️ نسب الرافعة المالية والتغطية <span class="en-term">Leverage & Coverage</span></div>
+      <p style="font-size:15px;color:var(--color-text-secondary); margin-bottom:1rem">تقيس مدى اعتماد الشركة على أموال الغير في التمويل، وقدرتها على سداد تكاليف هذه الديون.</p>
+
+      <div class="ratio-grid">
+        <div class="ratio-card">
+          <div class="ratio-name">الديون إلى حقوق الملكية <span class="en-term">Debt-to-Equity</span></div>
+          <div class="ratio-formula">إجمالي الديون ÷ حقوق الملكية</div>
+          <div class="ratio-result">1,030 ÷ 1,139 = <span>0.90</span></div>
+          <div class="ratio-compare">= المتوسط الصناعي (مقبول) ✓</div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">الديون إلى الأصول <span class="en-term">Debt-to-Assets</span></div>
+          <div class="ratio-formula">إجمالي الديون ÷ إجمالي الأصول</div>
+          <div class="ratio-result">1,030 ÷ 2,169 = <span>0.47</span></div>
+          <div class="ratio-compare">= المتوسط الصناعي (47% ممولة بالدين) ✓</div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">نسبة إجمالي الرسملة <span class="en-term">Total Capitalization</span></div>
+          <div class="ratio-formula">الديون ÷ (الديون طويلة الأجل + حقوق الملكية)</div>
+          <div class="ratio-result">1,030 ÷ 1,669 = <span>0.62</span></div>
+          <div class="ratio-compare">قريب جداً من الصناعة (0.60) ✓</div>
+        </div>
+      </div>
+
+      <h4 style="margin:1.5rem 0 1rem; font-size:16px; border-top:1px solid var(--color-border-tertiary); padding-top: 1.5rem;">نسبة تغطية الفوائد <span class="en-term">Interest Coverage Ratio</span></h4>
+      <div class="formula">ربح التشغيل قبل الفوائد والضرائب <span class="en-term">EBIT</span> ÷ مصاريف الفوائد</div>
+      <div class="table-wrap">
+      <table>
+        <tr><th>السنة</th><th>تغطية الفوائد <span class="en-term">Coverage Ratio</span></th><th>المتوسط الصناعي</th><th>التشخيص</th></tr>
+        <tr><td>2005</td><td class="row-good">10.30 مرة</td><td>4.66</td><td class="row-good">ممتازة جداً</td></tr>
+        <tr><td>2006</td><td>4.35 مرة</td><td>5.02</td><td style="color:var(--color-text-warning)">انخفاض مقلق</td></tr>
+        <tr><td>2007</td><td class="row-bad">3.56 مرة</td><td>5.19</td><td class="row-bad">ضعيفة، مؤشر خطر</td></tr>
+      </table>
+      </div>
+      <div class="note note-warning">
+        <span class="note-icon">📉</span>
+        <div><strong>الاستنتاج المالي:</strong> مستوى الديون للشركة طبيعي ومطابق للصناعة، لكن نسبة التغطية تنهار منذ عام 2005. هذا يعني أن المشكلة ليست في حجم القروض، بل في <strong>انخفاض ربح التشغيل <span class="en-term">EBIT</span></strong> الناتج عن ارتفاع التكاليف وانخفاض كفاءة المبيعات.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ACTIVITY -->
+  <div id="activity" class="section">
+    <div class="card">
+      <div class="card-header">⚙️ نسب النشاط <span class="en-term">Activity Ratios</span></div>
+      <p style="font-size:15px;color:var(--color-text-secondary); margin-bottom:1rem">توضح مدى كفاءة إدارة الشركة في استخدام أصولها <span class="en-term">Assets</span> لتوليد المبيعات وتحصيل حقوقها.</p>
+
+      <div class="ratio-grid">
+        <div class="ratio-card">
+          <div class="ratio-name">دوران الذمم المدينة <span class="en-term">AR Turnover</span></div>
+          <div class="ratio-formula">صافي المبيعات الآجلة ÷ الذمم المدينة</div>
+          <div class="ratio-result">2,211 ÷ 394 = <strong>5.61 مرة</strong></div>
+          <div class="ratio-compare">معدل الدوران السنوي</div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">متوسط فترة التحصيل <span class="en-term">ACP</span></div>
+          <div class="ratio-formula">365 ÷ معدل دوران الذمم</div>
+          <div class="ratio-result">365 ÷ 5.61 = <span class="row-good">65 يوم</span></div>
+          <div class="ratio-compare row-good">تحسن ليصل للمتوسط (65.7) ✓</div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">دوران المخزون <span class="en-term">Inventory Turnover</span></div>
+          <div class="ratio-formula">تكلفة البضاعة المباعة <span class="en-term">COGS</span> ÷ المخزون</div>
+          <div class="ratio-result">1,599 ÷ 696 = <span class="row-bad">2.30 مرة</span></div>
+          <div class="ratio-compare row-bad">أقل من المتوسط (3.45) ✗ متدني</div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">دوران الذمم الدائنة <span class="en-term">Payable Turnover</span></div>
+          <div class="ratio-formula">365 ÷ (المشتريات ÷ الذمم الدائنة)</div>
+          <div class="ratio-result">16.5 مرة ← <span class="row-bad">22.1 يوم</span></div>
+          <div class="ratio-compare row-bad">سداد سريع جداً مقارنة بالصناعة (46.7 يوم)</div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">دوران إجمالي الأصول <span class="en-term">Total Asset Turnover</span></div>
+          <div class="ratio-formula">صافي المبيعات ÷ إجمالي الأصول</div>
+          <div class="ratio-result">2,211 ÷ 2,169 = <span class="row-bad">1.02 مرة</span></div>
+          <div class="ratio-compare row-bad">أقل من المتوسط (1.17) ✗</div>
+        </div>
+      </div>
+      <div class="note note-warning">
+        <span class="note-icon">⚠️</span>
+        <div><strong>الاستنتاج المالي لنشاط الشركة:</strong> 
+          1- كفاءة تحصيل الديون جيدة.<br>
+          2- مشكلة ضخمة في تصريف المخزون (دوران بطيء).<br>
+          3- الشركة تدفع للموردين بسرعة كبيرة (خلال 22 يوماً بدلاً من 47 يوماً) مما يستنزف السيولة النقدية دون مبرر.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. PROFITABILITY & ROI -->
+  <div id="profit" class="section">
+    <div class="card">
+      <div class="card-header">💹 نسب الربحية والعائد <span class="en-term">Profitability & ROI</span></div>
+      <p style="font-size:15px;color:var(--color-text-secondary); margin-bottom:1rem">تقيس هذه النسب محصلة السياسات والقرارات للإدارة في توليد الأرباح مقارنة بالمبيعات والأصول.</p>
+
+      <div class="table-wrap">
+      <table>
+        <tr>
+          <th>المؤشر <span class="en-term">Ratio</span></th>
+          <th>طريقة الحساب <span class="en-term">Formula</span></th>
+          <th>BW 2007</th>
+          <th>متوسط الصناعة</th>
+          <th>الحالة</th>
+        </tr>
+        <tr>
+          <td><strong>هامش مجمل الربح <span class="en-term">Gross Profit Margin - GPM</span></strong></td>
+          <td>مجمل الربح ÷ المبيعات</td>
+          <td class="row-bad">27.7%</td>
+          <td>31.1%</td>
+          <td class="row-bad">ضعيف ومتراجع</td>
+        </tr>
+        <tr>
+          <td><strong>هامش صافي الربح <span class="en-term">Net Profit Margin - NPM</span></strong></td>
+          <td>صافي الدخل ÷ المبيعات</td>
+          <td class="row-bad">4.1%</td>
+          <td>8.2%</td>
+          <td class="row-bad">نصف متوسط القطاع</td>
+        </tr>
+        <tr>
+          <td><strong>العائد على الأصول <span class="en-term">Return on Assets - ROA</span></strong></td>
+          <td>صافي الدخل ÷ إجمالي الأصول</td>
+          <td class="row-bad">4.2%</td>
+          <td>9.6%</td>
+          <td class="row-bad">ضعف استغلال الأصول</td>
+        </tr>
+        <tr>
+          <td><strong>العائد على حقوق الملكية <span class="en-term">Return on Equity - ROE</span></strong></td>
+          <td>صافي الدخل ÷ حقوق الملكية</td>
+          <td class="row-bad">8.0%</td>
+          <td>18.0%</td>
+          <td class="row-bad">ضعف العائد للمساهمين</td>
+        </tr>
+      </table>
+      </div>
+      
+      <div class="note note-warning">
+        <span class="note-icon">📉</span>
+        <div><strong>التشخيص النهائي للربحية:</strong> كل نسب الربحية تتجه لأسفل منذ عام 2005 وهي أقل من القطاع. السبب المباشر هو الارتفاع الكبير في <strong>تكلفة البضاعة المباعة <span class="en-term">COGS</span></strong> و<strong>المصاريف الإدارية والبيعية</strong> مقارنة بنمو المبيعات.</div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color: var(--color-border-info); background-color: #fafeff;">
+      <div class="card-header" style="color:var(--color-text-info);">مفهوم العائد على الاستثمار <span class="en-term">Return on Investment - ROI</span></div>
+      <p style="font-size:14px; color:var(--color-text-secondary); margin-bottom:1rem">
+        هو مقياس أداء يُستخدم لتقييم كفاءة استثمار معين أو لمقارنة كفاءة عدة استثمارات مختلفة. يقيس بشكل مباشر حجم العائد نسبةً إلى تكلفة الاستثمار. ويُعبر عنه كنسبة مئوية.
+      </p>
+      <div class="formula" style="text-align: center; border-right: none; border-bottom: 3px solid var(--color-border-info)">
+        <span class="en-term">ROI</span> = (الربح من الاستثمار - تكلفة الاستثمار) ÷ تكلفة الاستثمار
+      </div>
+      <ul style="font-size:14px; color:var(--color-text-secondary); line-height:2; margin-right:20px; margin-top:1rem;">
+        <li>"الربح من الاستثمار" <span class="en-term">Gain from Investment</span> يعود للتدفقات النقدية والمتحصلات من بيع أو تشغيل الاستثمار.</li>
+        <li>يُستخدم هذا المؤشر بكثرة في القرارات المالية الشخصية وتقييم ربحية الشركات والمشاريع الفردية.</li>
+        <li>سهولة التعبير عنه بنسبة مئوية يجعله أداة ممتازة للمقارنة بين البدائل الاستثمارية المتعددة.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 7. ADVANCED ANALYSIS TOOLS -->
+  <div id="analysis" class="section">
+    <div class="card">
+      <div class="card-header">📏 أدوات التحليل المالي المتقدمة <span class="en-term">Advanced Analysis Tools</span></div>
+      <p style="font-size:15px;color:var(--color-text-secondary); margin-bottom:1.5rem">الرقم المفرد في القوائم لا يعني شيئاً بحد ذاته، يُستمد المعنى من المقارنات من خلال 3 أدوات رئيسية:</p>
+
+      <div class="step"><div class="step-num">1</div><div class="step-body">
+        <h4>التحليل الأفقي / تحليل الاتجاه <span class="en-term">Horizontal / Trend Analysis</span></h4>
+        <p>مقارنة بنود القوائم عبر الزمن لقياس التغير بالدولار أو كنسبة مئوية لمعرفة أهمية التغير.<br>
+        <strong>القانون:</strong> (قيمة سنة المقارنة - قيمة سنة الأساس) ÷ سنة الأساس × 100.</p>
+      </div></div>
+
+      <div class="step"><div class="step-num">2</div><div class="step-body">
+        <h4>التحليل العمودي / الحجم المشترك <span class="en-term">Vertical / Common-Size Analysis</span></h4>
+        <p>تُنسب كل قيمة في القائمة إلى قيمة أساسية (إجمالي الأصول للميزانية، وصافي المبيعات لقائمة الدخل) حيث تأخذ الأساس نسبة 100%. يزيل أثر الحجم لتسهيل المقارنة بين الشركات.</p>
+      </div></div>
+
+      <div class="step"><div class="step-num">3</div><div class="step-body">
+        <h4>تحليل الأرقام القياسية <span class="en-term">Index Analysis</span></h4>
+        <p>تُعيّن سنة محددة كسنة أساس (تأخذ قيمة 100%)، وتُحسب جميع السنوات اللاحقة كنسبة مئوية من هذه السنة الأساسية لإبراز معدلات النمو والتراجع التراكمي بوضوح تام.</p>
+      </div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">مثال: التحليل الأفقي <span class="en-term">Horizontal Analysis</span> للميزانية</div>
+      <div class="table-wrap">
+      <table>
+        <tr><th>البند</th><th>2012</th><th>2013</th><th>التغير ($)</th><th>نسبة التغير %</th></tr>
+        <tr><td>النقدية <span class="en-term">Cash</span></td><td>62,000</td><td>56,000</td><td class="row-bad">(6,000)</td><td class="row-bad">−9.7%</td></tr>
+        <tr><td>الذمم المدينة <span class="en-term">A/R</span></td><td>168,000</td><td>224,000</td><td class="row-good">+56,000</td><td class="row-good">+33.3%</td></tr>
+        <tr><td>الأصول المتداولة <span class="en-term">Current Assets</span></td><td>517,000</td><td>579,600</td><td>+62,600</td><td>+12.1%</td></tr>
+        <tr><td>الالتزامات المتداولة <span class="en-term">Current Liabilities</span></td><td>252,000</td><td>341,400</td><td class="row-bad">+89,400</td><td class="row-bad">+35.5%</td></tr>
+      </table>
+      </div>
+      <p style="font-size:13px; color:var(--color-text-secondary)"><strong>تفسير:</strong> الزيادة في الالتزامات المتداولة (89 ألف) أعلى بكثير من الزيادة في الأصول المتداولة (62 ألف)، أي أن الشركة تمول أصولاً غير متداولة بديون قصيرة الأجل وهو مؤشر خطير للسيولة.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">مثال: التحليل العمودي <span class="en-term">Vertical Analysis</span> لقائمة الدخل</div>
+      <div class="table-wrap">
+      <table>
+        <tr><th>البند</th><th>2012 ($)</th><th>النسبة (الأساس = المبيعات)</th></tr>
+        <tr><td>إجمالي المبيعات <span class="en-term">Gross Sales</span></td><td>400,000</td><td>109.9%</td></tr>
+        <tr><td>مردودات المبيعات <span class="en-term">Sales Returns</span></td><td>(36,000)</td><td class="row-bad">9.9% (مردودات عالية جداً)</td></tr>
+        <tr><td><strong>صافي المبيعات <span class="en-term">Net Sales</span></strong></td><td><strong>364,000</strong></td><td><strong>100%</strong></td></tr>
+        <tr><td>تكلفة البضاعة المباعة <span class="en-term">COGS</span></td><td>(218,400)</td><td class="row-bad">60% (تستنزف الأرباح)</td></tr>
+        <tr><td>مجمل الربح <span class="en-term">Gross Profit</span></td><td>145,600</td><td>40%</td></tr>
+        <tr><td>مصاريف بيعية وإدارية <span class="en-term">S,G&A</span></td><td>(94,200)</td><td>25.9%</td></tr>
+        <tr><td>صافي الدخل <span class="en-term">Net Income</span></td><td>43,400</td><td class="row-good">11.9%</td></tr>
+      </table>
+      </div>
+      <p style="font-size:13px; color:var(--color-text-secondary)"><strong>تفسير:</strong> المردودات تقارب 10% من المبيعات وهو رقم مرتفع يستدعي مراجعة جودة المنتج والتغليف. كما أن تكلفة البضاعة (60%) تحتاج إلى رقابة على المشتريات.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">مثال: تحليل الأرقام القياسية <span class="en-term">Index Analysis</span> لشركة BW</div>
+      <p style="font-size:14px; margin-bottom:1rem">باعتبار عام 2005 هو سنة الأساس <span class="en-term">Base Year</span> = 100%</p>
+      <div class="table-wrap">
+      <table>
+        <tr><th>البند (الميزانية)</th><th>2005 (سنة الأساس)</th><th>2006</th><th>2007</th></tr>
+        <tr><td>النقدية <span class="en-term">Cash</span></td><td>100.0%</td><td class="row-bad">60.8%</td><td class="row-bad">67.6% (انكماش النقد)</td></tr>
+        <tr><td>المخزون <span class="en-term">Inventory</span></td><td>100.0%</td><td>191.3%</td><td class="row-bad">216.1% (تضاعف مرتين!)</td></tr>
+        <tr><td>إجمالي الأصول <span class="en-term">Total Assets</span></td><td>100.0%</td><td>177.4%</td><td>167.1%</td></tr>
+      </table>
+      </div>
+      <p style="font-size:13px; color:var(--color-text-secondary)"><strong>تفسير:</strong> يتضح فوراً بمجرد النظر أن النقدية تقلصت بشكل حاد مقارنة بعام 2005، بينما تضخم المخزون بأكثر من الضعف (216%)، مما يؤكد أزمة السيولة ودوران المخزون بلمحة واحدة.</p>
+    </div>
+  </div>
+
+  <!-- 8. DU PONT -->
+  <div id="dupont" class="section">
+    <div class="card">
+      <div class="card-header">🔬 تحليل دو بونت <span class="en-term">Du Pont Analysis</span></div>
+      <p style="font-size:15px;color:var(--color-text-secondary); margin-bottom:1.5rem">يفكك هذا النموذج نسب العائد ليعرف المحلل من أين يأتي الخلل بدقة: هل هو من التسعير والتكاليف؟ أم من كفاءة استغلال الأصول؟ أم من هيكل الديون؟</p>
+
+      <h4 style="font-size:16px; margin-bottom:8px">1. العائد على الأصول <span class="en-term">ROA - Earning Power</span></h4>
+      <div class="formula"><span class="en-term">ROA</span> = هامش صافي الربح <span class="en-term">NPM</span> × دوران إجمالي الأصول <span class="en-term">TAT</span></div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>البيان</th><th><span class="en-term">NPM</span> (الربحية)</th><th><span class="en-term">TAT</span> (الكفاءة)</th><th><span class="en-term">ROA</span> الإجمالي</th></tr>
+          <tr><td>شركة BW (2007)</td><td class="row-bad">4.1%</td><td class="row-bad">1.02</td><td class="row-bad">4.2%</td></tr>
+          <tr><td>المتوسط الصناعي</td><td class="row-good">8.2%</td><td class="row-good">1.17</td><td class="row-good">9.6%</td></tr>
+        </table>
+      </div>
+
+      <h4 style="font-size:16px; margin-top: 2rem; margin-bottom:8px">2. العائد على حقوق الملكية <span class="en-term">ROE الممتد</span></h4>
+      <div class="formula"><span class="en-term">ROE</span> = هامش صافي الربح × دوران الأصول × <strong>مضاعف حقوق الملكية <span class="en-term">Equity Multiplier</span></strong></div>
+      <p style="font-size:14px; color:var(--color-text-secondary); margin-bottom:1rem">مضاعف حقوق الملكية <span class="en-term">Equity Multiplier</span> = إجمالي الأصول ÷ حقوق الملكية. بالنسبة للشركة: 2,169 ÷ 1,139 = <strong>1.90</strong></p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>البيان</th><th><span class="en-term">ROA</span></th><th>مضاعف الملكية (الرافعة)</th><th><span class="en-term">ROE</span> الإجمالي</th></tr>
+          <tr><td>شركة BW</td><td class="row-bad">4.2%</td><td>1.90</td><td class="row-bad">8.0%</td></tr>
+          <tr><td>الصناعة <span class="en-term">Industry</span></td><td class="row-good">9.6%</td><td>1.88</td><td class="row-good">18.0%</td></tr>
+        </table>
+      </div>
+      <div class="note">
+        <span class="note-icon">💡</span>
+        <div><strong>خلاصة Du Pont:</strong> يتضح أن الشركة تستخدم رافعة مالية (قروض) مطابقة تماماً للصناعة (1.90 مقابل 1.88). الخلل الذي دمر العائد للمساهمين <span class="en-term">ROE</span> لا يعود للديون، بل للضعف في هامش الربح التشغيلي وسوء استغلال الأصول (المخزون المتراكم).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. LIMITATIONS & SUMMARY -->
+  <div id="limits" class="section">
+    <div class="card">
+      <div class="card-header">⚠️ محدودية التحليل المالي والنسب <span class="en-term">Limitations of Ratio Analysis</span></div>
+      <p style="font-size:15px; color:var(--color-text-secondary); margin-bottom:1.5rem">النسب المالية ليست غاية بحد ذاتها بل <strong>نقطة بداية</strong> تطرح الأسئلة ولا تقدم الإجابات الكاملة. حدودها تشمل:</p>
+      <div class="grid2">
+        <div class="step" style="margin-bottom:0"><div class="step-num" style="background:#f1f5f9;color:#64748b">1</div><div class="step-body"><h4 style="font-size:14px">صعوبة تصنيف الصناعة <span class="en-term">Industry Category</span></h4><p style="font-size:13px">الشركات الكبرى تعمل في قطاعات متعددة، مما يصعب مقارنتها بقطاع واحد نقي.</p></div></div>
+        <div class="step" style="margin-bottom:0"><div class="step-num" style="background:#f1f5f9;color:#64748b">2</div><div class="step-body"><h4 style="font-size:14px">المتوسطات ليست أهدافاً <span class="en-term">Not Desirable Targets</span></h4><p style="font-size:13px">متوسط الصناعة هو دليل إرشادي <span class="en-term">Guideline</span> وليس هدفاً مثالياً.</p></div></div>
+        <div class="step" style="margin-bottom:0"><div class="step-num" style="background:#f1f5f9;color:#64748b">3</div><div class="step-body"><h4 style="font-size:14px">اختلاف السياسات المحاسبية <span class="en-term">Accounting Practices</span></h4><p style="font-size:13px">اختلاف طرق تقييم المخزون والاستهلاك يعرقل المقارنة الدقيقة.</p></div></div>
+        <div class="step" style="margin-bottom:0"><div class="step-num" style="background:#f1f5f9;color:#64748b">4</div><div class="step-body"><h4 style="font-size:14px">التضخم والموسمية <span class="en-term">Inflation & Seasonality</span></h4><p style="font-size:13px">تشوه القيم المطلقة للبيانات التاريخية وتؤثر على دقة المقارنات عبر الزمن.</p></div></div>
+      </div>
+    </div>
+
+    <div class="card" style="border: 2px solid var(--color-border-primary)">
+      <div class="card-header" style="justify-content: center; font-size: 20px;">📋 التقرير الختامي: حالة شركة Basket Wonders</div>
+      <p style="font-size:14px;color:var(--color-text-secondary); text-align:center; margin-bottom:1.5rem">بناءً على الخطوة الخامسة (التوصيات والتواصل <span class="en-term">Develop Recommendations</span>) للمحلل المالي، هذا هو التقرير النهائي:</p>
+      
+      <div class="table-wrap">
+      <table>
+        <tr>
+          <th>المجال التحليلي <span class="en-term">Area</span></th>
+          <th>المشكلة المكتشفة / المؤشر <span class="en-term">Indicator</span></th>
+          <th>السبب / الحل المقترح <span class="en-term">Recommendation</span></th>
+        </tr>
+        <tr>
+          <td><strong>المبيعات والربحية <span class="en-term">Profitability</span></strong></td>
+          <td class="row-bad">انخفاض إجمالي العوائد وهوامش الربح</td>
+          <td>تكلفة البضاعة <span class="en-term">COGS</span> والمصاريف الإدارية مرتفعة جداً. <em>الحل: مراجعة الموردين والتسعير وتقليل النفقات.</em></td>
+        </tr>
+        <tr>
+          <td><strong>إدارة المخزون <span class="en-term">Inventory Mgmt</span></strong></td>
+          <td class="row-bad">تراكم ضخم وبطء في دوران المخزون (2.30)</td>
+          <td>المخزون يشكل أكثر من 32% من الأصول. <em>الحل: تصفية البضائع الراكدة وتحسين سياسة التوريد.</em></td>
+        </tr>
+        <tr>
+          <td><strong>إدارة الذمم الدائنة <span class="en-term">Payables Mgmt</span></strong></td>
+          <td class="row-bad">الشركة تدفع ديونها مبكراً جداً (22 يوم)</td>
+          <td>يستنزف سيولة الشركة دون مبرر. <em>الحل: التفاوض مع الموردين لإطالة فترة السداد لتقترب من 46 يوماً.</em></td>
+        </tr>
+        <tr>
+          <td><strong>الهيكل التمويلي <span class="en-term">Capital Structure</span></strong></td>
+          <td class="row-good">الديون متناسبة مع معدل القطاع</td>
+          <td>الشركة لا تعاني من عبء اقتراض غير طبيعي. الخلل تشغيلي وليس تمويلياً.</td>
+        </tr>
+      </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- نظام الأسئلة والاختبارات المبرمج -->
+<script>
+  // بيانات الأسئلة لكل قسم مع توفير سياق (Context) للجداول والبيانات
+  const quizzesData = {
+    'intro': [
+      {
+        qEn: "Who uses financial analysis primarily to assess long-term cash flows and interest coverage?",
+        qAr: "من يستخدم التحليل المالي بشكل أساسي لتقييم التدفقات النقدية طويلة الأجل وتغطية الفوائد؟",
+        options: [
+          { textEn: "Trade Creditors", textAr: "الدائنون التجاريون", isCorrect: false },
+          { textEn: "Bondholders", textAr: "حاملو السندات", isCorrect: true },
+          { textEn: "Shareholders", textAr: "المساهمون", isCorrect: false }
+        ],
+        expEn: "Bondholders are long-term lenders focused on the firm's ability to pay interest and principal over a long period.",
+        expAr: "حاملو السندات هم مقرضون طويلي الأجل، يركزون بشكل أساسي على قدرة الشركة على سداد الفوائد وأصل الدين بمرور الوقت."
+      },
+      {
+        qEn: "What is the most critical step in the financial analysis framework where the analyst acts as an advisor?",
+        qAr: "ما هي الخطوة الأكثر أهمية ومسؤولية في إطار التحليل المالي والتي يلعب فيها المحلل دور المستشار؟",
+        options: [
+          { textEn: "Collecting Data", textAr: "جمع البيانات", isCorrect: false },
+          { textEn: "Processing Data", textAr: "معالجة البيانات", isCorrect: false },
+          { textEn: "Develop Recommendations", textAr: "التوصيات والتواصل", isCorrect: true }
+        ],
+        expEn: "Developing and communicating recommendations is the most critical phase as it directly influences the economic decisions of the users.",
+        expAr: "صياغة التوصيات والتواصل هي المرحلة الأهم لأنها تؤثر بشكل مباشر ومسؤول على القرارات الاقتصادية للمستخدمين بناءً على الأرقام."
+      }
+    ],
+    'statements': [
+      {
+        contextHTML: `
+          <div class="quiz-context">
+            <table>
+              <tr><th>Item / البند</th><th>Amount / المبلغ</th></tr>
+              <tr><td>Sales / المبيعات</td><td>$100,000</td></tr>
+              <tr><td>COGS / تكلفة البضاعة</td><td>$60,000</td></tr>
+              <tr><td>Operating Exp / مصاريف تشغيل</td><td>$20,000</td></tr>
+              <tr><td>Interest / فوائد</td><td>$5,000</td></tr>
+            </table>
+          </div>
+        `,
+        qEn: "Based on the table above, what is the Operating Profit (EBIT)?",
+        qAr: "بناءً على الجدول أعلاه، ما هو ربح التشغيل (EBIT)؟",
+        options: [
+          { textEn: "$40,000", textAr: "$40,000", isCorrect: false },
+          { textEn: "$20,000", textAr: "$20,000", isCorrect: true },
+          { textEn: "$15,000", textAr: "$15,000", isCorrect: false }
+        ],
+        expEn: `<span class="math-step">Step 1: Gross Profit = Sales - COGS ($100k - $60k = $40k)</span>
+                <span class="math-step">Step 2: EBIT = Gross Profit - Operating Exp ($40k - $20k = $20k)</span>
+                Note: Interest is deducted *after* EBIT.`,
+        expAr: `<span class="math-step">خطوة 1: مجمل الربح = المبيعات - تكلفة البضاعة (100 - 60 = 40 ألف)</span>
+                <span class="math-step">خطوة 2: ربح التشغيل = مجمل الربح - مصاريف التشغيل (40 - 20 = 20 ألف)</span>
+                ملاحظة: الفوائد تُخصم *بعد* حساب ربح التشغيل.`
+      },
+      {
+        qEn: "Under US GAAP, how are dividends paid classified in the cash flow statement?",
+        qAr: "بموجب المعايير الأمريكية (US GAAP)، كيف تصنف الأرباح الموزعة المدفوعة في قائمة التدفقات؟",
+        options: [
+          { textEn: "Operating Activity", textAr: "نشاط تشغيلي", isCorrect: false },
+          { textEn: "Investing Activity", textAr: "نشاط استثماري", isCorrect: false },
+          { textEn: "Financing Activity", textAr: "نشاط تمويلي", isCorrect: true }
+        ],
+        expEn: "US GAAP strictly classifies dividends paid as a financing activity, whereas IFRS allows it to be operating or financing.",
+        expAr: "المعايير الأمريكية صارمة وتصنفها كنشاط تمويلي حصراً، بينما المعايير الدولية (IFRS) تعطي مرونة لتصنيفها كتشغيلي أو تمويلي."
+      }
+    ],
+    'liquidity': [
+      {
+        contextHTML: `
+          <div class="quiz-context">
+            <table>
+              <tr><th>Current Assets / أصول متداولة</th><th>Amount</th><th>Current Liabilities / التزامات متداولة</th><th>Amount</th></tr>
+              <tr><td>Cash / نقدية</td><td>$50,000</td><td>Accounts Payable / ذمم دائنة</td><td>$100,000</td></tr>
+              <tr><td>A/R / ذمم مدينة</td><td>$100,000</td><td>Short-term Notes / أوراق دفع</td><td>$50,000</td></tr>
+              <tr><td>Inventory / مخزون</td><td>$150,000</td><td>-</td><td>-</td></tr>
+            </table>
+          </div>
+        `,
+        qEn: "Calculate the Acid-Test (Quick) Ratio based on the data above.",
+        qAr: "احسب نسبة السيولة السريعة (Acid-Test) بناءً على البيانات أعلاه.",
+        options: [
+          { textEn: "2.0 times", textAr: "2.0 مرة", isCorrect: false },
+          { textEn: "1.0 times", textAr: "1.0 مرة", isCorrect: true },
+          { textEn: "1.5 times", textAr: "1.5 مرة", isCorrect: false }
+        ],
+        expEn: `<span class="math-step">1. Quick Assets = Cash + A/R = 50k + 100k = $150k. (Inventory is excluded).</span>
+                <span class="math-step">2. Current Liabilities = AP + Notes = 100k + 50k = $150k.</span>
+                <span class="math-step">3. Quick Ratio = 150k / 150k = 1.0</span>`,
+        expAr: `<span class="math-step">1. الأصول السريعة = النقدية + الذمم = 50 + 100 = 150 ألف. (المخزون يُستبعد تماماً).</span>
+                <span class="math-step">2. الالتزامات المتداولة = ذمم دائنة + أوراق دفع = 100 + 50 = 150 ألف.</span>
+                <span class="math-step">3. النسبة السريعة = 150 / 150 = 1.0 مرة.</span>`
+      }
+    ],
+    'leverage': [
+      {
+        contextHTML: `
+          <div class="quiz-context">
+            <table>
+              <tr><th>Item / البند</th><th>Amount / المبلغ</th></tr>
+              <tr><td>Total Assets / إجمالي الأصول</td><td>$1,000,000</td></tr>
+              <tr><td>Total Equity / حقوق الملكية</td><td>$600,000</td></tr>
+              <tr><td>EBIT / ربح التشغيل</td><td>$150,000</td></tr>
+              <tr><td>Interest Exp / الفوائد</td><td>$30,000</td></tr>
+            </table>
+          </div>
+        `,
+        qEn: "Calculate the Debt-to-Assets ratio AND Interest Coverage Ratio.",
+        qAr: "احسب نسبة الديون إلى الأصول، ونسبة تغطية الفوائد.",
+        options: [
+          { textEn: "40% & 5 times", textAr: "40% و 5 مرات", isCorrect: true },
+          { textEn: "60% & 5 times", textAr: "60% و 5 مرات", isCorrect: false },
+          { textEn: "40% & 4 times", textAr: "40% و 4 مرات", isCorrect: false }
+        ],
+        expEn: `<span class="math-step">1. Total Debt = Assets - Equity = 1,000k - 600k = $400k.</span>
+                <span class="math-step">2. Debt-to-Assets = Debt / Assets = 400k / 1,000k = 40%.</span>
+                <span class="math-step">3. Interest Coverage = EBIT / Interest = 150k / 30k = 5 times.</span>`,
+        expAr: `<span class="math-step">1. إجمالي الديون = الأصول - الملكية = 1000 - 600 = 400 ألف.</span>
+                <span class="math-step">2. الديون للأصول = الديون ÷ الأصول = 400 ÷ 1000 = 40%.</span>
+                <span class="math-step">3. تغطية الفوائد = ربح التشغيل ÷ الفوائد = 150 ÷ 30 = 5 مرات.</span>`
+      }
+    ],
+    'activity': [
+      {
+        contextHTML: `
+          <div class="quiz-context">
+            <table>
+              <tr><th>Item / البند</th><th>Amount / المبلغ</th></tr>
+              <tr><td>COGS / تكلفة البضاعة المباعة</td><td>$400,000</td></tr>
+              <tr><td>Inventory / المخزون</td><td>$100,000</td></tr>
+            </table>
+          </div>
+        `,
+        qEn: "Calculate the Inventory Turnover Ratio.",
+        qAr: "احسب معدل دوران المخزون.",
+        options: [
+          { textEn: "3 times", textAr: "3 مرات", isCorrect: false },
+          { textEn: "4 times", textAr: "4 مرات", isCorrect: true },
+          { textEn: "5 times", textAr: "5 مرات", isCorrect: false }
+        ],
+        expEn: `<span class="math-step">Inventory Turnover = COGS / Inventory</span>
+                <span class="math-step">Turnover = $400,000 / $100,000 = 4 times.</span>
+                A higher turnover is generally better as it indicates efficient inventory management.`,
+        expAr: `<span class="math-step">دوران المخزون = تكلفة البضاعة ÷ المخزون</span>
+                <span class="math-step">الدوران = 400,000 ÷ 100,000 = 4 مرات.</span>
+                كلما ارتفع المعدل كان أفضل لأنه يدل على كفاءة بيع وتصريف المخزون.`
+      }
+    ],
+    'profit': [
+      {
+        qEn: "Which ratio strictly measures the return generated purely on the shareholders' investment?",
+        qAr: "أي نسبة تقيس العائد المحقق على استثمار المساهمين (المُلاك) فقط؟",
+        options: [
+          { textEn: "Return on Assets (ROA)", textAr: "العائد على الأصول (ROA)", isCorrect: false },
+          { textEn: "Return on Equity (ROE)", textAr: "العائد على حقوق الملكية (ROE)", isCorrect: true },
+          { textEn: "Gross Profit Margin (GPM)", textAr: "هامش مجمل الربح (GPM)", isCorrect: false }
+        ],
+        expEn: "ROE compares Net Income specifically to Shareholders' Equity, showing what the owners earned on their money.",
+        expAr: "العائد على حقوق الملكية (ROE) يقارن صافي الدخل بحقوق المساهمين تحديداً، ليوضح العائد المباشر لأصحاب رأس المال."
+      },
+      {
+        qEn: "You bought a machine for $10,000 and it generated $12,000 in total proceeds. What is the ROI?",
+        qAr: "اشتريت آلة بمبلغ 10,000 دولار وحققت لك متحصلات إجمالية 12,000 دولار. ما هو العائد على الاستثمار (ROI)؟",
+        options: [
+          { textEn: "120%", textAr: "120%", isCorrect: false },
+          { textEn: "20%", textAr: "20%", isCorrect: true },
+          { textEn: "12%", textAr: "12%", isCorrect: false }
+        ],
+        expEn: `<span class="math-step">ROI = (Gain - Cost) / Cost</span>
+                <span class="math-step">ROI = ($12,000 - $10,000) / $10,000 = 2,000 / 10,000 = 20%</span>`,
+        expAr: `<span class="math-step">العائد = (المتحصلات - التكلفة) ÷ التكلفة</span>
+                <span class="math-step">العائد = (12,000 - 10,000) ÷ 10,000 = 2,000 ÷ 10,000 = 20%</span>`
+      }
+    ],
+    'analysis': [
+      {
+        contextHTML: `
+          <div class="quiz-context">
+            <table>
+              <tr><th>Year / السنة</th><th>Accounts Rec. / ذمم مدينة</th></tr>
+              <tr><td>2012 (Base / أساس)</td><td>$100,000</td></tr>
+              <tr><td>2013</td><td>$125,000</td></tr>
+            </table>
+          </div>
+        `,
+        qEn: "What is the Horizontal Analysis percentage change for Accounts Receivable in 2013?",
+        qAr: "ما هي نسبة التغير (التحليل الأفقي) للذمم المدينة في عام 2013؟",
+        options: [
+          { textEn: "+20%", textAr: "+20%", isCorrect: false },
+          { textEn: "+25%", textAr: "+25%", isCorrect: true },
+          { textEn: "+125%", textAr: "+125%", isCorrect: false }
+        ],
+        expEn: `<span class="math-step">Formula: (Current Year - Base Year) / Base Year * 100</span>
+                <span class="math-step">Change = (125k - 100k) / 100k = 25k / 100k = +25%</span>`,
+        expAr: `<span class="math-step">القانون: (سنة المقارنة - سنة الأساس) ÷ سنة الأساس × 100</span>
+                <span class="math-step">التغير = (125 - 100) ÷ 100 = 25 ÷ 100 = +25% زيادة.</span>`
+      },
+      {
+        qEn: "In vertical analysis of an income statement, what represents the 100% base amount?",
+        qAr: "في التحليل العمودي لقائمة الدخل، ما هو البند الذي يمثل مبلغ الأساس (100%)؟",
+        options: [
+          { textEn: "Net Income", textAr: "صافي الدخل", isCorrect: false },
+          { textEn: "Gross Profit", textAr: "مجمل الربح", isCorrect: false },
+          { textEn: "Net Sales", textAr: "صافي المبيعات", isCorrect: true }
+        ],
+        expEn: "Every expense and profit line is divided by Net Sales to see what percentage of revenue it consumes.",
+        expAr: "يتم تقسيم كل مصروف أو ربح على صافي المبيعات لمعرفة النسبة التي يستهلكها هذا البند من الإيرادات."
+      }
+    ],
+    'dupont': [
+      {
+        contextHTML: `
+          <div class="quiz-context">
+            <table>
+              <tr><th>Item / البند</th><th>Amount / المبلغ</th></tr>
+              <tr><td>Net Income / صافي الدخل</td><td>$10,000</td></tr>
+              <tr><td>Sales / المبيعات</td><td>$100,000</td></tr>
+              <tr><td>Total Assets / إجمالي الأصول</td><td>$50,000</td></tr>
+              <tr><td>Total Equity / حقوق الملكية</td><td>$25,000</td></tr>
+            </table>
+          </div>
+        `,
+        qEn: "Calculate ROE using the DuPont method components (NPM × TAT × EM).",
+        qAr: "احسب العائد على حقوق الملكية (ROE) باستخدام مكونات نموذج دو بونت.",
+        options: [
+          { textEn: "NPM=10%, TAT=0.5, EM=2 ➔ ROE=10%", textAr: "هامش=10%, دوران=0.5, مضاعف=2 ➔ 10%", isCorrect: false },
+          { textEn: "NPM=10%, TAT=2.0, EM=2 ➔ ROE=40%", textAr: "هامش=10%, دوران=2.0, مضاعف=2 ➔ 40%", isCorrect: true },
+          { textEn: "NPM=20%, TAT=2.0, EM=0.5 ➔ ROE=20%", textAr: "هامش=20%, دوران=2.0, مضاعف=0.5 ➔ 20%", isCorrect: false }
+        ],
+        expEn: `<span class="math-step">1. Net Profit Margin (NPM) = 10k / 100k = 10%</span>
+                <span class="math-step">2. Total Asset Turnover (TAT) = 100k / 50k = 2.0 times</span>
+                <span class="math-step">3. Equity Multiplier (EM) = 50k / 25k = 2.0</span>
+                <span class="math-step">ROE = 10% × 2.0 × 2.0 = 40%</span>`,
+        expAr: `<span class="math-step">1. هامش الربح = الدخل ÷ المبيعات = 10 ÷ 100 = 10%</span>
+                <span class="math-step">2. دوران الأصول = المبيعات ÷ الأصول = 100 ÷ 50 = 2.0 مرة</span>
+                <span class="math-step">3. مضاعف الملكية = الأصول ÷ الملكية = 50 ÷ 25 = 2.0</span>
+                <span class="math-step">ROE = 10% × 2.0 × 2.0 = 40%</span>`
+      }
+    ],
+    'limits': [
+      {
+        qEn: "Why are industry averages considered only guidelines rather than absolute targets?",
+        qAr: "لماذا تُعتبر المتوسطات الصناعية مجرد إرشادات وليست أهدافاً مطلقة؟",
+        options: [
+          { textEn: "Firms use identical accounting methods.", textAr: "لأن الشركات تستخدم طرق محاسبية متطابقة.", isCorrect: false },
+          { textEn: "Firms within an industry have different strategies & sizes.", textAr: "لأن الشركات تختلف في استراتيجياتها وأحجامها.", isCorrect: true },
+          { textEn: "Averages are always incorrect.", textAr: "لأن المتوسطات تكون خاطئة دائماً.", isCorrect: false }
+        ],
+        expEn: "Variations in company size, accounting policies, and business models mean the 'average' isn't always the optimal target for every firm.",
+        expAr: "الاختلاف في السياسات المحاسبية والأحجام يجعل المتوسط مؤشراً عاماً وليس هدفاً مثالياً لكل شركة بحد ذاتها."
+      }
+    ]
+  };
+
+  function renderQuizzes() {
+    for (let sectionId in quizzesData) {
+      let sectionDiv = document.getElementById(sectionId);
+      if (!sectionDiv) continue;
+
+      let quizHTML = `
+        <div class="quiz-section">
+          <div class="quiz-header">
+            📝 اختبر معلوماتك <span class="en-term" style="font-size:14px; background:transparent; border:none; box-shadow:none;">| Interactive Quiz</span>
+          </div>
+          <div class="quiz-scroller">
+      `;
+
+      quizzesData[sectionId].forEach((q, qIndex) => {
+        let questionId = `${sectionId}-q${qIndex}`;
+        
+        quizHTML += `<div class="quiz-card-item" id="${questionId}">`;
+        
+        // إدراج السياق/الجدول إذا كان موجوداً
+        if (q.contextHTML) {
+          quizHTML += q.contextHTML;
+        }
+
+        quizHTML += `
+            <div class="bilingual-grid">
+              <div class="text-en">${q.qEn}</div>
+              <div class="text-ar">${q.qAr}</div>
+            </div>
+            <div class="quiz-options">
+        `;
+
+        // إدراج الخيارات مع تمرير المؤشرات الدقيقة للـ JS
+        q.options.forEach((opt, oIndex) => {
+          quizHTML += `
+              <button class="quiz-btn" onclick="checkAnswer(this, '${sectionId}', ${qIndex}, ${oIndex})">
+                <div class="text-en">${opt.textEn}</div>
+                <div class="text-ar">${opt.textAr}</div>
+              </button>
+          `;
+        });
+
+        quizHTML += `
+            </div>
+            <div class="quiz-feedback" id="feedback-${questionId}"></div>
+          </div>
+        `;
+      });
+
+      quizHTML += `
+          </div>
+        </div>
+      `;
+
+      sectionDiv.insertAdjacentHTML('beforeend', quizHTML);
+    }
+  }
+
+  function checkAnswer(btnElement, sectionId, qIndex, oIndex) {
+    let questionId = `${sectionId}-q${qIndex}`;
+    let questionCard = document.getElementById(questionId);
+    let allBtns = questionCard.querySelectorAll('.quiz-btn');
+    let feedbackDiv = document.getElementById(`feedback-${questionId}`);
+
+    // جلب بيانات السؤال والتحقق
+    let qData = quizzesData[sectionId][qIndex];
+    let isCorrect = qData.options[oIndex].isCorrect;
+    let expEn = qData.expEn;
+    let expAr = qData.expAr;
+
+    // تعطيل الأزرار
+    allBtns.forEach(btn => btn.disabled = true);
+
+    // تلوين وعرض النتيجة
+    if (isCorrect) {
+      btnElement.classList.add('correct');
+      feedbackDiv.innerHTML = `
+        <div class="feedback-status" style="color: var(--color-text-success);">
+          ✅ إجابة صحيحة | Correct Answer
+        </div>
+        <div class="bilingual-grid exp-content" style="margin-top: 8px; font-size:14px;">
+          <div class="text-en" style="color:var(--color-text-secondary);">${expEn}</div>
+          <div class="text-ar" style="color:var(--color-text-primary);">${expAr}</div>
+        </div>
+      `;
+      feedbackDiv.style.background = "var(--color-background-success)";
+      feedbackDiv.style.border = "1px solid #bbf7d0";
+    } else {
+      btnElement.classList.add('incorrect');
+      
+      // إيجاد الإجابة الصحيحة وتلوينها
+      qData.options.forEach((opt, idx) => {
+        if (opt.isCorrect) {
+          allBtns[idx].classList.add('correct');
+        }
+      });
+
+      feedbackDiv.innerHTML = `
+        <div class="feedback-status" style="color: var(--color-text-danger);">
+          ❌ إجابة خاطئة | Incorrect Answer
+        </div>
+        <div class="bilingual-grid exp-content" style="margin-top: 8px; font-size:14px;">
+          <div class="text-en" style="color:var(--color-text-secondary);">${expEn}</div>
+          <div class="text-ar" style="color:var(--color-text-primary);">${expAr}</div>
+        </div>
+      `;
+      feedbackDiv.style.background = "var(--color-background-danger)";
+      feedbackDiv.style.border = "1px solid #fecaca";
+    }
+
+    feedbackDiv.classList.add('show');
+  }
+
+  function show(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  window.onload = renderQuizzes;
+</script>
+
+</body>
+</html>
