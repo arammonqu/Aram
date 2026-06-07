@@ -6,6 +6,11 @@
 <title>محاسبة التكاليف — الإطار النظري</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<script>
+  if (window.screen.width <= 768 || window.innerWidth <= 768) {
+    document.documentElement.classList.add('mobile-view');
+  }
+</script>
 <style>
 :root {
   --bg:#07112B; --surface:#0F1A3C; --card:#122040; --border:#273C72;
@@ -417,6 +422,32 @@ html,body{width:100%;height:100%;overflow:hidden;background:#020510;font-family:
   font-size: 36px;
   font-weight: 900;
   color: var(--head);
+}
+
+/* Prevent iOS Safari from zooming out by making container fluid when mobile class is active */
+html.mobile-view, html.mobile-view body {
+  overflow: auto;
+}
+html.mobile-view #sr {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: calc(46px + env(safe-area-inset-bottom)) !important;
+  inset: 0 0 calc(46px + env(safe-area-inset-bottom)) 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  overflow: hidden !important;
+}
+html.mobile-view #deck {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  transform: none !important;
+}
+html.mobile-view .dots {
+  display: none !important;
 }
 
 /* ── RESPONSIVE / MOBILE FRIENDLY STYLES ── */
@@ -2059,7 +2090,7 @@ let jump = function() {};
 
   function scale(){
     const deck=document.getElementById('deck');
-    if (window.innerWidth <= 768) {
+    if (document.documentElement.classList.contains('mobile-view') || window.innerWidth <= 768) {
       deck.style.transform = '';
       return;
     }
