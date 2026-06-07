@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محاسبة التكاليف — الإطار النظري</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#07112B; --surface:#0F1A3C; --card:#122040; --border:#273C72;
+  --gold:#D4A517; --gl:#F0C040; --gd:rgba(212,165,23,.13);
+  --teal:#2FB8AC; --td:rgba(47,184,172,.12);
+  --rose:#E05C7A; --rd:rgba(224,92,122,.12);
+  --text:#EAE0CC; --muted:#8A97B5; --head:#F5EFDF;
+  --green:#4ADE80; --green-bg:rgba(74,222,128,.1); --green-border:rgba(74,222,128,.3);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:#020510;font-family:'Cairo',sans-serif;color:var(--text);line-height:1.6;}
+
+/* ── OUTER ── */
+#sr{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
+#deck{width:1280px;height:720px;position:relative;transform-origin:center center;}
+
+/* ── SLIDES ── */
+.slide{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .42s ease,transform .42s ease;transform:translateX(-24px);overflow:hidden;}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.slide.out{opacity:0;transform:translateX(24px);}
+
+/* ── BKGS ── */
+.bg-title{background:radial-gradient(ellipse 120% 60% at 50% -5%,rgba(212,165,23,.16) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 85% 85%,rgba(47,184,172,.09) 0%,transparent 50%),linear-gradient(150deg,#050C22 0%,#0D1C40 45%,#060E24 100%);}
+.bg-ch{background:linear-gradient(140deg,#08112A 0%,#11214A 50%,#080E26 100%);}
+.bg-std{background:linear-gradient(160deg,#07112B 0%,#0D1A38 100%);}
+
+/* ── TITLE SLIDE ── */
+.s-title{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:55px 80px;position:relative;height:100%;}
+.t-badge{display:inline-block;background:var(--gd);border:1px solid rgba(212,165,23,.4);color:var(--gl);font-size:11px;letter-spacing:3px;padding:5px 22px;border-radius:30px;margin-bottom:28px;font-weight:700;text-transform:uppercase;}
+.t-main{font-family:'Amiri',serif;font-size:72px;font-weight:700;color:var(--head);line-height:1.15;margin-bottom:6px;}
+.t-main span{color:var(--gl);}
+.t-sub{font-size:22px;color:var(--teal);font-weight:300;margin-bottom:38px;letter-spacing:1px;}
+.t-line{width:70px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 36px;}
+.t-meta{display:flex;gap:32px;justify-content:center;}
+.t-stat{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:12px 26px;text-align:center;}
+.t-sn{display:block;font-size:30px;font-weight:900;color:var(--gl);}
+.t-sl{font-size:10px;color:var(--muted);letter-spacing:1px;}
+
+/* ── CHAPTER DIVIDER ── */
+.s-ch{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px;position:relative;height:100%;}
+.ch-bg-num{position:absolute;font-size:260px;font-weight:900;color:rgba(212,165,23,.04);font-family:'Cairo',sans-serif;top:50%;left:50%;transform:translate(-50%,-53%);line-height:1;pointer-events:none;}
+.ch-badge{display:inline-block;border:1px solid var(--gold);color:var(--gold);font-size:11px;letter-spacing:3px;padding:5px 22px;border-radius:30px;margin-bottom:20px;text-transform:uppercase;position:relative;}
+.ch-title{font-family:'Amiri',serif;font-size:54px;color:var(--head);margin-bottom:14px;position:relative;line-height:1.3;}
+.ch-sub{font-size:20px;color:var(--teal);font-weight:300;position:relative;}
+.ch-line{width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--teal),transparent);margin:18px auto 0;}
+
+/* ── CONTENT SLIDE ── */
+.s-std{display:flex;flex-direction:column;height:100%;}
+.s-head{padding:24px 56px 18px;border-bottom:1px solid var(--border);flex-shrink:0;position:relative;}
+.s-head::after{content:'';position:absolute;bottom:0;right:0;width:220px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);}
+.s-ey{font-size:10px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:5px;font-weight:700;}
+.s-ttl{font-family:'Amiri',serif;font-size:36px;color:var(--head);line-height:1.25;}
+.s-ttl .en{font-size:15px;color:var(--muted);font-family:'Cairo',sans-serif;font-weight:300;display:block;margin-top:1px;}
+.s-body{flex:1;padding:22px 56px;overflow:hidden;display:flex;gap:18px;}
+.s-body.col1{flex-direction:column;}
+.s-body.col2{flex-direction:row;}
+.s-ft{padding:8px 56px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);flex-shrink:0;}
+.ft-l{font-size:10px;color:var(--muted);letter-spacing:1px;}
+.ft-r{font-size:10px;color:var(--gold);letter-spacing:1px;}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 22px;flex:1;}
+.card-t{font-size:13.5px;font-weight:700;color:var(--gl);margin-bottom:9px;padding-bottom:7px;border-bottom:1px solid var(--border);line-height:1.4;}
+.card-t.teal{color:var(--teal);}
+.card-t.rose{color:var(--rose);}
+
+/* ── LISTS ── */
+.pts{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.pts li{display:flex;align-items:flex-start;gap:9px;font-size:14px;color:var(--text);line-height:1.65;}
+.pts li b{color:var(--gl);font-weight:700;}
+.pts li.teal-d b{color:var(--teal);}
+.dot-g::before,.pts li::before{content:'';width:6px;height:6px;min-width:6px;border-radius:50%;background:var(--gold);margin-top:8px;display:inline-block;}
+.pts li.t::before{background:var(--teal);}
+.pts li.r::before{background:var(--rose);}
+
+/* ── DEF BOX ── */
+.def{background:var(--gd);border:1px solid rgba(212,165,23,.3);border-radius:12px;padding:16px 20px;font-size:14.5px;line-height:1.8;}
+.def.teal-def{background:var(--td);border-color:rgba(47,184,172,.3);}
+.def b{color:var(--gl);font-weight:700;}
+.def.teal-def b{color:var(--teal);}
+
+/* ── GOAL CARDS ── */
+.goals{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.g-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 15px;display:flex;align-items:flex-start;gap:11px;}
+.g-num{width:34px;height:34px;border-radius:8px;background:var(--gd);border:1px solid rgba(212,165,23,.3);color:var(--gl);font-size:17px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.g-num.teal{background:var(--td);border-color:rgba(47,184,172,.3);color:var(--teal);}
+.g-ar{font-size:13.5px;color:var(--text);font-weight:600;line-height:1.4;}
+.g-en{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+.tbl th{background:rgba(212,165,23,.11);color:var(--gl);padding:9px 13px;text-align:center;border:1px solid var(--border);font-weight:700;}
+.tbl td{padding:8px 13px;border:1px solid var(--border);text-align:center;color:var(--text);line-height:1.5;vertical-align:middle;}
+.tbl tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+.tbl td.rh{background:rgba(47,184,172,.07);color:var(--teal);font-weight:600;text-align:right;}
+
+/* ── COMP COLS ── */
+.comp-cols{display:flex;gap:14px;flex:1;}
+.cc{flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.cc-h{padding:11px 15px;font-size:13px;font-weight:700;text-align:center;border-bottom:1px solid var(--border);}
+.cc-h.g{background:var(--gd);color:var(--gl);}
+.cc-h.t{background:var(--td);color:var(--teal);}
+.cc-h.r{background:var(--rd);color:var(--rose);}
+.cc-b{padding:13px 15px;}
+.cc-b ul{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.cc-b ul li{font-size:12.5px;color:var(--text);padding-right:14px;position:relative;line-height:1.5;}
+.cc-b ul li::before{content:'';position:absolute;right:0;top:7px;width:5px;height:5px;border-radius:50%;}
+.cc.g .cc-b ul li::before{background:var(--gold);}
+.cc.t .cc-b ul li::before{background:var(--teal);}
+.cc.r .cc-b ul li::before{background:var(--rose);}
+
+/* ── TYPE BOXES ── */
+.types-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;}
+.tp{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 14px;text-align:center;}
+.tp-icon{font-size:26px;margin-bottom:8px;display:block;}
+.tp-name{font-size:13px;font-weight:700;color:var(--gl);margin-bottom:3px;}
+.tp-en{font-size:10px;color:var(--muted);margin-bottom:7px;}
+.tp-desc{font-size:12px;color:var(--text);line-height:1.55;}
+
+/* ── CONCEPT ROWS ── */
+.cr{display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 17px;}
+.cr-label{font-size:13.5px;font-weight:700;color:var(--gl);min-width:150px;flex-shrink:0;}
+.cr-sep{color:var(--border);font-size:18px;margin-top:1px;flex-shrink:0;}
+.cr-desc{font-size:13px;color:var(--text);line-height:1.6;flex:1;}
+.cr-label.teal{color:var(--teal);}
+
+/* ── FORMULA ── */
+.formula{background:#0A1830;border:1px solid var(--teal);border-radius:8px;padding:11px 20px;text-align:center;font-size:15px;color:var(--teal);font-weight:600;}
+
+/* ── TAGS ── */
+.tag{display:inline-block;padding:3px 11px;border-radius:20px;font-size:11px;font-weight:600;margin:2px;}
+.tg{background:var(--gd);color:var(--gl);border:1px solid rgba(212,165,23,.3);}
+.tt{background:var(--td);color:var(--teal);border:1px solid rgba(47,184,172,.3);}
+.tr{background:var(--rd);color:var(--rose);border:1px solid rgba(224,92,122,.3);}
+
+/* ── STEP FLOW ── */
+.flow{display:flex;align-items:stretch;gap:0;}
+.flow-step{flex:1;background:var(--card);border:1px solid var(--border);padding:14px 12px;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+.flow-step:first-child{border-radius:0 10px 10px 0;}
+.flow-step:last-child{border-radius:10px 0 0 10px;}
+.flow-arrow{display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:20px;padding:0 2px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--card);}
+.fs-num{font-size:11px;color:var(--muted);margin-bottom:4px;}
+.fs-name{font-size:13px;font-weight:700;color:var(--gl);}
+.fs-en{font-size:10px;color:var(--muted);margin-top:2px;}
+.fs-desc{font-size:11.5px;color:var(--text);margin-top:6px;line-height:1.45;}
+
+/* ── HIGHLIGHT QUOTE ── */
+.hq{background:linear-gradient(135deg,rgba(212,165,23,.1),rgba(212,165,23,.04));border-right:3px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 18px;font-size:15px;line-height:1.8;color:var(--text);}
+.hq b{color:var(--gl);}
+
+/* Three methods */
+.methods{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.mth{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:15px 16px;}
+.mth-t{font-size:13.5px;font-weight:700;color:var(--gl);margin-bottom:6px;}
+.mth-en{font-size:11px;color:var(--muted);margin-bottom:10px;}
+.mth-body{font-size:12.5px;color:var(--text);line-height:1.6;}
+.mth-pro{margin-top:8px;font-size:11.5px;color:var(--teal);}
+.mth-con{margin-top:4px;font-size:11.5px;color:var(--rose);}
+
+/* Two-panel wide */
+.panel{flex:1;display:flex;flex-direction:column;gap:11px;}
+.p-head{font-size:13px;font-weight:700;color:var(--gl);border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:2px;}
+.p-head.teal{color:var(--teal);}
+
+/* ── NAV BAR ── */
+#nav{position:fixed;bottom:0;left:0;right:0;height:46px;background:rgba(5,10,30,.97);border-top:1px solid rgba(38,58,110,.5);display:flex;align-items:center;justify-content:space-between;padding:0 22px;z-index:100;backdrop-filter:blur(10px);}
+#pb{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--teal));transition:width .4s ease;z-index:200;}
+.nb{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 16px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:12px;transition:all .2s;display:inline-flex;align-items:center;gap:6px;line-height:1;}
+.nb:hover{border-color:var(--gold);color:var(--gl);}
+.nb:disabled{opacity:.3;cursor:not-allowed;}
+#sc{color:var(--muted);font-size:11px;letter-spacing:1px;}
+#sc span{color:var(--gl);font-weight:700;}
+.dots{display:flex;gap:4px;align-items:center;}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .3s;}
+.dot.a{width:16px;border-radius:3px;background:var(--gold);}
+.dot.quiz-dot{background:rgba(47,184,172,.25);}
+.dot.quiz-dot.a{background:var(--teal);width:16px;border-radius:3px;}
+
+/* ── DECORATIVE ── */
+.geo{position:absolute;pointer-events:none;opacity:.05;}
+
+/* ── QUIZ SLIDES SPECIFIC STYLES ── */
+.quiz-question-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.q-num-badge {
+  display: inline-block;
+  background: var(--gd);
+  border: 1px solid rgba(212, 165, 23, 0.3);
+  color: var(--gl);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  width: fit-content;
+}
+.q-text {
+  font-size: 17px;
+  color: var(--head);
+  font-weight: 600;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.q-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.q-opt {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.01);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.q-opt:hover:not(.disabled) {
+  background: rgba(212, 165, 23, 0.06);
+  border-color: rgba(212, 165, 23, 0.25);
+  transform: translateX(-4px);
+}
+.q-opt.disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+.q-opt.correct {
+  background: var(--green-bg) !important;
+  border-color: var(--green-border) !important;
+  opacity: 1 !important;
+}
+.q-opt.wrong {
+  background: var(--rd) !important;
+  border-color: rgba(224, 92, 122, 0.3) !important;
+  opacity: 1 !important;
+}
+.opt-let {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.q-opt.correct .opt-let {
+  background: var(--green-bg);
+  border-color: var(--green);
+  color: var(--green);
+}
+.q-opt.wrong .opt-let {
+  background: var(--rd);
+  border-color: var(--rose);
+  color: var(--rose);
+}
+.opt-txt {
+  font-size: 13.5px;
+  color: var(--text);
+  line-height: 1.5;
+  flex: 1;
+}
+.q-opt.correct .opt-txt {
+  color: var(--green);
+  font-weight: 600;
+}
+.q-opt.wrong .opt-txt {
+  color: var(--rose);
+}
+.opt-chk {
+  font-size: 16px;
+  font-weight: 700;
+  width: 20px;
+  text-align: center;
+}
+.q-opt.correct .opt-chk::after {
+  content: '✓';
+  color: var(--green);
+}
+.q-opt.wrong .opt-chk::after {
+  content: '✗';
+  color: var(--rose);
+}
+
+/* Explanation Box Styles */
+.q-exp-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.q-exp-placeholder {
+  text-align: center;
+  padding: 40px 20px;
+}
+.placeholder-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.7; }
+}
+.placeholder-title {
+  font-size: 16px;
+  color: var(--gl);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.placeholder-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.q-exp-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  animation: fadeIn 0.4s ease forwards;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.q-exp-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--teal);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.q-exp-body {
+  font-size: 13.5px;
+  color: var(--text);
+  line-height: 1.75;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.q-exp-body b {
+  color: var(--teal);
+}
+
+/* Score Card Circle Ring styling */
+.score-card-container {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px;
+  width: 500px;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+.score-ring-container {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 20px;
+}
+.score-ring {
+  transform: rotate(-90deg);
+}
+.score-ring-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 10;
+}
+.score-ring-fill {
+  fill: none;
+  stroke: var(--teal);
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 440;
+  stroke-dashoffset: 440;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.score-percent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--head);
+}
+</style>
+</head>
+<body>
+
+<div id="pb"></div>
+<div id="sr">
+<div id="deck">
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 1 – TITLE
+══════════════════════════════════════════════ -->
+<div class="slide active bg-title">
+  <svg class="geo" style="top:-60px;left:-60px;width:360px;height:360px;" viewBox="0 0 360 360"><circle cx="0" cy="0" r="300" fill="none" stroke="gold" stroke-width="1"/><circle cx="0" cy="0" r="200" fill="none" stroke="gold" stroke-width="1"/><circle cx="0" cy="0" r="100" fill="none" stroke="gold" stroke-width="1"/></svg>
+  <svg class="geo" style="bottom:-80px;right:-80px;width:380px;height:380px;opacity:.04;" viewBox="0 0 380 380"><circle cx="380" cy="380" r="320" fill="none" stroke="#2FB8AC" stroke-width="1.5"/><circle cx="380" cy="380" r="200" fill="none" stroke="#2FB8AC" stroke-width="1"/></svg>
+
+  <div class="s-title">
+    <div class="t-badge">الإطار النظري • النسخة التفاعلية الكاملة</div>
+    <div class="t-main">محاسبة <span>التكاليف</span></div>
+    <div class="t-sub">Cost Accounting — Concepts, Classifications & Estimation</div>
+    <div class="t-line"></div>
+    <div class="t-meta">
+      <div class="t-stat"><span class="t-sn">٢</span><div class="t-sl">فصلان دراسيان</div></div>
+      <div class="t-stat"><span class="t-sn">٥</span><div class="t-sl">أهداف رئيسية</div></div>
+      <div class="t-stat"><span class="t-sn">٩+</span><div class="t-sl">تصنيفات التكاليف</div></div>
+      <div class="t-stat"><span class="t-sn">٢٠</span><div class="t-sl">سؤالاً تفاعلياً</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 2 – CHAPTER 1 DIVIDER
+══════════════════════════════════════════════ -->
+<div class="slide bg-ch">
+  <div class="s-ch">
+    <div class="ch-bg-num">١</div>
+    <div class="ch-badge">الفصل الأول</div>
+    <div class="ch-title">محاسبة التكاليف<br>المفاهيم والأهداف</div>
+    <div class="ch-sub">Cost Accounting: Concepts and Purposes</div>
+    <div class="ch-line"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 3 – ما هي محاسبة التكاليف؟
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الأول • تعريف</div>
+      <div class="s-ttl">ما هي محاسبة التكاليف؟ <span class="en">What is Cost Accounting?</span></div>
+    </div>
+    <div class="s-body col1">
+      <div class="def">
+        <b>محاسبة التكاليف (Cost Accounting)</b> هي عملية <b>تجميع بيانات التكاليف</b> الخاصة بمنتج معين أو وظيفة أو قسم داخل المنشأة أو خدمة تقدمها، ومعالجة هذه البيانات وتلخيصها <b>وفق أسلوب وغاية محددة</b> من أجل استخراج تكلفة السلعة أو الخدمة أو القسم.
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="card">
+          <div class="card-t">من أين نشأت؟</div>
+          <ul class="pts">
+            <li>كانت تُستخدم أساسًا في قطاع الصناعة</li>
+            <li>امتدت اليوم إلى <b>الخدمات والبنوك والقطاع العام</b></li>
+            <li>شهدت تطورات كبيرة في الآونة الأخيرة بسبب زيادة المنافسة العالمية</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-t teal">على ماذا يتركز محور التكاليف؟</div>
+          <ul class="pts">
+            <li class="t">تحديد تكلفة <b>موضوع محدد</b> قد يكون سلعة أو خدمة أو قسمًا</li>
+            <li class="t">تمييزها عن <b>المحاسبة المالية</b> الموجهة للخارج</li>
+            <li class="t">تزويد <b>الإدارة الداخلية</b> بمعلومات دقيقة وتفصيلية</li>
+          </ul>
+        </div>
+      </div>
+      <div class="def teal-def">
+        <b>أبرز المستجدات:</b> نظام التكاليف المبني على الأنشطة (Activity-Based Costing)، بطاقة العلامة المتوازنة (Balanced Scorecard)، والتكاليف المستهدفة (Target Costing).
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الأول</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 4 – الأهداف الرئيسية الخمسة
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الأول • الأهداف</div>
+      <div class="s-ttl">الأهداف الرئيسة لمحاسبة التكاليف <span class="en">Major Objectives of Cost Accounting</span></div>
+    </div>
+    <div class="s-body col1">
+      <div class="goals" style="grid-template-columns:1fr 1fr;gap:13px;">
+        <div class="g-card">
+          <div class="g-num">١</div>
+          <div><div class="g-ar">التكاليف لغايات اتخاذ القرارات الإدارية</div><div class="g-en">Costs for Decision Making</div></div>
+        </div>
+        <div class="g-card">
+          <div class="g-num">٢</div>
+          <div><div class="g-ar">التكاليف لغايات التخطيط</div><div class="g-en">Costs for Planning</div></div>
+        </div>
+        <div class="g-card">
+          <div class="g-num">٣</div>
+          <div><div class="g-ar">التكاليف لغايات الرقابة</div><div class="g-en">Costs for Controlling</div></div>
+        </div>
+        <div class="g-card">
+          <div class="g-num">٤</div>
+          <div><div class="g-ar">التكاليف لغايات تقييم الأداء</div><div class="g-en">Costs for Performance Evaluation</div></div>
+        </div>
+      </div>
+      <div class="g-card" style="border-color:rgba(47,184,172,.4);">
+        <div class="g-num teal">٥</div>
+        <div><div class="g-ar" style="color:var(--teal);">التكاليف لغايات المحاسبة المالية — تحديد تكلفة البضاعة المصنعة والمخزون</div><div class="g-en">Costs for Financial Accounting</div></div>
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الأول</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 5 – اتخاذ القرارات والتخطيط
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الأول • الأهداف ١ و٢</div>
+      <div class="s-ttl">اتخاذ القرارات والتخطيط <span class="en">Decision Making & Planning</span></div>
+    </div>
+    <div class="s-body col2">
+      <div class="panel">
+        <div class="p-head">١. التكاليف لاتخاذ القرارات الإدارية</div>
+        <ul class="pts">
+          <li>لا يكاد يخلو <b>قرار إداري</b> من وجود تكلفة تترتب عليه</li>
+          <li>الإدارة تحتاج لمعرفة التكاليف المرتبطة بكل قرار قبل اتخاذه</li>
+          <li><b>مثال:</b> شركة طيران تقرر تسيير رحلة جديدة — لا بد من دراسة التكاليف ومقارنتها بالإيرادات المتوقعة</li>
+          <li><b>مثال:</b> شركة صناعية توفر نقل لعامليها — يجب تقدير تكاليف كل بديل (تملّك/تعاقد) واختيار الأوفر</li>
+        </ul>
+        <div class="formula">التكاليف ← تحليل البدائل ← القرار الأمثل</div>
+      </div>
+      <div class="panel">
+        <div class="p-head teal">٢. التكاليف لغايات التخطيط</div>
+        <ul class="pts">
+          <li class="t"><b>الموازنات التقديرية</b> أداة التخطيط الرئيسية — وتتضمن الإيرادات والتكاليف المقدّرة</li>
+          <li class="t">الشركات الصناعية تقدّر: المواد المباشرة، العمل المباشر، التكاليف الصناعية غير المباشرة</li>
+          <li class="t">المصاريف التسويقية والإدارية تُقدَّر بدقة</li>
+          <li class="t">عند ظهور نتائج مغايرة للخطة، تلجأ الإدارة لتعديل خططها المستقبلية</li>
+        </ul>
+        <div class="hq">الموازنة التقديرية تعكس <b>الخطط الموضوعة من قبل الإدارة</b> وما تسعى إلى تحقيقه.</div>
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الأول</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 6 – الرقابة وتقييم الأداء والمحاسبة المالية
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الأول • الأهداف ٣ و٤ و٥</div>
+      <div class="s-ttl">الرقابة وتقييم الأداء والمحاسبة المالية <span class="en">Control, Performance & Financial Accounting</span></div>
+    </div>
+    <div class="s-body col1" style="gap:12px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;">
+        <div class="card">
+          <div class="card-t">٣. الرقابة (Controlling)</div>
+          <ul class="pts" style="gap:7px;">
+            <li style="font-size:13px;">مقارنة <b>التكاليف المقدّرة أو المعيارية</b> مع التكاليف الفعلية</li>
+            <li style="font-size:13px;">الانحراف السلبي ← إشارة تحقيق ومحاسبة</li>
+            <li style="font-size:13px;">أداة رقابية على العاملين للحد من الإسراف والزيادة في التكاليف غير المبررة</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-t">٤. تقييم الأداء (Performance Evaluation)</div>
+          <ul class="pts" style="gap:7px;">
+            <li style="font-size:13px;">في ظل <b>اللامركزية</b>: تفويض الصلاحيات للإدارات الوسطى والدنيا</li>
+            <li style="font-size:13px;">تقسيم المنشأة إلى: <b>مراكز تكلفة، مراكز ربحية، مراكز استثمار</b></li>
+            <li style="font-size:13px;">تقسيم المراكز بناءً على الصلاحيات الممنوحة + التكاليف المنفقة</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card" style="flex:none;">
+        <div class="card-t teal">٥. المحاسبة المالية (Financial Accounting)</div>
+        <div style="display:flex;gap:18px;align-items:flex-start;">
+          <ul class="pts" style="gap:7px;flex:1;">
+            <li class="t" style="font-size:13px;">عند إعداد القوائم المالية للشركات الصناعية: لا بد من تحديد <b>تكلفة المخزون تحت التشغيل</b> وتكلفة <b>مخزون البضاعة تامة الصنع</b></li>
+            <li class="t" style="font-size:13px;">تحديد التكاليف الصناعية للبضاعة المصنعة، المباعة، والمخزون السلعي</li>
+          </ul>
+          <div class="flow" style="flex:1;align-self:stretch;">
+            <div class="flow-step"><div class="fs-num">خطوة ١</div><div class="fs-name">تكاليف الإنتاج</div><div class="fs-desc">مباشرة وغير مباشرة</div></div>
+            <div class="flow-arrow">←</div>
+            <div class="flow-step"><div class="fs-num">خطوة ٢</div><div class="fs-name">بضاعة تامة</div><div class="fs-desc">Finished Goods</div></div>
+            <div class="flow-arrow">←</div>
+            <div class="flow-step"><div class="fs-num">خطوة ٣</div><div class="fs-name">تكلفة البضاعة المباعة</div><div class="fs-desc">Cost of Goods Sold</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الأول</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 7 – المحاسبات الثلاث
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الأول • التمييز</div>
+      <div class="s-ttl">المحاسبات الثلاث <span class="en">Cost, Managerial & Financial Accounting</span></div>
+    </div>
+    <div class="s-body col2">
+      <div class="comp-cols">
+        <div class="cc g">
+          <div class="cc-h g">محاسبة التكاليف<br><small style="font-weight:300;">Cost Accounting</small></div>
+          <div class="cc-b">
+            <ul>
+              <li>تجميع بيانات التكاليف الخاصة بمنتج / قسم / خدمة</li>
+              <li>معالجة وتلخيص وفق أسلوب وغاية محددة</li>
+              <li>استخراج تكلفة السلعة أو الخدمة بدقة</li>
+              <li>تُغذّي كلًا من المحاسبة المالية والإدارية</li>
+              <li>تركيزها: تحديد تكلفة موضوع معين</li>
+            </ul>
+          </div>
+        </div>
+        <div class="cc t">
+          <div class="cc-h t">المحاسبة الإدارية<br><small style="font-weight:300;">Managerial Accounting</small></div>
+          <div class="cc-b">
+            <ul>
+              <li>تجميع ومعالجة البيانات المالية وغير المالية</li>
+              <li>وفق أساليب وقواعد محددة للوصول لمعلومات تخدم الإدارة</li>
+              <li>تهدف: اتخاذ القرارات، التخطيط، الرقابة، التنسيق، تقييم الأداء</li>
+              <li>موجهة للمستخدمين الداخليين (المدراء)</li>
+              <li>جزء من نظم المعلومات الإدارية (MIS)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="cc r">
+          <div class="cc-h r">المحاسبة المالية<br><small style="font-weight:300;">Financial Accounting</small></div>
+          <div class="cc-b">
+            <ul>
+              <li>تسجيل العمليات المالية التي تحدث في المنشأة</li>
+              <li>تحضير القوائم المالية بنقطة زمنية معينة</li>
+              <li>تزويد الأطراف الخارجية بالمعلومات</li>
+              <li>تخدم أساسًا: المستثمرين والمقرضين والدولة</li>
+              <li>بيانات تاريخية في معظمها</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الأول</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 8 – مقارنة الفروقات الرئيسية
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الأول • مقارنة</div>
+      <div class="s-ttl">أبرز الفروقات بين المحاسبات الثلاث <span class="en">Key Differences</span></div>
+    </div>
+    <div class="s-body col1">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th style="text-align:right;">الوجه المقارَن</th>
+            <th>المحاسبة المالية</th>
+            <th>المحاسبة الإدارية</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="rh">مستخدمو البيانات</td><td>أطراف خارجية (مستثمرون، مقرضون، حكومة)</td><td>مدراء وإدارات داخل المنشأة</td></tr>
+          <tr><td class="rh">طبيعة البيانات</td><td>تاريخية في الغالب</td><td>حالية ومستقبلية لدعم القرارات</td></tr>
+          <tr><td class="rh">إلزامية</td><td>إلزامية قانونًا في معظم الدول</td><td>ليست إلزامية</td></tr>
+          <tr><td class="rh">التنظيم القانوني</td><td>مقيّدة بمعايير محاسبية دولية ومهنية</td><td>تُكيَّف مع متطلبات الإدارة</td></tr>
+          <tr><td class="rh">درجة التفصيل</td><td>محدودة ومجمَّعة</td><td>أكثر تفصيلًا وتحليلًا</td></tr>
+          <tr><td class="rh">الغاية</td><td>تزويد المالكين والمقرضين بالمعلومات</td><td>تزويد الإدارة لأغراض القرارات والرقابة</td></tr>
+          <tr><td class="rh">نوعية المعلومات</td><td>مالية في الغالب</td><td>مالية وغير مالية + معلومات تشغيلية</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الأول</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 9 – تكاليف ومنافع المعلومات
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الأول • المعلومات</div>
+      <div class="s-ttl">تكاليف ومنافع المعلومات <span class="en">Costs and Benefits of Information</span></div>
+    </div>
+    <div class="s-body col1">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1;">
+        <div class="card">
+          <div class="card-t">تكاليف المعلومات</div>
+          <ul class="pts">
+            <li>رواتب الموظفين القائمين على جمع ومعالجة البيانات</li>
+            <li>تكاليف الأجهزة والبرامج والأنظمة المحاسبية المستخدمة</li>
+            <li>نفقات تشغيل نظم المعلومات وصيانتها</li>
+            <li>الوقت الذي يصرفه المدراء في دراسة هذه المعلومات</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-t teal">منافع المعلومات</div>
+          <ul class="pts">
+            <li class="t">تسهيل الإدارة في القيام بوظائفها المختلفة</li>
+            <li class="t">مساعدتها على تحقيق أهداف المنشأة</li>
+            <li class="t">دعم القرارات الاستراتيجية والتشغيلية</li>
+            <li class="t">تحسين الكفاءة وخفض التكاليف التشغيلية</li>
+          </ul>
+        </div>
+      </div>
+      <div class="hq">
+        يتوجب على المنشأة دراسة تكاليف ومنافع المعلومات المقدمة من محاسبة التكاليف والتأكد من أن <b>المنافع المتوقعة تزيد عن تكاليف الحصول عليها</b>، وإلا انتفت الغاية الأساسية من تلك المعلومات.
+      </div>
+      <div class="def teal-def">
+        <b>ملاحظة مهمة:</b> من غير المنطقي وجود نظام معلومات متطوّر ومكلّف لمنشأة صغيرة الحجم لا تحتاج إليه. <b>تكاليف ومنافع نظام المعلومات المحاسبية</b> من الأمور الأساسية التي تؤخذ بعين الاعتبار عند تصميم النظام.
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الأول</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 10 – CHAPTER 2 DIVIDER
+══════════════════════════════════════════════ -->
+<div class="slide bg-ch">
+  <div class="s-ch">
+    <div class="ch-bg-num">٢</div>
+    <div class="ch-badge">الفصل الثاني</div>
+    <div class="ch-title">تصنيفات التكاليف<br>وتقديرها</div>
+    <div class="ch-sub">Cost Classifications and Estimation</div>
+    <div class="ch-line"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 11 – تعريف التكاليف وموضوع التكلفة
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الثاني • تعريف</div>
+      <div class="s-ttl">تعريف التكاليف وموضوع التكلفة <span class="en">Cost Definition & Cost Objective</span></div>
+    </div>
+    <div class="s-body col1">
+      <div class="def">
+        <b>التكاليف (Costs)</b> هي التضحيات أو المبالغ التي تتكبّدها المنشأة في سبيل الحصول على <b>سلعة أو خدمة أو منفعة ما</b>، أو تحقيق هدف معين.
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;">
+        <div class="card">
+          <div class="card-t">موضوع التكلفة (Cost Objective)</div>
+          <ul class="pts">
+            <li>ما هو الموضوع الذي يُراد إيجاد تكلفته?</li>
+            <li>قد يكون <b>إنتاج سلعة</b> — مثلًا تصنيع خزانة</li>
+            <li>أو <b>تقديم خدمة</b> — كخدمة بنكية</li>
+            <li>أو <b>قسم من أقسام المنشأة</b></li>
+            <li>أو <b>مرحلة تصنيع معينة</b></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-t teal">مراحل تحديد التكاليف</div>
+          <div style="display:flex;flex-direction:column;gap:9px;">
+            <div class="cr">
+              <div class="cr-label">١. تحديد التكاليف</div>
+              <div class="cr-sep">|</div>
+              <div class="cr-desc" style="font-size:12.5px;">Cost Assignment — تحديد واضح لموضوع التكلفة (سلعة، خدمة، قسم، مرحلة)</div>
+            </div>
+            <div class="cr">
+              <div class="cr-label teal">٢. تجميع التكاليف</div>
+              <div class="cr-sep">|</div>
+              <div class="cr-desc" style="font-size:12.5px;">Cost Accumulation — تجميع مفردات التكاليف الخاصة بموضوع التكلفة وفق الأسلوب والغاية</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="def teal-def" style="font-size:13px;">
+        <b>لاحظ:</b> تصنيفات التكاليف متعددة، وكل تصنيف يخدم غاية أو أكثر تنشدها الإدارة — فالمواد الخام قد تُصنَّف كتكلفة متغيرة من حيث السلوك، وكتكلفة مباشرة من حيث علاقتها بالسلعة، وكتكلفة منتج من حيث توقيت الاعتراف بها.
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الثاني</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 12 – تصنيف التكاليف حسب السلوك
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الثاني • التصنيف الأول</div>
+      <div class="s-ttl">تصنيف التكاليف حسب سلوكها مع الحجم <span class="en">Classification by Behavior</span></div>
+    </div>
+    <div class="s-body col1">
+      <div class="def" style="font-size:13.5px;flex:none;">من أهم التصنيفات — يُحدَّد به <b>مدى استجابة التكاليف للتغير في حجم نشاط المنشأة (مستوى النشاط)</b>. يُستخدم في التخطيط وإعداد الموازنات والرقابة واتخاذ القرارات.</div>
+      <div class="types-row" style="flex:1;">
+        <div class="tp">
+          <span class="tp-icon">📈</span>
+          <div class="tp-name">التكاليف المتغيرة</div>
+          <div class="tp-en">Variable Costs</div>
+          <div class="tp-desc">تتغير بنفس النسبة مع تغير حجم النشاط. <b>التكلفة الكلية متغيرة</b>، لكن تكلفة الوحدة <b>ثابتة</b>. مثال: المواد الخام.</div>
+        </div>
+        <div class="tp">
+          <span class="tp-icon">📊</span>
+          <div class="tp-name">التكاليف الثابتة</div>
+          <div class="tp-en">Fixed Costs</div>
+          <div class="tp-desc">تبقى ثابتة في مجموعها ضمن نطاق الملائم. <b>تكلفة الوحدة تتناقص</b> بزيادة الإنتاج. مثال: إيجار المصنع.</div>
+        </div>
+        <div class="tp">
+          <span class="tp-icon">〰️</span>
+          <div class="tp-name">التكاليف شبه المتغيرة</div>
+          <div class="tp-en">Semi-variable Costs</div>
+          <div class="tp-desc">تجمع خصائص المتغيرة والثابتة. تزداد مع نشاط المنشأة لكن <b>بشكل غير منتظم</b>. مثال: مصاريف الصيانة والكهرباء.</div>
+        </div>
+        <div class="tp">
+          <span class="tp-icon">👾</span>
+          <div class="tp-name">التكاليف المتدرجة</div>
+          <div class="tp-en">Step Costs</div>
+          <div class="tp-desc">تتغير بالاتجاه ذاته لكن <b>ليس بنفس نسبة التغير</b> في النشاط. تزداد بمقدار ثابت كلما تجاوز النشاط حدًّا معينًا. مثال: رواتب المشرفين.</div>
+        </div>
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الثاني</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 13 – المتغيرة والثابتة بالتفصيل
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الثاني • تفاصيل</div>
+      <div class="s-ttl">التكاليف المتغيرة والثابتة بالتفصيل <span class="en">Variable & Fixed Costs — In Depth</span></div>
+    </div>
+    <div class="s-body col2">
+      <div class="panel">
+        <div class="p-head">التكاليف المتغيرة (Variable Costs)</div>
+        <ul class="pts" style="gap:8px;">
+          <li style="font-size:13.5px;"><b>المجموع الكلي</b> = علاقة خطية مع حجم الإنتاج</li>
+          <li style="font-size:13.5px;"><b>تكلفة الوحدة</b> تبقى ثابتة رغم تغير الحجم</li>
+          <li style="font-size:13.5px;">أمثلة: المواد الخام المستخدمة في الإنتاج، أجور العمال الصناعيين (المدفوعة بناءً على عدد ساعات العمل)</li>
+        </ul>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:12.5px;margin-top:4px;">
+          <div style="color:var(--muted);margin-bottom:6px;font-size:11px;">مثال: خشب لتصنيع خزائن بسعر 4 دنانير/م²</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:4px 8px;color:var(--muted);">الوحدات</td><td style="padding:4px 8px;color:var(--gl);text-align:center;">١</td><td style="padding:4px 8px;color:var(--gl);text-align:center;">١٠</td><td style="padding:4px 8px;color:var(--gl);text-align:center;">١٠٠</td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:4px 8px;color:var(--muted);">الخشب المستخدم</td><td style="text-align:center;padding:4px;">3 م²</td><td style="text-align:center;padding:4px;">30 م²</td><td style="text-align:center;padding:4px;">300 م²</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--muted);">إجمالي التكلفة</td><td style="text-align:center;padding:4px;">12 د</td><td style="text-align:center;padding:4px;">120 د</td><td style="text-align:center;padding:4px;">1,200 د</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="p-head teal">التكاليف الثابتة (Fixed Costs)</div>
+        <ul class="pts" style="gap:8px;">
+          <li class="t" style="font-size:13.5px;"><b>المجموع الكلي</b> يبقى ثابتًا ضمن <b>نطاق الملائم (Relevant Range)</b></li>
+          <li class="t" style="font-size:13.5px;"><b>تكلفة الوحدة</b> تتناقص كلما زاد حجم الإنتاج</li>
+          <li class="t" style="font-size:13.5px;">أمثلة: إيجار المصنع، اهتلاك الآلات (بطريقة القسط الثابت)، راتب مدير المصنع</li>
+        </ul>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:12.5px;margin-top:4px;">
+          <div style="color:var(--muted);margin-bottom:6px;font-size:11px;">مثال: إيجار مصنع = 5,000 دينار/سنة</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:4px 8px;color:var(--muted);">الوحدات</td><td style="padding:4px 8px;color:var(--teal);text-align:center;">١</td><td style="padding:4px 8px;color:var(--teal);text-align:center;">١٠</td><td style="padding:4px 8px;color:var(--teal);text-align:center;">١٠٠</td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:4px 8px;color:var(--muted);">إجمالي الإيجار</td><td style="text-align:center;padding:4px;">5,000</td><td style="text-align:center;padding:4px;">5,000</td><td style="text-align:center;padding:4px;">5,000</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--muted);">تكلفة الوحدة</td><td style="text-align:center;padding:4px;">5,000</td><td style="text-align:center;padding:4px;">500</td><td style="text-align:center;padding:4px;">50</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الثاني</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 14 – التصنيف حسب وظائف المنشأة والصناعية
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الثاني • التصنيف الثاني والثالث</div>
+      <div class="s-ttl">التصنيف حسب وظائف المنشأة وأنواع التكاليف الصناعية <span class="en">By Function & Manufacturing Types</span></div>
+    </div>
+    <div class="s-body col2">
+      <div class="panel">
+        <div class="p-head">التصنيف حسب وظائف المنشأة</div>
+        <ul class="pts" style="gap:8px;">
+          <li style="font-size:13px;"><b>البحث والتطوير</b> (R&D) — استكشاف منتجات وعمليات جديدة</li>
+          <li style="font-size:13px;"><b>تصميم السلعة أو الخدمة</b> — Design of Products/Processes</li>
+          <li style="font-size:13px;"><b>التصنيع / الإنتاج</b> — Production/Manufacturing</li>
+          <li style="font-size:13px;"><b>التسويق</b> — Marketing</li>
+          <li style="font-size:13px;"><b>التوزيع</b> — Distribution</li>
+          <li style="font-size:13px;"><b>خدمة المستهلك</b> — Customer Service</li>
+        </ul>
+        <div class="def teal-def" style="font-size:12.5px;margin-top:6px;">
+          <b>نظام ABC:</b> يقوم على تقسيم كل وظيفة أو عملية إلى أنشطة فرعية، للتعرف على تكلفة كل نشاط يضيفه للسلعة أو الخدمة.
+        </div>
+      </div>
+      <div class="panel">
+        <div class="p-head teal">أنواع التكاليف الصناعية (Manufacturing)</div>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <div class="cr">
+            <div class="cr-label">المواد المباشرة</div>
+            <div class="cr-sep">|</div>
+            <div class="cr-desc" style="font-size:12.5px;">Direct Materials — المواد التي تشكّل الهيكل الأساسي للسلعة وتظهر في المنتج النهائي بشكل واضح. مثال: القماش في الألبسة.</div>
+          </div>
+          <div class="cr">
+            <div class="cr-label">العمل المباشر</div>
+            <div class="cr-sep">|</div>
+            <div class="cr-desc" style="font-size:12.5px;">Direct Labor — أجور من يعملون مباشرة على إنتاج السلعة. مثال: رواتب الخياطين في مصنع ملابس.</div>
+          </div>
+          <div class="cr">
+            <div class="cr-label teal">تك. صناعية غير مباشرة</div>
+            <div class="cr-sep">|</div>
+            <div class="cr-desc" style="font-size:12.5px;">Indirect Mfg. Costs — باقي تكاليف التصنيع: مواد غير مباشرة (الغراء والمسامير)، عمل غير مباشر (رواتب المشرفين)، تكاليف أخرى (إيجار، كهرباء، اهتلاك).</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:6px;">
+          <div class="tag tg">التكاليف الأولية = م.م + ع.م</div>
+          <div class="tag tt">تكاليف التحويل = ع.م + تك. غير مباشرة</div>
+        </div>
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الثاني</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 15 – تكلفة المنتج والفترة
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الثاني • التصنيف الرابع</div>
+      <div class="s-ttl">تكلفة المنتج والفترة — توقيت الاعتراف كمصروف <span class="en">Product Cost vs. Period Cost</span></div>
+    </div>
+    <div class="s-body col2">
+      <div class="panel">
+        <div class="p-head">تكلفة المنتج (Product Cost)</div>
+        <ul class="pts" style="gap:8px;">
+          <li style="font-size:13.5px;">تُسمى أيضًا <b>التكلفة القابلة للتخزين (Inventoriable Costs)</b></li>
+          <li style="font-size:13.5px;">تشمل جميع التكاليف الصناعية المنفقة على الإنتاج: مباشرة وغير مباشرة</li>
+          <li style="font-size:13.5px;"><b>تُخزَّن</b> ضمن المخزون كأصل حتى بيع السلعة</li>
+          <li style="font-size:13.5px;">عند بيع السلعة تتحول إلى <b>تكلفة البضاعة المباعة (COGS)</b> في قائمة الدخل</li>
+        </ul>
+        <div class="flow" style="margin-top:10px;">
+          <div class="flow-step" style="padding:10px 10px;"><div class="fs-name" style="font-size:12px;">إنتاج</div><div class="fs-desc">تكاليف تُحمَّل على المخزون</div></div>
+          <div class="flow-arrow">←</div>
+          <div class="flow-step" style="padding:10px 10px;"><div class="fs-name" style="font-size:12px;">بضاعة تامة</div><div class="fs-desc">أصل في الميزانية</div></div>
+          <div class="flow-arrow">←</div>
+          <div class="flow-step" style="padding:10px 10px;"><div class="fs-name" style="font-size:12px;">بيع</div><div class="fs-desc">مصروف في قائمة الدخل</div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="p-head teal">تكلفة الفترة (Period Cost)</div>
+        <ul class="pts" style="gap:8px;">
+          <li class="t" style="font-size:13.5px;">التكاليف والمصاريف التي <b>لا ترتبط بشكل مادي مباشر</b> بعملية التصنيع</li>
+          <li class="t" style="font-size:13.5px;">يتحقق معظمها <b>بمرور الزمن</b></li>
+          <li class="t" style="font-size:13.5px;">تُعتبر <b>مصروفًا</b> مباشرة — لا تحمَّل على المنتج</li>
+          <li class="t" style="font-size:13.5px;">تُقتطع مباشرةً من قائمة الدخل للوصول لصافي الربح أو الخسارة</li>
+        </ul>
+        <div class="def teal-def" style="font-size:13px;margin-top:6px;">
+          <b>أمثلة على تكاليف الفترة:</b> المصاريف الإدارية والتسويقية — رواتب المدراء الإداريين، مصاريف الإعلان، عمولات رجال البيع، مصاريف الإيجار للمكاتب الإدارية.
+        </div>
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الثاني</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 16 – التتبع والرقابة والملاءمة
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الثاني • التصنيفات الخامسة والسادسة والسابعة</div>
+      <div class="s-ttl">التتبع والرقابة والملاءمة للقرارات <span class="en">Traceability, Controllability & Relevance</span></div>
+    </div>
+    <div class="s-body col1" style="gap:12px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;flex:1;">
+        <div class="card">
+          <div class="card-t">حسب إمكانية التتبع</div>
+          <ul class="pts" style="gap:7px;">
+            <li style="font-size:12.5px;"><b>مباشرة (Direct):</b> يمكن ربطها بوضوح بموضوع التكلفة (سلعة/قسم)</li>
+            <li style="font-size:12.5px;"><b>غير مباشرة (Indirect):</b> تُنفَق من قبل المنشأة وتستفيد منها أكثر من قسم</li>
+            <li style="font-size:12.5px;">مثال: راتب مدير الإنتاج → مباشرة لقسم الإنتاج</li>
+            <li style="font-size:12.5px;">مثال: راتب المدير العام → غير مباشرة لجميع الأقسام</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-t">حسب إمكانية الرقابة</div>
+          <ul class="pts" style="gap:7px;">
+            <li style="font-size:12.5px;"><b>قابلة للرقابة (Controllable):</b> القسم يستطيع ضبطها واتخاذ القرارات الخاصة بها</li>
+            <li style="font-size:12.5px;"><b>غير قابلة (Uncontrollable):</b> لا يملك القسم صلاحية التحكم بها</li>
+            <li style="font-size:12.5px;">التكاليف تميل للرقابة كلما ارتفعنا في السلم الإداري</li>
+            <li style="font-size:12.5px;">أساس <b>محاسبة المسؤولية (Responsibility Accounting)</b></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-t">حسب ملاءمتها للقرار</div>
+          <ul class="pts" style="gap:7px;">
+            <li style="font-size:12.5px;"><b>ملائمة (Relevant):</b> يتوقع إنفاقها في المستقبل + تختلف بين البدائل المتاحة</li>
+            <li style="font-size:12.5px;"><b>غير ملائمة (Irrelevant):</b> لن تتأثر بالقرار المتخذ</li>
+            <li style="font-size:12.5px;"><b>التكاليف الغارقة (Sunk Costs):</b> تكاليف تاريخية دُفعت سابقًا — دائمًا غير ملائمة</li>
+          </ul>
+        </div>
+      </div>
+      <div class="hq">
+        <b>قاعدة التكاليف الغارقة:</b> مهما كانت التكاليف التاريخية التي دفعتها المنشأة، فإنها <b>لا تؤخذ بعين الاعتبار</b> عند تحليل البدائل المتاحة لأنها لن تتغير بأي قرار تتخذه الإدارة.
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الثاني</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 17 – تصنيفات إضافية هامة
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الثاني • تصنيفات إضافية</div>
+      <div class="s-ttl">تصنيفات إضافية هامة <span class="en">Additional Classifications</span></div>
+    </div>
+    <div class="s-body col1" style="gap:12px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;">
+        <div class="card">
+          <div class="card-t">المهندسة والملتزم بها والاختيارية</div>
+          <div style="display:flex;flex-direction:column;gap:9px;margin-top:6px;">
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+              <span class="tag tg" style="width:140px;text-align:center;flex-shrink:0;margin:0;">مهندسة (Engineered)</span>
+              <span style="font-size:12.5px;line-height:1.5;padding-top:2px;">ترتبط ماديًا ومباشرة بحجم النشاط (مثل المواد المباشرة).</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+              <span class="tag tt" style="width:140px;text-align:center;flex-shrink:0;margin:0;">ملتزم بها (Committed)</span>
+              <span style="font-size:12.5px;line-height:1.5;padding-top:2px;">ضرورية لتمكين المنشأة من العمل في الأجل القصير (مثل الإيجار والاهتلاك).</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+              <span class="tag tr" style="width:140px;text-align:center;flex-shrink:0;margin:0;">اختيارية (Discretionary)</span>
+              <span style="font-size:12.5px;line-height:1.5;padding-top:2px;">تنجم عن قرار إداري ويمكن تعديلها (مثل البحث والتطوير والتدريب).</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-t">المثالية والمعيارية والفعلية</div>
+          <ul class="pts" style="gap:7px;">
+            <li style="font-size:12.5px;"><b>المثالية (Ideal):</b> محددة مسبقًا في ظل كفاءة إنتاجية عالية جدًا — لا تسمح بأي نوع من الهدر</li>
+            <li style="font-size:12.5px;"><b>المعيارية (Standards):</b> مقدَّرة مسبقًا على أسس ومعايير محددة — تأخذ بعين الاعتبار <b>الهدر الطبيعي</b> المقبول</li>
+            <li style="font-size:12.5px;"><b>الفعلية (Actual):</b> التكاليف التي تم إنفاقها فعلًا لإنتاج السلعة أو الخدمة — تُقارَن مع المعيارية</li>
+          </ul>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="def" style="font-size:13px;">
+          <b>استخدام التصنيف المثالي/المعياري:</b> الغاية رقابية — يتم التحكم في التكاليف من قبل الإدارة لمحاولة ضبطها ومنع الإسراف والهدر في الموارد المتاحة للمنشأة.
+        </div>
+        <div class="def teal-def" style="font-size:13px;">
+          <b>أهمية التكاليف المعيارية:</b> تُستخدم في إعداد الموازنات التقديرية، كما تُستخدم للرقابة على كفاءة استخدام الموارد عبر مقارنتها مع التكاليف الفعلية.
+        </div>
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الثاني</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 18 – مفاهيم تكاليف هامة
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الثاني • المصطلحات</div>
+      <div class="s-ttl">مصطلحات ومفاهيم تكاليف هامة <span class="en">Key Cost Terms and Concepts</span></div>
+    </div>
+    <div class="s-body col1" style="gap:11px;">
+      <div class="cr">
+        <div class="cr-label">متوسط التكلفة<br><small style="font-weight:300;font-size:10px;">Average Cost</small></div>
+        <div class="cr-sep">|</div>
+        <div class="cr-desc">إجمالي التكاليف الإنتاجية المنفقة ÷ عدد الوحدات المنتجة خلال نفس الفترة. <b>مثال:</b> إنتاج 150,000 وحدة بتكاليف 300,000 دينار → متوسط التكلفة = 2 دينار/وحدة.</div>
+      </div>
+      <div class="cr">
+        <div class="cr-label">هامش التكلفة<br><small style="font-weight:300;font-size:10px;">Marginal Cost</small></div>
+        <div class="cr-sep">|</div>
+        <div class="cr-desc">التكاليف الإضافية التي تتحملها المنشأة عند إنتاج <b>وحدة واحدة إضافية</b>. <b>مثال:</b> إنتاج الوحدة رقم 150,001 يكلف 1.5 دينار إضافية → هامش التكلفة = 1.5 دينار.</div>
+      </div>
+      <div class="cr">
+        <div class="cr-label">التكلفة التفاضلية<br><small style="font-weight:300;font-size:10px;">Incremental Cost</small></div>
+        <div class="cr-sep">|</div>
+        <div class="cr-desc">الفرق في التكاليف بين بديلين متاحين لتنفيذ مهمة. <b>مثال:</b> شراء آلة = 15,000 د ؛ استئجارها = 16,500 د → التكلفة التفاضلية = 1,500 دينار لصالح الشراء.</div>
+      </div>
+      <div class="cr">
+        <div class="cr-label teal">تكلفة الفرصة البديلة<br><small style="font-weight:300;font-size:10px;">Opportunity Cost</small></div>
+        <div class="cr-sep">|</div>
+        <div class="cr-desc">المنافع التي ستفقدها المنشأة نتيجة لفقدانها للبديل التالي لأفضل بديل تم اختياره. <b>ليست تكلفة بالمفهوم المحاسبي العام</b> — شائعة عند الاقتصاديين. <b>مثال:</b> البيع محليًا بـ25,000 أو تصديرًا بـ24,000 → تكلفة الفرصة البديلة = 24,000 دينار.</div>
+      </div>
+      <div class="cr">
+        <div class="cr-label" style="color:var(--rose);">التكاليف الغارقة<br><small style="font-weight:300;font-size:10px;">Sunk Costs</small></div>
+        <div class="cr-sep">|</div>
+        <div class="cr-desc">تكاليف دُفعت في الماضي ولن تتغير بأي قرار مستقبلي. <b>دائمًا غير ملائمة</b> لاتخاذ القرارات. <b>مثال:</b> التكلفة التاريخية للأصول الثابتة.</div>
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الثاني</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 19 – مسببات التكلفة
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الثاني • المسببات</div>
+      <div class="s-ttl">مسببات التكلفة والأنشطة ومنظور القيمة المضافة <span class="en">Cost Drivers, Activities & Value-Added Analysis</span></div>
+    </div>
+    <div class="s-body col2">
+      <div class="panel">
+        <div class="p-head">مسببات التكلفة (Cost Drivers)</div>
+        <div class="def" style="font-size:13px;margin-bottom:10px;">
+          مقياس النشاط الذي يؤثر على <b>سلوك التكلفة</b> — ما هو العامل الذي تتغير التكاليف بتغيّره؟
+        </div>
+        <div style="font-size:12.5px;color:var(--muted);margin-bottom:8px;">أنواع مسببات التكلفة:</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <div class="cr" style="padding:10px 14px;">
+            <div class="cr-label" style="font-size:12px;min-width:120px;">مسببات العمليات</div>
+            <div class="cr-desc" style="font-size:12px;">Transaction Drivers — يُحمَّل بناءً على عدد مرات تكرار العمليات. مثال: عدد فحوصات المريض في المستشفى.</div>
+          </div>
+          <div class="cr" style="padding:10px 14px;">
+            <div class="cr-label" style="font-size:12px;min-width:120px;">مسببات الفترة</div>
+            <div class="cr-desc" style="font-size:12px;">Duration Drivers — يُحمَّل بناءً على الفترة اللازمة لتنفيذ العملية. أكثر دقة من السابق.</div>
+          </div>
+          <div class="cr" style="padding:10px 14px;">
+            <div class="cr-label teal" style="font-size:12px;min-width:120px;">مسببات الاستعمال الفعلي</div>
+            <div class="cr-desc" style="font-size:12px;">Intensity Drivers — يُحمَّل بالتكاليف الفعلية التي انفقت عليه. الأدق والأكثر تكلفة.</div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="p-head teal">تحليل الأنشطة ومنظور القيمة المضافة</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+          <div class="card" style="padding:12px 14px;">
+            <div class="card-t" style="font-size:12px;margin-bottom:6px;">✅ أنشطة مضيفة للقيمة</div>
+            <div style="font-size:12px;line-height:1.6;">Value-Added Activities<br>• نشاط التصنيع<br>• إنجاز الخدمة</div>
+          </div>
+          <div class="card" style="padding:12px 14px;">
+            <div class="card-t rose" style="font-size:12px;margin-bottom:6px;">❌ أنشطة غير مضيفة</div>
+            <div style="font-size:12px;line-height:1.6;">Non-Value-Added Activities<br>• التخزين<br>• فحص المنتج<br>• الشحن<br>• وقت العطل</div>
+          </div>
+        </div>
+        <div class="def teal-def" style="font-size:12.5px;">
+          حتى يُصنَّف نشاط بأنه <b>مضيف للقيمة</b> يجب توافر شرطين:<br>
+          ١. يزيد من منفعة السلعة أو الخدمة من وجهة نظر المستهلك.<br>
+          ٢. المستهلك مستعد لتحمّل تكلفة هذه المنفعة.
+          <br><br><span style="color:var(--gl);">الدراسات العلمية:</span> 10% فقط من الأنشطة الكلية تُضيف قيمة حقيقية!
+        </div>
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الثاني</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 20 – تقدير التكاليف
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الثاني • التقدير</div>
+      <div class="s-ttl">طرق تقدير التكاليف شبه المتغيرة <span class="en">Cost Estimation Methods</span></div>
+    </div>
+    <div class="s-body col1">
+      <div class="def" style="font-size:13.5px;flex:none;">الهدف من تقدير التكاليف شبه المتغيرة هو <b>فصل جزأيها (الثابت والمتغير)</b> لاستطاعة تقدير قيمتها بناءً على حجم النشاط المتوقع، وذلك بتحديد قيمة المعادلة <b>ص = أ + ب س</b></div>
+      <div class="methods" style="flex:1;">
+        <div class="mth">
+          <div class="mth-t">١. طريقة النقطة العليا والدنيا</div>
+          <div class="mth-en">High-Low Method</div>
+          <div class="mth-body">
+            تعتمد على اختيار <b>أعلى وأدنى مستوى نشاط</b> من سجلات الشركة الماضية، ثم احتساب التكلفة المتغيرة للوحدة:<br><br>
+            <span style="color:var(--gl);font-size:11.5px;">ب = (التكاليف عند الأعلى − التكاليف عند الأدنى) ÷ (الأعلى − الأدنى)</span>
+          </div>
+          <div class="mth-pro">✅ بسيطة وسهلة التطبيق</div>
+          <div class="mth-con">❌ تتأثر بالمشاهدات المتطرفة؛ تهمل باقي المشاهدات</div>
+        </div>
+        <div class="mth">
+          <div class="mth-t">٢. طريقة الانتشار</div>
+          <div class="mth-en">Scatter Graph Method</div>
+          <div class="mth-body">
+            تأخذ <b>جميع المشاهدات</b> بعين الاعتبار. تُنشئ رسمًا بيانيًا تتقاطع فيه نقاط بيانات التكاليف مع مستويات النشاط. يُرسَم خط مستقيم يتوسط المشاهدات. نقطة تقاطع الخط مع المحور العمودي تمثل <b>التكاليف الثابتة.</b>
+          </div>
+          <div class="mth-pro">✅ تأخذ جميع المشاهدات بعين الاعتبار</div>
+          <div class="mth-con">❌ تعتمد على الحكم الشخصي للرسم; قد تختلف النتائج من شخص لآخر</div>
+        </div>
+        <div class="mth" style="border-color:rgba(47,184,172,.4);">
+          <div class="mth-t" style="color:var(--teal);">٣. تحليل الانحدار (المربعات الصغرى)</div>
+          <div class="mth-en">Regression Analysis (Least Squares)</div>
+          <div class="mth-body">
+            <b>الأفضل والأدق</b> — تأخذ جميع المشاهدات وتحدد مستوى الارتباط. لا تتدخل التقديرات الشخصية. تُطبَّق باستخدام برامج إحصائية (SPSS وغيرها).<br><br>
+            <span style="color:var(--teal);font-size:11.5px;">ب = [ن × مج(س ص) − مج(س) × مج(ص)] ÷ [ن × مج(س²) − (مج س)²]</span>
+            <br><span style="color:var(--teal);font-size:11.5px;">أ = [مج(ص) − ب × مج(س)] ÷ ن</span>
+          </div>
+          <div class="mth-pro" style="color:var(--teal);">✅ الأدق رياضيًا؛ يأخذ جميع المشاهدات موضوعيًا</div>
+          <div class="mth-con">❌ تعتمد بيانات تاريخية قد لا تعكس المستقبل دائمًا</div>
+        </div>
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الثاني</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 21 – مخزون الشركات الصناعية
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الثاني • المخزون</div>
+      <div class="s-ttl">أنواع المخزون في الشركات الصناعية وتدفق التكاليف <span class="en">Inventory Types & Cost Flow</span></div>
+    </div>
+    <div class="s-body col2">
+      <div class="panel">
+        <div class="p-head">أنواع المخزون</div>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <div class="cr">
+            <div class="cr-label">مخزون المواد الخام</div>
+            <div class="cr-sep">|</div>
+            <div class="cr-desc" style="font-size:12.5px;"><b>Raw Material:</b> المواد الموجودة في المستودعات والتي لم تُصرف بعد للإنتاج. عند صرفها تصبح "مواد مباشرة".</div>
+          </div>
+          <div class="cr">
+            <div class="cr-label teal">البضاعة تحت التشغيل</div>
+            <div class="cr-sep">|</div>
+            <div class="cr-desc" style="font-size:12.5px;"><b>Work in Process:</b> ما بدأ تصنيعه وصُرف عليه من مواد وعمالة وتكاليف، لكن لا يزال بحاجة لاستكمال التصنيع.</div>
+          </div>
+          <div class="cr">
+            <div class="cr-label">البضاعة تامة الصنع</div>
+            <div class="cr-sep">|</div>
+            <div class="cr-desc" style="font-size:12.5px;"><b>Finished Goods:</b> المخزون الذي تم الانتهاء من تصنيعه وهو جاهز للبيع — حمل كافة احتياجات التصنيع.</div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="p-head teal">تدفق التكاليف في الشركات الصناعية</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 14px;text-align:center;">
+            <div style="font-size:12px;color:var(--muted);">خطوة ١</div>
+            <div style="font-size:13px;font-weight:700;color:var(--gl);">المواد المباشرة + العمل المباشر + تكاليف غير مباشرة</div>
+          </div>
+          <div style="text-align:center;font-size:20px;color:var(--gold);">↓</div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 14px;text-align:center;">
+            <div style="font-size:12px;color:var(--muted);">خطوة ٢</div>
+            <div style="font-size:13px;font-weight:700;color:var(--teal);">حساب البضاعة تحت التشغيل (Work in Process)</div>
+          </div>
+          <div style="text-align:center;font-size:20px;color:var(--gold);">↓</div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:11px 14px;text-align:center;">
+            <div style="font-size:12px;color:var(--muted);">خطوة ٣</div>
+            <div style="font-size:13px;font-weight:700;color:var(--gl);">حساب البضاعة تامة الصنع (Finished Goods)</div>
+          </div>
+          <div style="text-align:center;font-size:20px;color:var(--gold);">↓</div>
+          <div style="background:var(--card);border:1px solid rgba(47,184,172,.4);border-radius:8px;padding:11px 14px;text-align:center;">
+            <div style="font-size:12px;color:var(--muted);">خطوة ٤</div>
+            <div style="font-size:13px;font-weight:700;color:var(--teal);">تكلفة البضاعة المباعة (Cost of Goods Sold) → قائمة الدخل</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الثاني</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 22 – ملخص خريطة التصنيفات
+══════════════════════════════════════════════ -->
+<div class="slide bg-std">
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">الفصل الثاني • ملخص</div>
+      <div class="s-ttl">خريطة تصنيفات التكاليف — ملخص شامل <span class="en">Cost Classifications — Master Summary</span></div>
+    </div>
+    <div class="s-body col1" style="gap:10px;">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th style="text-align:right;width:22%;">أساس التصنيف</th>
+            <th style="width:38%;">أنواع التكاليف</th>
+            <th>الغاية / الاستخدام</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="rh">السلوك مع الحجم</td><td>متغيرة، ثابتة، شبه متغيرة، متدرجة</td><td>التخطيط، إعداد الموازنات، اتخاذ القرارات</td></tr>
+          <tr><td class="rh">وظائف المنشأة</td><td>بحث وتطوير، تصنيع، تسويق، إدارية</td><td>رقابة وتقييم أداء كل وظيفة</td></tr>
+          <tr><td class="rh">عناصر التصنيع</td><td>مواد مباشرة، عمل مباشر، تك. غير مباشرة</td><td>احتساب تكلفة السلعة للتسعير والمحاسبة المالية</td></tr>
+          <tr><td class="rh">توقيت الاعتراف</td><td>تكلفة منتج (inventoriable)، تكلفة فترة</td><td>إعداد القوائم المالية وتقييم المخزون</td></tr>
+          <tr><td class="rh">إمكانية التتبع</td><td>تكاليف مباشرة، تكاليف غير مباشرة</td><td>توزيع التكاليف على الأقسام والمنتجات</td></tr>
+          <tr><td class="rh">إمكانية الرقابة</td><td>قابلة للرقابة، غير قابلة للرقابة</td><td>محاسبة المسؤولية وتقييم أداء المراكز</td></tr>
+          <tr><td class="rh">ملاءمة القرار</td><td>تكاليف ملائمة، غير ملائمة، غارقة</td><td>اتخاذ القرارات الإدارية — تجاهل الغارقة</td></tr>
+          <tr><td class="rh">طبيعة الالتزام</td><td>مهندسة، ملتزم بها، اختيارية</td><td>إعداد الموازنات التقديرية والتخطيط</td></tr>
+          <tr><td class="rh">مرحلة المعرفة</td><td>مثالية، معيارية، فعلية</td><td>الرقابة ومحاسبة المسؤولية وقياس الانحرافات</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="s-ft"><div class="ft-l">محاسبة التكاليف</div><div class="ft-r">الفصل الثاني</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 23 – FINAL SUMMARY
+══════════════════════════════════════════════ -->
+<div class="slide bg-title">
+  <svg class="geo" style="top:-60px;left:-60px;width:360px;height:360px;opacity:.04;" viewBox="0 0 360 360"><circle cx="0" cy="0" r="300" fill="none" stroke="gold" stroke-width="1"/><circle cx="0" cy="0" r="200" fill="none" stroke="gold" stroke-width="1"/></svg>
+  <div class="s-std">
+    <div class="s-head">
+      <div class="s-ey">ملخص ختامي</div>
+      <div class="s-ttl">أبرز ما تعلمناه — محاسبة التكاليف في سطور <span class="en">Key Takeaways</span></div>
+    </div>
+    <div class="s-body col2">
+      <div class="panel">
+        <div class="p-head">الفصل الأول — المفاهيم والأهداف</div>
+        <ul class="pts" style="gap:8px;">
+          <li style="font-size:13.5px;">محاسبة التكاليف تتمحور حول <b>تجميع وتحليل بيانات التكاليف</b> بدقة</li>
+          <li style="font-size:13.5px;">تخدم كلًا من المحاسبة الإدارية والمالية معًا</li>
+          <li style="font-size:13.5px;">الأهداف الخمسة: <b>القرارات، التخطيط، الرقابة، تقييم الأداء، المحاسبة المالية</b></li>
+          <li style="font-size:13.5px;">المحاسبة المالية = للخارج؛ الإدارية = للداخل</li>
+          <li style="font-size:13.5px;"><b>المنافع يجب أن تتجاوز تكاليف</b> إنتاج المعلومات</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="p-head teal">الفصل الثاني — التصنيفات والتقدير</div>
+        <ul class="pts" style="gap:8px;">
+          <li class="t" style="font-size:13.5px;">٩ تصنيفات رئيسية — كل تصنيف لغاية مختلفة</li>
+          <li class="t" style="font-size:13.5px;">أهم تصنيف: <b>حسب السلوك</b> (متغيرة/ثابتة/شبه متغيرة/متدرجة)</li>
+          <li class="t" style="font-size:13.5px;"><b>التكاليف الغارقة</b> لا تدخل في تحليل القرارات أبدًا</li>
+          <li class="t" style="font-size:13.5px;"><b>10% فقط</b> من الأنشطة تضيف قيمة فعلية للمستهلك</li>
+          <li class="t" style="font-size:13.5px;">أدق طرق التقدير: <b>تحليل الانحدار (المربعات الصغرى)</b></li>
+        </ul>
+      </div>
+    </div>
+    <div style="padding:14px 56px;border-top:1px solid var(--border);">
+      <div class="hq" style="font-size:15px;text-align:center;">
+        <b>المعادلة الأساسية للتكاليف شبه المتغيرة:</b> &nbsp;&nbsp; ص = أ + ب س &nbsp;&nbsp;|&nbsp;&nbsp; إجمالي التكاليف = الجزء الثابت + (التكلفة المتغيرة/وحدة × مستوى النشاط)
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 24 – QUIZ START DIVIDER
+══════════════════════════════════════════════ -->
+<div class="slide bg-ch">
+  <div class="s-ch">
+    <div class="ch-bg-num">؟</div>
+    <div class="ch-badge" style="border-color: var(--teal); color: var(--teal);">قسم التقييم</div>
+    <div class="ch-title">أسئلة تفاعلية</div>
+    <div class="ch-sub">اختبر مدى فهمك لمفاهيم ومفردات الإطار النظري (٢٠ سؤالاً)</div>
+    <div class="ch-line" style="background: linear-gradient(90deg, transparent, var(--teal), transparent);"></div>
+    <button class="nb" style="margin-top: 30px; padding: 12px 36px; font-size: 16px; background: var(--teal); border: none; color: white; border-radius: 8px; font-family: 'Cairo', sans-serif; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(47, 184, 172, 0.3);" onclick="go(1)">
+      بدء الاختبار التفاعلي &larr;
+    </button>
+  </div>
+</div>
+
+</div><!-- /deck -->
+</div><!-- /sr -->
+
+<!-- ── NAV ── -->
+<div id="nav">
+  <div style="display: flex; gap: 10px; align-items: center;">
+    <button class="nb" id="prevBtn" onclick="go(-1)">&#8250; السابق</button>
+    <button class="nb" id="fsBtn" onclick="toggleFS()">⛶ ملء الشاشة</button>
+  </div>
+  
+  <div class="dots" id="dots"></div>
+  
+  <div style="display: flex; gap: 12px; align-items: center;">
+    <div id="sc"><span id="cur">1</span> / <span id="tot">45</span></div>
+    <button class="nb" id="nextBtn" onclick="go(1)">التالي &#8249;</button>
+  </div>
+</div>
+
+<script>
+// ── Quiz Data ──
+const quizData = [
+  {
+    id: 1,
+    question: "محاسبة التكاليف هي عملية تجميع بيانات التكاليف ومعالجتها. ما هو الهدف الرئيسي من ذلك؟",
+    options: [
+      "استخراج تكلفة السلعة أو الخدمة أو القسم",
+      "تسجيل العمليات المالية في دفتر اليومية",
+      "إعداد قائمة المركز المالي للمساهمين",
+      "تحديد الضرائب المستحقة على المنشأة"
+    ],
+    correct: 0,
+    explanation: "محاسبة التكاليف تتمحور حول <b>تجميع بيانات التكاليف</b> الخاصة بمنتج معين أو وظيفة أو قسم أو خدمة، ومعالجة هذه البيانات وتلخيصها <b>وفق أسلوب وغاية محددة</b> من أجل استخراج تكلفة السلعة أو الخدمة أو القسم — وهذا يميّزها عن المحاسبة المالية الموجهة للخارج."
+  },
+  {
+    id: 2,
+    question: "أي من الأهداف التالية ليس من الأهداف الخمسة الرئيسية لمحاسبة التكاليف؟",
+    options: [
+      "التكاليف لغايات اتخاذ القرارات الإدارية",
+      "التكاليف لغايات التخطيط",
+      "التكاليف لغايات الرقابة",
+      "التكاليف لغايات التدقيق الخارجي"
+    ],
+    correct: 3,
+    explanation: "الأهداف الخمسة الرئيسية لمحاسبة التكاليف هي: <b>اتخاذ القرارات، التخطيط، الرقابة، تقييم الأداء، والمحاسبة المالية</b>. التدقيق الخارجي لا يدخل ضمن أهداف محاسبة التكاليف بل هو من وظائف المحاسبة المالية والرقابة الخارجية. (تمرين 3 من الفصل الأول بكتاب المادة)."
+  },
+  {
+    id: 3,
+    question: "ما الفرق الجوهري بين المحاسبة المالية والمحاسبة الإدارية من حيث مستخدمي البيانات؟",
+    options: [
+      "المحاسبة المالية للإدارة والإدارية للمساهمين",
+      "كلاهما يخدم المستخدمين الداخليين فقط",
+      "المحاسبة المالية للأطراف الخارجية والإدارية للمدراء الداخليين",
+      "لا يوجد فرق في مستخدمي البيانات"
+    ],
+    correct: 2,
+    explanation: "المحاسبة المالية تُقدّم معلوماتها <b>للأطراف الخارجية</b> (مستثمرون، مقرضون، حكومة)، بينما المحاسبة الإدارية موجهة <b>للمستخدمين الداخليين</b> (المدراء والإدارات) لأغراض اتخاذ القرارات والتخطيط والرقابة."
+  },
+  {
+    id: 4,
+    question: "التكاليف المتغيرة (Variable Costs) تتميز بأن:",
+    options: [
+      "التكلفة الكلية ثابتة وتكلفة الوحدة متغيرة",
+      "التكلفة الكلية متغيرة وتكلفة الوحدة ثابتة",
+      "كلاهما ثابت ضمن النطاق الملائم",
+      "كلاهما متغير بشكل عشوائي"
+    ],
+    correct: 1,
+    explanation: "التكاليف المتغيرة تتغير في <b>مجموعها الكلي</b> بنفس نسبة تغير حجم النشاط، لكن <b>تكلفة الوحدة الواحدة تبقى ثابتة</b>. مثال: إذا كانت تكلفة المادة الخام 4 دنانير/وحدة، فإنتاج 10 وحدات يكلف 40 دينار و100 وحدة تكلف 400 دينار — التكلفة الإجمالية تتغير لكن تكلفة الوحدة (4 دنانير) ثابتة."
+  },
+  {
+    id: 5,
+    question: "التكاليف الثابتة (Fixed Costs) عند زيادة حجم الإنتاج:",
+    options: [
+      "تبقى التكلفة الإجمالية ثابتة وتتناقص تكلفة الوحدة",
+      "تزداد التكلفة الإجمالية وتكلفة الوحدة",
+      "تتناقص كل من التكلفة الإجمالية وتكلفة الوحدة",
+      "تبقى تكلفة الوحدة ثابتة وتزداد التكلفة الإجمالية"
+    ],
+    correct: 0,
+    explanation: "التكاليف الثابتة تبقى <b>ثابتة في مجموعها</b> ضمن النطاق الملائم (Relevant Range)، لكن <b>تكلفة الوحدة تتناقص</b> كلما زاد حجم الإنتاج. مثال: إيجار المصنع 5,000 دينار — إنتاج 1 وحدة ← تكلفة الوحدة 5,000؛ إنتاج 100 وحدة ← تكلفة الوحدة 50 دينار فقط."
+  },
+  {
+    id: 6,
+    question: "ما الفرق بين تكلفة المنتج (Product Cost) وتكلفة الفترة (Period Cost)؟",
+    options: [
+      "تكلفة المنتج تُخصم فورًا وتكلفة الفترة تُخزّن كأصل",
+      "تكلفة المنتج تُخزّن ضمن المخزون حتى البيع وتكلفة الفترة تُخصم مباشرة",
+      "لا يوجد فرق بينهما من حيث التوقيت",
+      "تكلفة الفترة ترتبط بالتصنيع وتكلفة المنتج ترتبط بالإدارة"
+    ],
+    correct: 1,
+    explanation: "تكلفة المنتج (Inventoriable Costs) تشمل جميع التكاليف الصناعية وتُخزّن <b>كأصل ضمن المخزون</b> حتى بيع السلعة فتتحول لتكلفة البضاعة المباعة. أما تكلفة الفترة فلا ترتبط بالتصنيع مباشرة وتُعتبر <b>مصروفًا</b> يُخصم من قائمة الدخل فور حدوثها (مثل: المصاريف الإدارية والتسويقية)."
+  },
+  {
+    id: 7,
+    question: "التكاليف الغارقة (Sunk Costs) تتميز بأنها:",
+    options: [
+      "تكاليف مستقبلية يمكن تعديلها بالقرارات الإدارية",
+      "تكاليف تتغير بتغير البدائل المتاحة أمام الإدارة",
+      "تكاليف تاريخية دُفعت سابقًا ولن تتغير بأي قرار مستقبلي",
+      "تكاليف قابلة للاسترداد عند إلغاء المشروع"
+    ],
+    correct: 2,
+    explanation: "التكاليف الغارقة هي تكاليف <b>تاريخية دُفعت في الماضي</b> ولن تتغير بأي قرار مستقبلي تتخذه الإدارة. لذلك هي <b>دائمًا غير ملائمة</b> لاتخاذ القرارات ويجب تجاهلها عند تحليل البدائل المتاحة. مثال: التكلفة التاريخية للأصول الثابتة التي تم شراؤها."
+  },
+  {
+    id: 8,
+    question: "تكلفة الفرصة البديلة (Opportunity Cost) هي:",
+    options: [
+      "المنافع التي تفقدها المنشأة نتيجة عدم اختيار البديل التالي الأفضل",
+      "التكلفة الفعلية المدفوعة لشراء أصل معين",
+      "الفرق بين سعر البيع وتكلفة الإنتاج",
+      "التكاليف الإضافية لإنتاج وحدة واحدة إضافية"
+    ],
+    correct: 0,
+    explanation: "تكلفة الفرصة البديلة تمثل <b>المنافع التي ستفقدها المنشأة</b> نتيجة لفقدانها للبديل التالي لأفضل بديل تم اختياره. هي ليست تكلفة بالمفهوم المحاسبي العام بل هي مفهوم شائع عند الاقتصاديين. مثال: إذا اختارت الشركة بيع المنتج محليًا بـ25,000 بدلاً من التصدير بـ24,000، فتكلفة الفرصة البديلة = 24,000 دينار."
+  },
+  {
+    id: 9,
+    question: "ما هو مسبب التكلفة (Cost Driver)؟",
+    options: [
+      "الشخص المسؤول عن الموازنة في المنشأة",
+      "نوع من أنواع التكاليف الثابتة",
+      "تقرير محاسبي يُعدّ نهاية السنة",
+      "مقياس النشاط الذي يؤثر على سلوك التكلفة"
+    ],
+    correct: 3,
+    explanation: "مسبب التكلفة هو <b>مقياس النشاط الذي يؤثر على سلوك التكلفة</b> — أي العامل الذي تتغير التكاليف بتغيّره. وله ثلاثة أنواع: مسببات العمليات (Transaction Drivers)، مسببات الفترة (Duration Drivers)، ومسببات الاستعمال الفعلي (Intensity Drivers). (تمرين 10 من الفصل الثاني بكتاب المادة)."
+  },
+  {
+    id: 10,
+    question: "حتى يُصنَّف نشاط بأنه مضيف للقيمة (Value-Added)، يجب توافر:",
+    options: [
+      "موافقة الإدارة العليا على النشاط",
+      "أن يزيد من منفعة السلعة من وجهة نظر المستهلك وأن يكون المستهلك مستعدًا لتحمّل تكلفته",
+      "أن تكون تكلفته أقل من الموازنة المقدّرة",
+      "أن ينتمي لقسم التصنيع حصرًا"
+    ],
+    correct: 1,
+    explanation: "لتصنيف نشاط كمضيف للقيمة يجب توافر شرطين: <b>١)</b> أن يزيد من منفعة السلعة أو الخدمة من وجهة نظر المستهلك. <b>٢)</b> أن يكون المستهلك مستعدًا لتحمّل تكلفة هذه المنفعة. الدراسات تُشير أن <b>10% فقط</b> من الأنشطة تُضيف قيمة فعلية!"
+  },
+  {
+    id: 11,
+    question: "أي من طرق تقدير التكاليف شبه المتغيرة هي الأدق رياضيًا؟",
+    options: [
+      "طريقة النقطة العليا والدنيا (High-Low Method)",
+      "طريقة الانتشار (Scatter Graph Method)",
+      "تحليل الانحدار — المربعات الصغرى (Regression Analysis)",
+      "جميع الطرق متساوية في الدقة"
+    ],
+    correct: 2,
+    explanation: "تحليل الانحدار (المربعات الصغرى) هو <b>الأفضل والأدق</b> رياضيًا — فهو يأخذ جميع المشاهدات ويحدد مستوى الارتباط دون تدخل التقديرات الشخصية، ويُطبَّق باستخدام برامج إحصائية. طريقة النقطة العليا والدنيا أبسط لكنها تهمل المشاهدات الوسطى، وطريقة الانتشار تعتمد على الحكم الشخصي. (تمرين 6 من الفصل الثاني بكتاب المادة)."
+  },
+  {
+    id: 12,
+    question: "التكاليف الأولية (Prime Costs) تتكون من:",
+    options: [
+      "المواد المباشرة + التكاليف الصناعية غير المباشرة",
+      "العمل المباشر + التكاليف الصناعية غير المباشرة",
+      "جميع تكاليف التصنيع",
+      "المواد المباشرة + العمل المباشر"
+    ],
+    correct: 3,
+    explanation: "التكاليف الأولية (Prime Costs) = <b>المواد المباشرة + العمل المباشر</b>. وهي تمثل التكاليف التي ترتبط وتتداخل بشكل مباشر ومادي في تصنيع وإنتاج السلعة أو تقديم الخدمة."
+  },
+  {
+    id: 13,
+    question: "الموازنات التقديرية تُستخدم أساسًا في:",
+    options: [
+      "التخطيط (Planning)",
+      "التدقيق الخارجي",
+      "إعداد القوائم المالية للمساهمين",
+      "تسجيل العمليات في دفتر اليومية"
+    ],
+    correct: 0,
+    explanation: "الموازنات التقديرية هي <b>أداة التخطيط الرئيسية</b> — تعكس الخطط الموضوعة من قبل الإدارة وتتضمن الإيرادات والتكاليف المقدّرة. الشركات الصناعية تُقدّر فيها: المواد المباشرة، العمل المباشر، التكاليف الصناعية غير المباشرة، والمصاريف التسويقية والإدارية. (الصح والخطأ تمرين 4 من الفصل الأول بكتاب المادة)."
+  },
+  {
+    id: 14,
+    question: "في ظل اللامركزية، تقسّم المنشأة إلى مراكز مسؤولية. أي مما يلي ليس من أنواع هذه المراكز؟",
+    options: [
+      "مراكز تكلفة",
+      "مراكز ربحية",
+      "مراكز تسويقية",
+      "مراكز استثمار"
+    ],
+    correct: 2,
+    explanation: "في ظل <b>اللامركزية</b> يتم تفويض الصلاحيات وتقسيم المنشأة إلى ثلاثة أنواع من مراكز المسؤولية: <b>مراكز تكلفة، مراكز ربحية، ومراكز استثمار</b>. يتم تقييم كل مركز بناءً على الصلاحيات الممنوحة والتكاليف المنفقة. \"مراكز تسويقية\" ليست تصنيفًا معتمدًا لمراكز المسؤولية."
+  },
+  {
+    id: 15,
+    question: "التكلفة التفاضلية (Incremental Cost) تمثل:",
+    options: [
+      "إجمالي التكاليف مقسومًا على عدد الوحدات",
+      "تكلفة إنتاج وحدة واحدة إضافية",
+      "التكاليف التي لا تتغير بتغير القرار",
+      "الفرق في التكاليف بين بديلين متاحين"
+    ],
+    correct: 3,
+    explanation: "التكلفة التفاضلية هي <b>الفرق في التكاليف بين بديلين متاحين</b> لتنفيذ مهمة معينة. مثال: شراء آلة = 15,000 دينار؛ استئجارها = 16,500 دينار ← التكلفة التفاضلية = 1,500 دينار لصالح الشراء. ملاحظة: هذا يختلف عن هامش التكلفة (Marginal Cost) الذي يمثل تكلفة إنتاج وحدة واحدة إضافية."
+  },
+  {
+    id: 16,
+    question: "في حال كون مصاريف الكهرباء تكاليف شبه متغيرة للمصنع، فإن الجزء المتغير من تكاليف الكهرباء يعتبر في هذه الحالة تكاليف:",
+    options: [
+      "تكاليف تحويل: لا ، وتكاليف فترة: لا",
+      "تكاليف تحويل: لا ، وتكاليف فترة: نعم",
+      "تكاليف تحويل: نعم ، وتكاليف فترة: نعم",
+      "تكاليف تحويل: نعم ، وتكاليف فترة: لا"
+    ],
+    correct: 3,
+    explanation: "كهرباء المصنع هي تكلفة صناعية غير مباشرة (MOH). وطالما أنها تكلفة تصنيع، فهي تُصنف كـ <b>تكاليف منتج (Product Cost)</b> قابلة للتخزين (فترة: لا)، وتعتبر جزءًا من <b>تكاليف التحويل (Conversion Costs)</b> التي تحول المواد الخام إلى منتج تام (تحويل: نعم). (تمرين 8 من أسئلة امتحانات الـ CPA بكتاب المادة)."
+  },
+  {
+    id: 17,
+    question: "إذا كانت التكلفة المتغيرة المقدرة للصيانة هي 0.5 دينار لساعة دوران الآلات الواحدة، وكانت التكاليف الشهرية الثابتة المقدرة 250 دينار، فإن تكاليف الصيانة الشهرية المقدرة عند مستوى نشاط يبلغ 1,000 ساعة دوران للآلات ستكون:",
+    options: [
+      "250 دينار",
+      "500 دينار",
+      "750 دينار",
+      "1,000 دينار"
+    ],
+    correct: 2,
+    explanation: "باستخدام معادلة سلوك التكلفة: <b>ص = أ + ب س</b> حيث:<br>أ (التكلفة الثابتة) = 250 دينار<br>ب (التكلفة المتغيرة للوحدة) = 0.5 دينار<br>س (مستوى النشاط) = 1,000 ساعة<br>إذن: ص = 250 + (0.5 × 1,000) = 250 + 500 = <b>750 دينار</b>. (تمرين 7 من الفصل الثاني بكتاب المادة)."
+  },
+  {
+    id: 18,
+    question: "تعتبر مصاريف الصيانة تكاليف شبه متغيرة وترتبط بساعات دوران الآلات. تم استخدام تحليل الانحدار وظهرت المعادلة: ص = 6,000 + 5.25 س. إذا كانت الساعات المتوقعة هي 1,000 ساعة، فما هي تكاليف الصيانة المتوقعة؟",
+    options: [
+      "11,250 دينار",
+      "10,125 دينار",
+      "5,250 دينار",
+      "4,725 دينار"
+    ],
+    correct: 0,
+    explanation: "باستخدام معادلة الانحدار: <b>ص = 6,000 + 5.25 س</b> (حيث س هي ساعات الدوران = 1,000 ساعة).<br>إذن: ص = 6,000 + (5.25 × 1,000) = 6,000 + 5,250 = <b>11,250 دينار</b>. (تمرين 9 من الفصل الثاني بأسئلة امتحانات الـ JCPA بكتاب المادة).<br><i>ملاحظة:</i> ورد الرقم الأول في معادلة الكتاب بصيغة (60,00) وهو خطأ مطبعي في الكتاب والمقصود به 6,000 ليتطابق مع خيارات الإجابة."
+  },
+  {
+    id: 19,
+    question: "إذا كان تعيين العاملين وتحديد أجورهم في قسم الإنتاج في المصنع هو من صلاحية قسم شؤون العاملين (وليس رئيس قسم الإنتاج)، فإن أجور العاملين تعتبر بالنسبة لرئيس قسم الإنتاج تكاليف:",
+    options: [
+      "قابلة للرقابة (Controllable)",
+      "غير قابلة للرقابة (Uncontrollable)",
+      "تكاليف فترة (Period Cost)",
+      "تكاليف غير ملائمة للقرار (Irrelevant)"
+    ],
+    correct: 1,
+    explanation: "تُصنف التكاليف بأنها <b>غير قابلة للرقابة</b> بالنسبة لمدير مركز مسؤولية معين إذا كان لا يملك الصلاحية أو القدرة على اتخاذ القرار بخصوص إنفاقها أو تحديد قيمتها. ونظرًا لأن أجور عمال الإنتاج هنا يتم تحديدها بالكامل من قِبل قسم شؤون العاملين، فإن مدير قسم الإنتاج لا يستطيع التحكم بها وبالتالي هي غير قابلة للرقابة بالنسبة له. (تمرين 5 من الفصل الثاني بكتاب المادة)."
+  },
+  {
+    id: 20,
+    question: "يُعتبر الغراء والمسامير المستخدمة في صناعة الأثاث الخشبي تكاليف صناعية:",
+    options: [
+      "مباشرة (Direct Materials)",
+      "غير مباشرة (Indirect Materials / Overhead)",
+      "تكاليف فترة (Period Costs)",
+      "تكاليف أولية (Prime Costs)"
+    ],
+    correct: 1,
+    explanation: "الغراء والمسامير في صناعة الأثاث تعتبر <b>مواد غير مباشرة (Indirect Materials)</b> وتدخل ضمن التكاليف الصناعية غير المباشرة (MOH). والسبب في ذلك أن قيمتها منخفضة نسبيًا، ومن الصعب أو غير الاقتصادي تتبع حصة كل وحدة منتجة (مثل طاولة أو خزانة) منها بدقة. (تمرين 2 من الفصل الثاني بكتاب المادة)."
+  }
+];
+
+let answers = new Array(quizData.length).fill(null);
+const letters = ['أ', 'ب', 'ج', 'د'];
+
+// Dynamically generate quiz and score slides before navigation logic runs
+(function initQuizGeneration() {
+  const deck = document.getElementById('deck');
+  
+  quizData.forEach((q, idx) => {
+    const slide = document.createElement('div');
+    slide.className = 'slide bg-std quiz-slide';
+    slide.setAttribute('data-q-id', q.id);
+    
+    const chapterText = q.id <= 3 ? 'الفصل الأول • المفاهيم والأهداف' : 'الفصل الثاني • تصنيفات التكاليف وتقديرها';
+    
+    slide.innerHTML = `
+      <div class="s-std">
+        <div class="s-head">
+          <div class="s-ey">${chapterText}</div>
+          <div class="s-ttl">سؤال تفاعلي (${q.id} من ٢٠) <span class="en">Interactive Question</span></div>
+        </div>
+        <div class="s-body col2">
+          <!-- Right Panel: Question & Options -->
+          <div class="panel" style="flex: 1.3;">
+            <div class="quiz-question-card">
+              <div class="q-num-badge">السؤال التفاعلي ${q.id}</div>
+              <div class="q-text">${q.question}</div>
+              <div class="q-opts">
+                ${q.options.map((opt, oi) => `
+                  <div class="q-opt" data-opt-idx="${oi}" onclick="submitAnswer(${q.id}, ${oi})">
+                    <div class="opt-let">${letters[oi]}</div>
+                    <div class="opt-txt">${opt}</div>
+                    <div class="opt-chk"></div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+          <!-- Left Panel: Explanation Card -->
+          <div class="panel" style="flex: 1.0;">
+            <div class="q-exp-box" id="q-exp-${q.id}">
+              <div class="q-exp-placeholder">
+                <div class="placeholder-icon">💡</div>
+                <div class="placeholder-title">بانتظار إجابتك...</div>
+                <div class="placeholder-desc">اختر أحد الخيارات لتصحيح الإجابة وعرض الشرح المفصل هنا.</div>
+              </div>
+              <div class="q-exp-card" style="display: none;">
+                <div class="q-exp-header">
+                  <span class="exp-icon">💡</span>
+                  <span class="exp-title">شرح الإجابة</span>
+                </div>
+                <div class="q-exp-body">${q.explanation}</div>
+                <button class="nb next-slide-btn" onclick="go(1)" style="margin-top: 15px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--teal); border: none; color: white; border-radius: 8px; padding: 10px; cursor: pointer; font-family: 'Cairo', sans-serif; font-weight: 700; transition: all 0.2s;">
+                  <span>${q.id === quizData.length ? 'عرض النتيجة النهائية' : 'السؤال التالي'}</span>
+                  <span>&larr;</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="s-ft">
+          <div class="ft-l">محاسبة التكاليف — أسئلة تفاعلية</div>
+          <div class="ft-r">السؤال ${q.id} من ٢٠</div>
+        </div>
+      </div>
+    `;
+    deck.appendChild(slide);
+  });
+  
+  // Score Slide
+  const scoreSlide = document.createElement('div');
+  scoreSlide.className = 'slide bg-title quiz-score-slide';
+  scoreSlide.innerHTML = `
+    <div class="s-std" style="justify-content: center; align-items: center; text-align: center; padding: 40px; height: 100%;">
+      <div class="t-badge" style="border-color: var(--teal); color: var(--teal); background: var(--td); margin-bottom: 20px;">اختبار الإطار النظري</div>
+      
+      <div class="score-card-container">
+        <h2 style="font-family: 'Amiri', serif; font-size: 38px; color: var(--head); margin-bottom: 20px; font-weight: 700;">النتيجة النهائية</h2>
+        
+        <!-- Circular Progress Ring -->
+        <div class="score-ring-container">
+          <svg class="score-ring" width="160" height="160">
+            <circle class="score-ring-bg" cx="80" cy="80" r="70" />
+            <circle class="score-ring-fill" id="score-ring-fill-el" cx="80" cy="80" r="70" />
+          </svg>
+          <div class="score-percent" id="final-score-percent">0%</div>
+        </div>
+        
+        <div class="score-msg" id="final-score-msg" style="font-size: 20px; font-weight: 700; color: var(--gl); margin: 15px 0 8px;"></div>
+        <div class="score-det" id="final-score-details" style="font-size: 13.5px; color: var(--muted); margin-bottom: 25px;"></div>
+        
+        <button class="quiz-reset-btn" onclick="restartQuiz()" style="padding: 10px 30px; font-size: 14px; background: var(--gd); border: 1px solid var(--gold); color: var(--gl); border-radius: 8px; cursor: pointer; font-family: 'Cairo', sans-serif; font-weight: 700; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px;">
+          <span>🔄</span>
+          <span>إعادة محاولة الاختبار</span>
+        </button>
+      </div>
+    </div>
+  `;
+  deck.appendChild(scoreSlide);
+})();
+
+// Navigation & Slides Engine
+let cur = 0;
+let N = 0;
+let go = function() {};
+let jump = function() {};
+
+(function initNavigation(){
+  const slides = document.querySelectorAll('.slide');
+  N = slides.length;
+  const dotsEl = document.getElementById('dots');
+  const curEl = document.getElementById('cur');
+  const totEl = document.getElementById('tot');
+  const pb = document.getElementById('pb');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  
+  totEl.textContent = N;
+  
+  // Build dots
+  for(let i=0;i<N;i++){
+    const d=document.createElement('div');
+    // Color code dots: slide 24 (index 23) is transition, index >= 23 are quiz slides
+    d.className='dot' + (i===0?' a':'') + (i >= 23 ? ' quiz-dot' : '');
+    d.onclick=(()=>{const j=i;return()=>jump(j)})();
+    dotsEl.appendChild(d);
+  }
+
+  function scale(){
+    const deck=document.getElementById('deck');
+    const scaleX=window.innerWidth/1280;
+    const scaleY=(window.innerHeight-46)/720;
+    const s=Math.min(scaleX,scaleY);
+    deck.style.transform=`scale(${s})`;
+  }
+  scale();
+  window.addEventListener('resize',scale);
+
+  function render(){
+    slides.forEach((s,i)=>{
+      s.classList.remove('active','out');
+      if(i===cur) s.classList.add('active');
+      else if(i<cur) s.classList.add('out');
+    });
+    document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('a',i===cur));
+    curEl.textContent=cur+1;
+    pb.style.width=((cur+1)/N*100)+'%';
+    prevBtn.disabled=cur===0;
+    nextBtn.disabled=cur===N-1;
+    
+    // Trigger SVG animation when reaching score slide
+    if(cur === N - 1) {
+      setTimeout(updateScoreCard, 100);
+    }
+  }
+
+  go = function(dir){jump(cur+dir);}
+  jump = function(i){
+    if(i<0||i>=N)return;
+    cur=i;
+    render();
+  }
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowUp') go(-1);
+    if(e.key==='ArrowLeft'||e.key==='ArrowDown') go(1);
+    if(e.key==='f'||e.key==='F') toggleFS();
+  });
+
+  // Touch/swipe
+  let tx=0;
+  document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-tx;
+    if(Math.abs(dx)>50) go(dx>0?-1:1);
+  });
+
+  render();
+})();
+
+// Fullscreen API Logic
+function toggleFS() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => {
+      console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+    });
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+document.addEventListener('fullscreenchange', () => {
+  const fsBtn = document.getElementById('fsBtn');
+  if (fsBtn) {
+    if (document.fullscreenElement) {
+      fsBtn.innerHTML = '🗗 شاشة صغيرة';
+    } else {
+      fsBtn.innerHTML = '⛶ ملء الشاشة';
+    }
+  }
+});
+
+// Quiz Engine functions
+function submitAnswer(qId, optIdx) {
+  const slide = document.querySelector(`.quiz-slide[data-q-id="${qId}"]`);
+  if (!slide) return;
+  
+  // Exit if already answered
+  if (answers[qId - 1] !== null) return;
+  
+  const question = quizData[qId - 1];
+  answers[qId - 1] = optIdx;
+  
+  const options = slide.querySelectorAll('.q-opt');
+  const isCorrect = optIdx === question.correct;
+  
+  // Disable all options
+  options.forEach(opt => opt.classList.add('disabled'));
+  
+  // Show correctness
+  options[question.correct].classList.add('correct');
+  if (!isCorrect) {
+    options[optIdx].classList.add('wrong');
+  }
+  
+  // Switch placeholder with explanation card
+  const expBox = document.getElementById(`q-exp-${qId}`);
+  if (expBox) {
+    const placeholder = expBox.querySelector('.q-exp-placeholder');
+    const card = expBox.querySelector('.q-exp-card');
+    if (placeholder && card) {
+      placeholder.style.display = 'none';
+      card.style.display = 'flex';
+    }
+  }
+}
+
+function updateScoreCard() {
+  let correctCount = 0;
+  answers.forEach((ans, idx) => {
+    if (ans === quizData[idx].correct) {
+      correctCount++;
+    }
+  });
+  
+  const percent = Math.round((correctCount / quizData.length) * 100);
+  
+  const percentEl = document.getElementById('final-score-percent');
+  const msgEl = document.getElementById('final-score-msg');
+  const detailsEl = document.getElementById('final-score-details');
+  const ringFill = document.getElementById('score-ring-fill-el');
+  
+  if (percentEl) percentEl.textContent = percent + '%';
+  
+  if (msgEl) {
+    if (percent >= 90) {
+      msgEl.textContent = '🎉 ممتاز! أداء رائع ومبهر';
+      msgEl.style.color = 'var(--green)';
+    } else if (percent >= 70) {
+      msgEl.textContent = '👏 جيد جدًا! تحصيل ممتاز';
+      msgEl.style.color = 'var(--gl)';
+    } else if (percent >= 50) {
+      msgEl.textContent = '📚 مقبول! بحاجة لمراجعة بعض المفاهيم';
+      msgEl.style.color = 'var(--gold)';
+    } else {
+      msgEl.textContent = '📖 تحتاج لقراءة الملخص مجددًا';
+      msgEl.style.color = 'var(--rose)';
+    }
+  }
+  
+  if (detailsEl) {
+    detailsEl.textContent = `لقد أجبت بشكل صحيح على ${correctCount} من أصل ${quizData.length} أسئلة تفاعلية.`;
+  }
+  
+  if (ringFill) {
+    const offset = 440 - (440 * percent / 100);
+    ringFill.style.strokeDashoffset = offset;
+    if (percent >= 90) ringFill.style.stroke = 'var(--green)';
+    else if (percent >= 50) ringFill.style.stroke = 'var(--teal)';
+    else ringFill.style.stroke = 'var(--rose)';
+  }
+}
+
+function restartQuiz() {
+  // Clear answers
+  answers.fill(null);
+  
+  // Reset quiz slide elements
+  quizData.forEach(q => {
+    const slide = document.querySelector(`.quiz-slide[data-q-id="${q.id}"]`);
+    if (slide) {
+      const options = slide.querySelectorAll('.q-opt');
+      options.forEach(opt => {
+        opt.classList.remove('disabled', 'correct', 'wrong');
+      });
+      
+      const expBox = document.getElementById(`q-exp-${q.id}`);
+      if (expBox) {
+        const placeholder = expBox.querySelector('.q-exp-placeholder');
+        const card = expBox.querySelector('.q-exp-card');
+        if (placeholder && card) {
+          placeholder.style.display = 'block';
+          card.style.display = 'none';
+        }
+      }
+    }
+  });
+  
+  // Reset Score ring fill offset
+  const ringFill = document.getElementById('score-ring-fill-el');
+  if (ringFill) {
+    ringFill.style.strokeDashoffset = 440;
+  }
+  
+  // Jump to first quiz question (Slide 25, index 24)
+  jump(24);
+}
+</script>
+</body>
+</html>
