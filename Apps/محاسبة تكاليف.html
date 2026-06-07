@@ -426,13 +426,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:#020510;font-family:
   }
   
   #sr {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 46px; /* leave space for the bottom nav bar */
-    display: block;
-    overflow: hidden;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: calc(46px + env(safe-area-inset-bottom)) !important;
+    inset: 0 0 calc(46px + env(safe-area-inset-bottom)) 0 !important;
+    display: block !important;
+    overflow: hidden !important;
   }
   
   #deck {
@@ -481,6 +482,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#020510;font-family:
   /* Navigation Bar */
   #nav {
     padding: 0 12px !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+    height: calc(46px + env(safe-area-inset-bottom)) !important;
   }
   
   .dots {
@@ -683,6 +686,21 @@ html,body{width:100%;height:100%;overflow:hidden;background:#020510;font-family:
     align-self: center !important;
     height: auto !important;
     display: inline-block !important;
+  }
+
+  /* Prevent horizontal table overflow on mobile */
+  .tbl {
+    table-layout: fixed !important;
+    width: 100% !important;
+  }
+  .tbl td, .tbl th {
+    word-wrap: break-word !important;
+    white-space: normal !important;
+  }
+
+  /* Prevent flexbox items from shrinking on mobile, allowing natural scrolling */
+  .s-body * {
+    flex-shrink: 0 !important;
   }
 }
 </style>
@@ -2086,10 +2104,18 @@ let jump = function() {};
 
   // Touch/swipe
   let tx=0;
-  document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+  let ty=0;
+  document.addEventListener('touchstart',e=>{
+    tx=e.touches[0].clientX;
+    ty=e.touches[0].clientY;
+  },{passive:true});
   document.addEventListener('touchend',e=>{
     const dx=e.changedTouches[0].clientX-tx;
-    if(Math.abs(dx)>50) go(dx>0?-1:1);
+    const dy=e.changedTouches[0].clientY-ty;
+    // Only switch slide if horizontal swipe is longer than vertical scroll and meets threshold
+    if(Math.abs(dx)>50 && Math.abs(dx) > Math.abs(dy)) {
+      go(dx>0?-1:1);
+    }
   });
 
   render();
