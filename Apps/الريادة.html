@@ -1,0 +1,2578 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الامتحان الشامل الموحد - الريادة وإدارة الأعمال الصغيرة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-app:          linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    --bg-card:         rgba(255, 255, 255, 0.95);
+    --bg-card-header:  #f8fafc;
+    --border-color:    rgba(203, 213, 225, 0.6);
+    --text-main:       #0f172a;
+    --text-muted:      #475569;
+    --text-white:      #ffffff;
+    --primary:         #0f172a;
+    --accent:          #b58d3d;
+    --accent-light:    #fdf6e2;
+    --accent-gradient: linear-gradient(135deg, var(--accent-light) 0%, #fffdf6 100%);
+    --success:         #059669;
+    --success-bg:      #ecfdf5;
+    --success-border:  #34d399;
+    --error:           #dc2626;
+    --error-bg:        #fef2f2;
+    --error-border:    #f87171;
+    --shadow-sm:       0 2px 8px rgba(0, 0, 0, 0.05);
+    --shadow-md:       0 12px 30px rgba(0, 0, 0, 0.06);
+    --shadow-lg:       0 20px 40px -15px rgba(15, 23, 42, 0.08);
+    --radius-lg:       28px;
+    --radius-md:       18px;
+    --radius-sm:       12px;
+    --transition:      all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --font-size-base:  1rem;
+  }
+
+  body.dark-theme {
+    --bg-app:          linear-gradient(135deg, #0b0f19 0%, #030712 100%);
+    --bg-card:         rgba(21, 30, 51, 0.96);
+    --bg-card-header:  #1e2942;
+    --border-color:    rgba(42, 59, 92, 0.6);
+    --text-main:       #f8fafc;
+    --text-muted:      #94a3b8;
+    --primary:         #f8fafc;
+    --accent:          #e5c158;
+    --accent-light:    rgba(229, 193, 88, 0.08);
+    --accent-gradient: linear-gradient(135deg, var(--accent-light) 0%, rgba(21, 30, 51, 0.4) 100%);
+    --success:         #10b981;
+    --success-bg:      #064e3b30;
+    --success-border:  #059669;
+    --error:           #f87171;
+    --error-bg:        #7f1d1d30;
+    --error-border:    #b91c1c;
+    --shadow-sm:       0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md:       0 12px 30px rgba(0, 0, 0, 0.5);
+    --shadow-lg:       0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+    background: var(--bg-app);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    overflow: hidden;
+    position: relative;
+    transition: background var(--transition), color var(--transition);
+    font-size: var(--font-size-base);
+  }
+
+  .bg-decorator {
+    position: fixed; width: 600px; height: 600px;
+    border-radius: 50%; filter: blur(120px);
+    z-index: -1; pointer-events: none; opacity: 0.4;
+  }
+  .bg-decorator.top-right { top: -200px; right: -200px; background: radial-gradient(circle, rgba(181, 141, 61, 0.12) 0%, transparent 80%); }
+  .bg-decorator.bottom-left { bottom: -200px; left: -200px; background: radial-gradient(circle, rgba(58, 80, 107, 0.15) 0%, transparent 80%); }
+
+  /* ===== TOP CONTROLS ===== */
+  .top-controls {
+    position: absolute; top: 15px; left: 20px; right: 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 10; width: calc(100% - 40px);
+  }
+  .controls-group { display: flex; gap: 8px; align-items: center; }
+
+  .control-btn {
+    background: var(--bg-card); border: 1px solid var(--border-color);
+    color: var(--text-main); height: 38px; padding: 0 14px;
+    border-radius: 22px; cursor: pointer; display: flex;
+    align-items: center; justify-content: center;
+    font-size: 0.82rem; font-weight: 700; box-shadow: var(--shadow-sm);
+    transition: var(--transition); gap: 6px; backdrop-filter: blur(6px);
+    font-family: inherit;
+  }
+  .control-btn:hover { transform: translateY(-1px); border-color: var(--accent); box-shadow: var(--shadow-md); }
+  .theme-btn { width: 38px; padding: 0; border-radius: 50%; }
+
+  /* Font size buttons */
+  .font-btn { width: 38px; padding: 0; border-radius: 50%; font-size: 0.9rem; font-weight: 900; }
+
+  .wrapper {
+    width: 100%; height: 94vh; display: flex;
+    flex-direction: column; align-items: center;
+    justify-content: center; margin-top: 35px;
+  }
+
+  /* ===== CARD ===== */
+  .card {
+    background: var(--bg-card); border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-lg); padding: 28px 36px;
+    box-shadow: var(--shadow-lg); transition: var(--transition);
+    position: relative; overflow: hidden;
+    width: 97vw; height: 83vh;
+    display: flex; flex-direction: column; justify-content: space-between;
+    backdrop-filter: blur(8px);
+  }
+  .card:fullscreen, .card:-webkit-full-screen {
+    width: 100vw !important; height: 100vh !important;
+    border-radius: 0 !important; border: none !important;
+    padding: 35px 50px !important;
+    display: flex !important; flex-direction: column !important;
+    justify-content: space-between !important;
+    background: var(--bg-card) !important;
+  }
+  .card-slide-decorator {
+    position: absolute; top: 0; right: 0; bottom: 0;
+    width: 5px; background: linear-gradient(180deg, var(--accent) 0%, var(--accent) 100%);
+  }
+
+  /* ===== VIEW PANELS ===== */
+  .view-panel { display: none; flex-direction: column; flex-grow: 1; height: 100%; justify-content: space-between; overflow: hidden; }
+  .view-panel.active { display: flex; animation: slideInFade 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+  @keyframes slideInFade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ===== DASHBOARD ===== */
+  .dashboard-content { display: flex; flex-direction: column; gap: 12px; justify-content: space-between; height: 100%; flex-grow: 1; overflow-y: auto; }
+  .section-title { font-size: 1.08rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 4px; height: 16px; background: var(--accent); border-radius: 4px; display: inline-block; }
+
+  .chapters-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .chapter-item {
+    background: var(--bg-card-header); border: 1px solid var(--border-color);
+    border-radius: var(--radius-md); padding: 9px 13px;
+    cursor: pointer; display: flex; align-items: center; gap: 10px;
+    transition: var(--transition); user-select: none;
+  }
+  .chapter-item:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .chapter-item.selected { background: var(--accent-light); border-color: var(--accent); }
+  .checkbox-custom { width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--text-muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: var(--transition); }
+  .chapter-item.selected .checkbox-custom { border-color: var(--accent); background: var(--accent); }
+  .checkbox-custom::after { content: '✓'; color: var(--bg-card); font-size: 0.8rem; font-weight: 900; display: none; }
+  .chapter-item.selected .checkbox-custom::after { display: block; }
+  .chapter-info { display: flex; flex-direction: column; }
+  .chapter-name { font-weight: 700; font-size: 0.82rem; color: var(--text-main); }
+  .chapter-meta { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; }
+
+  .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 5px; }
+  .option-card { background: var(--bg-card-header); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 9px 13px; display: flex; flex-direction: column; justify-content: center; }
+  select { width: 100%; padding: 7px 10px; border-radius: var(--radius-sm); background: var(--bg-card); border: 1.5px solid var(--border-color); color: var(--text-main); font-family: inherit; font-weight: 600; outline: none; cursor: pointer; transition: var(--transition); margin-top: 3px; font-size: 0.82rem; }
+  select:focus { border-color: var(--accent); }
+
+  .btn-start {
+    background: var(--accent); color: var(--text-white) !important;
+    border: none; border-radius: var(--radius-md); padding: 11px 28px;
+    font-size: 1rem; font-weight: 800; cursor: pointer;
+    transition: var(--transition); box-shadow: 0 4px 12px rgba(181, 141, 61, 0.35);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-family: inherit;
+  }
+  .btn-start:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(181, 141, 61, 0.45); }
+  .btn-start:disabled { background: var(--text-muted); opacity: 0.5; box-shadow: none; cursor: not-allowed; transform: none; }
+
+  /* ===== QUIZ HEADER ===== */
+  .quiz-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px; }
+  .badge-container { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .badge { background: var(--accent-light); border: 1px solid rgba(181, 141, 61, 0.25); color: var(--accent); font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+  .badge.badge-type { background: var(--bg-card-header); border-color: var(--border-color); color: var(--text-muted); }
+  .slide-counter { font-size: 0.85rem; color: var(--text-muted); font-weight: 700; }
+
+  .timer-container {
+    background: var(--accent-light); border: 1.5px solid rgba(181, 141, 61, 0.3);
+    color: var(--accent); padding: 3px 12px; border-radius: 20px;
+    font-size: 0.82rem; font-weight: 700; display: flex; align-items: center; gap: 5px;
+    box-shadow: var(--shadow-sm); transition: var(--transition);
+  }
+  .timer-container.warning { background: var(--error-bg) !important; border-color: var(--error-border) !important; color: var(--error) !important; animation: timerPulse 0.8s infinite alternate; }
+  @keyframes timerPulse { from { transform: scale(1); } to { transform: scale(1.04); } }
+
+  .progress-wrap { width: 100%; background: var(--border-color); height: 5px; border-radius: 99px; overflow: hidden; margin-bottom: 12px; }
+  .progress-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+
+  /* ===== SPLIT LAYOUT ===== */
+  .slide-body-split {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 36px; flex-grow: 1; align-items: stretch; overflow: hidden; height: 100%;
+  }
+  .options-pane { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; padding-right: 5px; padding-left: 10px; height: 100%; justify-content: flex-start; }
+  .question-pane { display: flex; flex-direction: column; gap: 14px; overflow-y: auto; padding-right: 15px; padding-left: 5px; height: 100%; justify-content: center; }
+
+  .q-text {
+    font-size: calc(var(--font-size-base) * 1.3);
+    font-weight: 800; color: var(--text-main); line-height: 1.65;
+    border-right: 4px solid var(--accent); padding-right: 12px;
+    margin-bottom: 4px; text-align: right;
+  }
+
+  /* ===== OPTION BUTTONS ===== */
+  .option-btn {
+    background: var(--bg-card-header); border: 2px solid var(--border-color);
+    border-radius: var(--radius-md); padding: 14px 18px; font-family: inherit;
+    font-size: calc(var(--font-size-base) * 0.98); font-weight: 700;
+    color: var(--text-main); cursor: pointer; text-align: right;
+    transition: var(--transition); display: flex; align-items: center;
+    gap: 14px; line-height: 1.5; box-shadow: var(--shadow-sm); width: 100%;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-light); transform: translateX(-4px); }
+  .option-btn:disabled { cursor: default; }
+  .option-btn .letter-circle {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--bg-card); border: 2px solid var(--border-color);
+    color: var(--text-muted); display: flex; align-items: center;
+    justify-content: center; font-size: 0.82rem; font-weight: 800;
+    flex-shrink: 0; transition: var(--transition);
+  }
+  .option-btn:hover:not(:disabled) .letter-circle { border-color: var(--accent); color: var(--accent); }
+
+  .option-btn.correct { background: var(--success-bg) !important; border-color: var(--success) !important; color: var(--text-main) !important; }
+  .option-btn.correct .letter-circle { background: var(--success) !important; color: var(--text-white) !important; border-color: var(--success) !important; }
+  .option-btn.wrong { background: var(--error-bg) !important; border-color: var(--error) !important; color: var(--text-main) !important; }
+  .option-btn.wrong .letter-circle { background: var(--error) !important; color: var(--text-white) !important; border-color: var(--error) !important; }
+  .option-btn.reveal { background: var(--success-bg) !important; border-color: var(--success) !important; opacity: 0.85; }
+  .option-btn.reveal .letter-circle { background: var(--success) !important; color: var(--text-white) !important; border-color: var(--success) !important; }
+  .option-btn.selected-feedback { background: var(--accent-light) !important; border-color: var(--accent) !important; color: var(--text-main) !important; transform: translateX(-4px); }
+
+  .status-icon { font-size: 1.1rem; font-weight: 900; margin-right: auto; display: flex; align-items: center; justify-content: center; }
+
+  /* ===== EXPLANATION BOX ===== */
+  .explanation-box {
+    display: none; background: var(--accent-gradient);
+    border-right: 5px solid var(--accent); border-radius: var(--radius-sm);
+    padding: 20px; animation: drawerOpen 0.4s ease forwards;
+    box-shadow: var(--shadow-sm); width: 100%;
+  }
+  .explanation-box.show { display: block; }
+  @keyframes drawerOpen { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .explanation-title { font-weight: 800; color: var(--accent); margin-bottom: 8px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+  .explanation-text { font-size: calc(var(--font-size-base) * 0.92); color: var(--text-main); line-height: 1.85; }
+  .explanation-text strong { color: var(--accent); }
+
+
+  /* ===== QUIZ CONTROLS ===== */
+  .quiz-controls { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 12px; margin-top: 12px; gap: 10px; }
+  .btn-control {
+    background: var(--bg-card-header); border: 1px solid var(--border-color);
+    color: var(--text-main); border-radius: var(--radius-sm);
+    padding: 10px 22px; font-family: inherit; font-weight: 700;
+    cursor: pointer; transition: var(--transition); display: flex;
+    align-items: center; gap: 7px; font-size: 0.9rem;
+  }
+  .btn-control:hover:not(:disabled) { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+  .btn-control:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-control.btn-accent { background: var(--accent); color: var(--text-white); border-color: var(--accent); }
+  .btn-control.btn-accent:hover { box-shadow: 0 4px 12px rgba(181, 141, 61, 0.3); }
+
+  .score-badge-mini { background: rgba(255, 255, 255, 0.05); padding: 5px 14px; border-radius: 30px; font-size: 0.78rem; font-weight: 700; color: var(--accent); border: 1px solid var(--border-color); }
+
+  /* ===== SLIDE DOTS - Horizontal Scroll ===== */
+  .slide-dots {
+    display: flex; flex-direction: row; flex-wrap: nowrap;
+    gap: 5px; margin-top: 8px; width: 100%;
+    padding: 6px 8px; background: var(--bg-card-header);
+    border: 1px solid var(--border-color); border-radius: var(--radius-md);
+    overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .slide-dots::-webkit-scrollbar { display: none; }
+  .dot {
+    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+    background: var(--bg-card); border: 1.5px solid var(--border-color);
+    color: var(--text-muted); font-size: 0.65rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: var(--transition); user-select: none;
+    scroll-snap-align: center;
+  }
+  .dot:hover { border-color: var(--accent); color: var(--accent); }
+  .dot.current { border-color: var(--accent); background: var(--accent-light); color: var(--accent); transform: scale(1.15); }
+  .dot.correct { background: var(--success-bg); border-color: var(--success); color: var(--success); }
+  .dot.wrong { background: var(--error-bg); border-color: var(--error); color: var(--error); }
+  .dot.answered { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+
+  /* ===== RESULT VIEW ===== */
+  .result-view { align-items: center; text-align: center; gap: 12px; justify-content: flex-start; height: 100%; overflow-y: auto; }
+  .result-circle { width: 120px; height: 120px; border-radius: 50%; background: var(--bg-card-header); border: 5px solid var(--accent); display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: var(--shadow-md); flex-shrink: 0; }
+  .result-score { font-size: 2.4rem; font-weight: 900; color: var(--accent); line-height: 1.1; }
+  .result-total { font-size: 0.78rem; color: var(--text-muted); font-weight: 700; }
+  .result-title { font-size: 1.4rem; font-weight: 800; color: var(--text-main); }
+  .result-msg { font-size: 0.9rem; color: var(--text-muted); max-width: 550px; line-height: 1.6; }
+
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; width: 100%; max-width: 560px; }
+  .stat-card { background: var(--bg-card-header); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px; display: flex; flex-direction: column; gap: 2px; align-items: center; }
+  .stat-val { font-size: 1.4rem; font-weight: 900; }
+  .stat-card.correct-card .stat-val { color: var(--success); }
+  .stat-card.wrong-card .stat-val { color: var(--error); }
+  .stat-card.pct-card .stat-val { color: var(--accent); }
+  .stat-lbl { font-size: 0.72rem; color: var(--text-muted); font-weight: 700; }
+
+  /* ===== WEAKNESS ANALYSIS BY CHAPTER ===== */
+  .chapter-analysis { width: 100%; max-width: 680px; }
+  .chapter-analysis-title { font-size: 0.9rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; display: flex; align-items: center; gap: 7px; }
+  .ch-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+  .ch-bar-label { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); width: 110px; flex-shrink: 0; text-align: right; line-height: 1.3; }
+  .ch-bar-wrap { flex-grow: 1; background: var(--border-color); height: 10px; border-radius: 99px; overflow: hidden; }
+  .ch-bar-fill { height: 100%; border-radius: 99px; transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+  .ch-bar-pct { font-size: 0.72rem; font-weight: 800; width: 36px; flex-shrink: 0; }
+
+  /* ===== RESULT BUTTONS ===== */
+  .btn-restart {
+    background: var(--accent); color: var(--text-white); font-size: 1rem; font-weight: 800;
+    border: none; border-radius: var(--radius-md); padding: 11px 30px;
+    cursor: pointer; transition: var(--transition); box-shadow: 0 4px 12px rgba(181, 141, 61, 0.3);
+    font-family: inherit;
+  }
+  .btn-restart:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(181, 141, 61, 0.45); }
+
+  /* ===== HISTORY VIEW ===== */
+  .history-view { height: 100%; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+  .history-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .history-table th { background: var(--bg-card-header); color: var(--text-muted); font-weight: 700; padding: 8px 12px; text-align: right; border-bottom: 1px solid var(--border-color); }
+  .history-table td { padding: 8px 12px; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
+  .history-table tr:hover td { background: var(--accent-light); }
+  .history-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-weight: 700; font-size: 0.72rem; }
+  .history-badge.good { background: var(--success-bg); color: var(--success); }
+  .history-badge.mid { background: var(--accent-light); color: var(--accent); }
+  .history-badge.low { background: var(--error-bg); color: var(--error); }
+  .empty-history { text-align: center; color: var(--text-muted); font-size: 0.95rem; padding: 30px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .slide-body-split { display: flex; flex-direction: column; gap: 14px; overflow-y: auto; height: auto; flex-grow: 1; }
+    .options-pane { order: 1; height: auto; overflow-y: visible; padding-left: 0; padding-right: 0; }
+    .question-pane { order: 2; height: auto; overflow-y: visible; padding-left: 0; padding-right: 0; justify-content: flex-start; margin-top: 8px; }
+  }
+
+  @media (max-width: 768px) {
+    body { padding: 5px; overflow-y: auto; }
+    .card { width: 98vw; height: 94vh; padding: 12px 16px; border-radius: var(--radius-md); }
+    .chapters-grid { grid-template-columns: 1fr; gap: 7px; }
+    .settings-grid { grid-template-columns: 1fr; gap: 7px; }
+    .top-controls { top: 6px; left: 8px; right: 8px; width: calc(100% - 16px); }
+    .control-btn { height: 33px; padding: 0 10px; font-size: 0.74rem; }
+    .font-btn { width: 33px; }
+    .theme-btn { width: 33px; }
+    .q-text { font-size: calc(var(--font-size-base) * 1.08); border-right-width: 3px; padding-right: 8px; }
+    .option-btn { padding: 11px 14px; font-size: calc(var(--font-size-base) * 0.9); gap: 10px; }
+    .option-btn .letter-circle { width: 26px; height: 26px; font-size: 0.76rem; }
+    .explanation-box { padding: 12px; }
+    .explanation-text { font-size: calc(var(--font-size-base) * 0.82); }
+    .btn-control { padding: 9px 14px; font-size: 0.82rem; }
+    .stats-grid { grid-template-columns: 1fr; gap: 8px; }
+    .ch-bar-label { width: 80px; font-size: 0.65rem; }
+  }
+
+  @media (max-height: 650px) {
+    .card { height: 88vh; padding: 8px 18px; }
+    .q-text { font-size: calc(var(--font-size-base) * 1.0); }
+    .option-btn { padding: 9px 13px; font-size: calc(var(--font-size-base) * 0.88); }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-decorator top-right"></div>
+<div class="bg-decorator bottom-left"></div>
+
+<!-- Top Controls -->
+<div class="top-controls">
+  <header>
+    <h1 style="font-size: 1.05rem; font-weight: 900; color: var(--text-main);">الامتحان الشامل <span>الموحد</span></h1>
+  </header>
+  <div class="controls-group">
+    <button class="control-btn font-btn" id="fontDownBtn" onclick="changeFontSize(-1)" title="تصغير الخط">A-</button>
+    <button class="control-btn font-btn" id="fontUpBtn" onclick="changeFontSize(1)" title="تكبير الخط">A+</button>
+    <button class="control-btn" id="historyBtn" onclick="showHistoryView()" title="سجلي الدراسي">📋 سجلي</button>
+    <button class="control-btn" id="fullscreenBtn" onclick="toggleFullScreen()"><span>📺 ملء</span></button>
+    <button class="control-btn theme-btn" id="themeBtn" onclick="toggleTheme()" title="تغيير المظهر">☀️</button>
+  </div>
+</div>
+
+<div class="wrapper">
+  <div class="card" id="cardContainer">
+    <div class="card-slide-decorator"></div>
+
+    <!-- ===== VIEW 1: DASHBOARD ===== -->
+    <div class="view-panel active" id="viewDashboard">
+      <div class="dashboard-content">
+        <div>
+          <div class="section-title">اختر فصول المادة للاختبار</div>
+          <div class="chapters-grid" id="chaptersContainer"></div>
+        </div>
+        <div>
+          <div class="section-title">إعدادات التحكم والاختبار</div>
+          <div class="settings-grid">
+            <div class="option-card">
+              <label for="selectType" style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted);">نوع الأسئلة</label>
+              <select id="selectType">
+                <option value="all">جميع الأسئلة</option>
+                <option value="mcq">اختيار من متعدد فقط</option>
+                <option value="tf">صواب وخطأ فقط</option>
+              </select>
+            </div>
+            <div class="option-card">
+              <label for="selectMode" style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted);">طريقة الاختبار</label>
+              <select id="selectMode">
+                <option value="all">اختبار كامل (جميع الأسئلة)</option>
+                <option value="random20">اختبار سريع (20 سؤالاً عشوائياً)</option>
+                <option value="random50">اختبار مكثف (50 سؤالاً عشوائياً)</option>
+              </select>
+            </div>
+            <div class="option-card">
+              <label for="selectTimer" style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted);">مؤقت الاختبار ⏱️</label>
+              <select id="selectTimer">
+                <option value="none">بدون مؤقت (مفتوح)</option>
+                <option value="q45">مؤقت لكل سؤال (45 ثانية)</option>
+                <option value="t15">مؤقت للاختبار كاملاً (15 دقيقة)</option>
+                <option value="t30">مؤقت للاختبار كاملاً (30 دقيقة)</option>
+              </select>
+            </div>
+            <div class="option-card">
+              <label for="selectFeedback" style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted);">عرض الإجابة والحل 💡</label>
+              <select id="selectFeedback">
+                <option value="immediate">مباشرة بعد حل السؤال</option>
+                <option value="end">في نهاية الاختبار فقط</option>
+              </select>
+            </div>
+            <div class="option-card">
+              <label for="selectShuffle" style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted);">ترتيب الخيارات 🔀</label>
+              <select id="selectShuffle">
+                <option value="yes" selected>ترتيب عشوائي عادل (مستحسن)</option>
+                <option value="no">ترتيب كتابي افتراضي (غير متوازن)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <button class="btn-start" id="btnStart" onclick="startQuiz()" disabled>
+          ابدأ الامتحان الآن 🚀
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== VIEW 2: QUIZ ===== -->
+    <div class="view-panel" id="viewQuiz">
+      <div class="quiz-header">
+        <div class="badge-container">
+          <span class="badge" id="badgeChapter">الفصل الأول</span>
+          <span class="badge badge-type" id="badgeType">اختيار من متعدد</span>
+          <span class="badge" id="reviewBadge" style="display:none; background: var(--error-bg); border-color: var(--error-border); color: var(--error); font-weight: 800;">وضع المراجعة 🔎</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="timer-container" id="timerContainer" style="display:none;">
+            <span>⏱️</span><span id="timerText">00:00</span>
+          </div>
+          <div class="slide-counter" id="quizCounter">السؤال 1 من 10</div>
+        </div>
+      </div>
+
+      <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+      <!-- Split layout -->
+      <div class="slide-body-split" id="quizSplitBody">
+        <!-- Right: Question + Options -->
+        <div class="options-pane">
+          <div class="q-text" id="qText">نص السؤال يظهر هنا...</div>
+          <div id="optionsContainer" style="display:flex; flex-direction:column; gap:10px; width:100%;"></div>
+        </div>
+        <!-- Left: Explanation -->
+        <div class="question-pane">
+          <div class="explanation-box" id="explanationBox">
+            <div class="explanation-title">
+              <span id="explanationIndicator">💡</span>
+              <span>شرح وتوضيح الجواب الصحيح:</span>
+            </div>
+            <div class="explanation-text" id="explanationText"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="quiz-controls">
+        <button class="btn-control" id="btnPrev" onclick="navigateQuestion(-1)" disabled>→ السابق</button>
+        <button class="btn-control" id="btnHome" onclick="confirmGoHome()" style="border-color: var(--error-border); color: var(--error); font-weight: bold;">الرئيسية 🏠</button>
+        <div class="score-badge-mini" id="scoreMini">النقاط: 0</div>
+        <button class="btn-control btn-accent" id="btnNext" onclick="navigateQuestion(1)" disabled>التالي ←</button>
+      </div>
+
+      <div style="text-align:center; font-size:0.68rem; color:var(--text-muted); margin-top:5px; font-weight:600;">
+        💡 الأرقام 1-4 للإجابة • Space/Enter للتالي • الأسهم للتنقل • Swipe على الجوال
+      </div>
+
+      <div class="slide-dots" id="slideDotsContainer"></div>
+    </div>
+
+    <!-- ===== VIEW 3: RESULT ===== -->
+    <div class="view-panel" id="viewResult">
+      <div class="result-view">
+        <div class="result-circle">
+          <div class="result-score" id="resultScore">0</div>
+          <div class="result-total" id="resultTotal">من 0</div>
+        </div>
+        <h2 class="result-title" id="resultTitle">أداء رائع!</h2>
+        <p class="result-msg" id="resultMsg"></p>
+        <div class="stats-grid">
+          <div class="stat-card correct-card"><div class="stat-val" id="statCorrect">0</div><div class="stat-lbl">إجابات صحيحة ✅</div></div>
+          <div class="stat-card wrong-card"><div class="stat-val" id="statWrong">0</div><div class="stat-lbl">إجابات خاطئة ❌</div></div>
+          <div class="stat-card pct-card"><div class="stat-val" id="statPct">0%</div><div class="stat-lbl">النسبة المئوية 📈</div></div>
+        </div>
+
+        <!-- Weakness Analysis by Chapter -->
+        <div class="chapter-analysis">
+          <div class="chapter-analysis-title">📊 تحليل الأداء حسب الفصل</div>
+          <div id="chapterBars"></div>
+        </div>
+
+        <div style="display:flex; gap:12px; justify-content:center; width:100%; max-width:560px; flex-wrap:wrap; margin-top:8px;">
+          <button class="btn-restart" style="flex:1; min-width:130px;" onclick="restartQuiz()">إعادة الامتحان 🔄</button>
+          <button class="btn-restart" id="btnReviewAnswers" style="flex:1; min-width:130px; background:var(--bg-card-header); border:2px solid var(--accent); color:var(--accent); box-shadow:none;" onclick="startReviewMode()">مراجعة الأسئلة 🔎</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== VIEW 4: HISTORY ===== -->
+    <div class="view-panel" id="viewHistory">
+      <div class="history-view">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div class="section-title" style="margin-bottom:0;">📋 سجلي الدراسي</div>
+          <button class="btn-control" onclick="clearHistory()" style="color:var(--error); border-color:var(--error-border); font-size:0.78rem; padding:6px 14px;">حذف السجل 🗑️</button>
+        </div>
+        <div id="historyContainer"></div>
+        <button class="btn-restart" style="align-self:center; margin-top:10px;" onclick="changeView('viewHistory','viewDashboard')">العودة للرئيسية 🏠</button>
+      </div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /wrapper -->
+
+<script>
+const ALL_QUESTIONS = [
+  {
+    "file": "exam_business_plan_ch13.html",
+    "chapter": 13,
+    "chapter_title": "خطة العمل في الأعمال الصغيرة والريادية",
+    "q_num": 1,
+    "q_text": "ما التعريف الأدق لـ\"خطة العمل\" (Business Plan) وفقاً للمادة المدروسة؟",
+    "q_type": "mcq",
+    "options": [
+      "وثيقة تتضمن فقط الأهداف المالية للمنظمة",
+      "الوثيقة التي تصف ماذا خُطِّط من الأعمال المراد تنفيذها ضمن المرحلة القادمة",
+      "تقرير يُعدّ بصفة دورية بعد تنفيذ المشروع لتقييم النتائج",
+      "خطة تسويقية تُحدِّد قنوات التوزيع فحسب"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "خطة العمل (Business Plan) هي الوثيقة التي تصف ماذا خُطِّط من الأعمال المراد تنفيذها ضمن المرحلة القادمة. وهي توثيق شامل يتضمن الأهداف، الاستراتيجيات، الهيكل التنظيمي، المتطلبات المالية، وأساليب مواجهة المشكلات. لا تقتصر على الجانب المالي ولا تُكتب بعد التنفيذ، بل قبله وخلاله كدليل عمل."
+  },
+  {
+    "file": "exam_business_plan_ch13.html",
+    "chapter": 13,
+    "chapter_title": "خطة العمل في الأعمال الصغيرة والريادية",
+    "q_num": 2,
+    "q_text": "ما الأجزاء الرئيسية الثلاثة لخطة العمل حسب المادة؟",
+    "q_type": "mcq",
+    "options": [
+      "الرؤية، الرسالة، القيم",
+      "الإنتاج، التسويق، الموارد البشرية",
+      "مفهوم العمل، الحصة السوقية، الموازنة أو القسم المالي",
+      "تحليل SWOT، خطة التسويق، خطة التشغيل"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "تنقسم خطة العمل إلى ثلاثة أجزاء رئيسية:\n\n          1. مفهوم العمل أو المشروع: نوع المشروع والهيكلية ونمط المنتج/الخدمة وآلية النجاح.\n\n          2. الحصة السوقية: الطاقة الاستيعابية للسوق، قدرات المستهلكين، حالة المنافسة، أماكن تمركز الزبائن.\n\n          3. الموازنة أو القسم المالي: الواردات، التدفقات النقدية، كشف الموازنة، تحليل نقطة التعادل."
+  },
+  {
+    "file": "exam_business_plan_ch13.html",
+    "chapter": 13,
+    "chapter_title": "خطة العمل في الأعمال الصغيرة والريادية",
+    "q_num": 3,
+    "q_text": "ما الحجم الاعتيادي (المعتاد) لخطة العمل؟",
+    "q_type": "mcq",
+    "options": [
+      "من 1 إلى 5 صفحات",
+      "من 5 إلى 10 صفحات",
+      "من 15 إلى 20 صفحة",
+      "من 50 إلى 100 صفحة"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "يتراوح الحجم الاعتيادي لخطة العمل بين 15 و20 صفحة، وقد يختلف الحجم الفعلي باختلاف الحاجات والأهداف، إذ يمتد من صفحة واحدة وحتى مائة صفحة. كما أن الحجم يعتمد بدرجة كبيرة على طبيعة الأعمال والمشروع المراد تأسيسه."
+  },
+  {
+    "file": "exam_business_plan_ch13.html",
+    "chapter": 13,
+    "chapter_title": "خطة العمل في الأعمال الصغيرة والريادية",
+    "q_num": 4,
+    "q_text": "أيٌّ مما يلي ليس من العناصر السبعة الأساسية لخطة العمل؟",
+    "q_type": "mcq",
+    "options": [
+      "الخلاصة الرئيسية وتوصيف العمل",
+      "الاستراتيجيات التسويقية وتحليل المنافسة",
+      "سياسة الموارد البشرية وخطة التوظيف",
+      "خطة التصميم والتطوير والعوامل المالية"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "العناصر السبعة الأساسية لخطة العمل هي:\n\n          1. الخلاصة الرئيسية\n\n          2. توصيف العمل\n\n          3. الاستراتيجيات التسويقية\n\n          4. تحليل المنافسة\n\n          5. خطة التصميم والتطوير\n\n          6. خطة العمليات والإدارة\n\n          7. العوامل المالية\n\n\n          \"سياسة الموارد البشرية وخطة التوظيف\" ليست عنصراً مستقلاً بالاسم ضمن هذه العناصر السبعة، وإن كانت تُغطَّى جزئياً تحت بند الفريق الإداري."
+  },
+  {
+    "file": "exam_business_plan_ch13.html",
+    "chapter": 13,
+    "chapter_title": "خطة العمل في الأعمال الصغيرة والريادية",
+    "q_num": 5,
+    "q_text": "ما نوع خطة العمل التي تُستخدم للتقديم للبنوك والمستثمرين للحصول على التمويل؟",
+    "q_type": "mcq",
+    "options": [
+      "الخطط المصغرة (Mini-Plans)",
+      "خطط العمل (Working Plans)",
+      "خطط التقديم (Presentation Plans)",
+      "الخطط الإلكترونية (Electronic Plans)"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "خطط التقديم (Presentation Plans) هي خطة العمل \"من دون الرتوش والانطباعات\"، وتُستخدم عادةً للتقديم للبنوك أو المستثمرين وغيرهم من خارج الشركة بهدف الحصول على التمويل المالي.\n\n\n          أما الأنواع الأربعة لخطط العمل فهي:\n\n          • الخطط المصغرة (Mini-Plans): حتى 10 صفحات للأمور الأساسية.\n\n          • خطط العمل (Working Plans): أداة التشغيل والإدارة اليومية للريادي، تفصيلية وشاملة.\n\n          • خطط التقديم (Presentation Plans): للمستثمرين والبنوك للحصول على التمويل.\n\n          • الخطط الإلكترونية (Electronic Plans): نسخة رقمية تُعرض وتُرسل بواسطة الحاسب."
+  },
+  {
+    "file": "exam_business_plan_ch13.html",
+    "chapter": 13,
+    "chapter_title": "خطة العمل في الأعمال الصغيرة والريادية",
+    "q_num": 6,
+    "q_text": "أيٌّ من مكونات خطة العمل يُكتب في النهاية ولكنه يُوضع في المقدمة؟",
+    "q_type": "mcq",
+    "options": [
+      "توصيف المنظمة (Company Description)",
+      "الخلاصة التنفيذية (Executive Summary)",
+      "تحليل السوق (Market Analysis)",
+      "الخطة المالية (Financial Plan)"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "الخلاصة التنفيذية (Executive Summary) هي القسم الذي يُكتب في نهاية الخطة لأنه يلخّص أهم النقاط الواردة فيها، غير أنه يُوضع في المقدمة عند تجميع الخطة النهائية وتقديمها. وهي أول ما يقرأه المستثمر أو الممول، لذا يجب أن تكون مُقنِعة وشاملة لأبرز نقاط الخطة كاملةً."
+  },
+  {
+    "file": "exam_business_plan_ch13.html",
+    "chapter": 13,
+    "chapter_title": "خطة العمل في الأعمال الصغيرة والريادية",
+    "q_num": 7,
+    "q_text": "ما العلاقة الصحيحة بين التدفقات النقدية والأرباح وفق ما أشارت إليه المادة؟",
+    "q_type": "mcq",
+    "options": [
+      "التدفقات النقدية تساوي الأرباح دائماً",
+      "الربح يعني بالضرورة توافر السيولة النقدية",
+      "التدفقات النقدية لا تعني بالضرورة الأرباح، والربح لا يعني بالضرورة السيولة",
+      "السيولة النقدية أقل أهمية من الأرباح في خطة العمل"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "المادة تؤكد صراحةً أن التدفقات النقدية (Cash Flow) لا تعني بالضرورة الأرباح، وأن الربح لا يعني بالضرورة السيولة النقدية في البنك. هذا الفارق الجوهري يُفسِّر لماذا تنتهي كثير من المنظمات الربحية بسبب مشاكل السيولة النقدية. لذا تُعدّ التدفقات النقدية من أولويات خطة العمل بالغة الأهمية وصعبة التحقيق في آنٍ واحد، ويُعدّ تحليلها القسمَ الأكثر أهمية في الخطة."
+  },
+  {
+    "file": "exam_business_plan_ch13.html",
+    "chapter": 13,
+    "chapter_title": "خطة العمل في الأعمال الصغيرة والريادية",
+    "q_num": 8,
+    "q_text": "ما الأمر المؤدي إلى نجاح خطة العمل الذي لا يُعدّ من العوامل الصحيحة الواردة في المادة؟",
+    "q_type": "mcq",
+    "options": [
+      "وضوح الأفكار وسهولة فهمها وتحديد الأهداف بوضوح",
+      "إظهار قدرات الإدارة في نجاح العمل وإبراز الربحية المستهدفة",
+      "الاستعانة بمستشار خارجي متخصص لكتابة الخطة بالكامل",
+      "احتواء الخطة على هيكلية واضحة ومنطقية وكتابتها بعبارات ذات محتوى واضح"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "العوامل المؤدية إلى نجاح خطة العمل وفق المادة هي:\n\n          أ. وضوح الأفكار وجعلها سهلة الفهم وواضحة الأهداف.\n\n          ب. كتابتها بعبارات واضحة ذات محتوى واضح.\n\n          ج. احتواؤها على هيكلية واضحة ومنطقية.\n\n          د. إظهار قدرات الإدارة في نجاح العمل.\n\n          هـ. إبراز العوائد وخاصة الربحية المستهدفة.\n\n\n          \"الاستعانة بمستشار خارجي لكتابة الخطة بالكامل\" لم يُذكر كعامل نجاح في المادة، والمادة لا تشترط هذا الأمر كضرورة بل تشجع صاحب المشروع على المشاركة الفعلية في إعداد خطته."
+  },
+  {
+    "file": "exam_business_plan_ch13.html",
+    "chapter": 13,
+    "chapter_title": "خطة العمل في الأعمال الصغيرة والريادية",
+    "q_num": 9,
+    "q_text": "ماذا يمثّل تحليل SWOT في خطة التسويق؟",
+    "q_type": "mcq",
+    "options": [
+      "تحليل المبيعات والتوزيع وموازنة النفقات والتنبؤات",
+      "دراسة رضا المستهلكين فقط",
+      "تحليل نقاط القوة والضعف في البيئة الداخلية والفرص والتهديدات في البيئة الخارجية",
+      "تحليل اقتصادي للأسعار والمنافسة السعرية"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "تحليل SWOT هو أسلوب التحليل البيئي الذي يشمل:\n\n          • S (Strength) نقاط القوة: في البيئة الداخلية.\n\n          • W (Weakness) نقاط الضعف: في البيئة الداخلية.\n\n          • O (Opportunities) الفرص: في البيئة الخارجية.\n\n          • T (Threats) التهديدات: في البيئة الخارجية.\n\n\n          ويعتبر هذا التحليل جزءاً لا يتجزأ من أي خطة تسويقية لأي مشروع تجاري، كما جاء في مثال دراسة الحالة الخاصة بمشروع الحاسبات والبرمجيات."
+  },
+  {
+    "file": "exam_business_plan_ch13.html",
+    "chapter": 13,
+    "chapter_title": "خطة العمل في الأعمال الصغيرة والريادية",
+    "q_num": 10,
+    "q_text": "أيٌّ من الخيارات التالية لا يُعدّ من أساليب تقسيم الزبائن إلى مجموعات (شرائح) كما وردت في المادة؟",
+    "q_type": "mcq",
+    "options": [
+      "التصنيف بحسب العمر والدخل والجنس",
+      "التصنيف بحسب المهنة والمستوى التعليمي",
+      "التصنيف بحسب اللون والجنسية والديانة",
+      "التصنيف بحسب القدرات الشرائية"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "ذكرت المادة ثلاثة أساليب لتقسيم الزبائن إلى مجموعات (حصص) هي:\n\n          1. التصنيف بحسب العمر والدخل والجنس.\n\n          2. التصنيف بحسب المهنة والمستوى التعليمي.\n\n          3. التصنيف بحسب القدرات الشرائية.\n\n\n          أما \"التصنيف بحسب اللون والجنسية والديانة\" فلم يرد في المادة، فضلاً عن كونه غير مقبول أخلاقياً في معظم ممارسات التسويق الحديث."
+  },
+  {
+    "file": "exam_business_plan_ch13.html",
+    "chapter": 13,
+    "chapter_title": "خطة العمل في الأعمال الصغيرة والريادية",
+    "q_num": 11,
+    "q_text": "أيٌّ من الأخطاء التالية تُعدّ خطأً شائعاً في خطة الأعمال وفق المادة؟",
+    "q_type": "mcq",
+    "options": [
+      "التركيز على التدفقات النقدية بدلاً من حجم الأرباح المتوقعة",
+      "تحديد الأولويات والتركيز على هدف مهم محدد",
+      "إعداد الخطة فور ظهور الحاجة إليها دون إعطائها الوقت الكافي",
+      "جعل خطة العمل مرنة لتطابق جميع الأهداف الحقيقية"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "من الأخطاء الشائعة في خطة الأعمال وفق المادة:\n\n          ❌ إعداد الخطة وقت ظهور الحاجة إليها فقط دون تحضير مسبق، مما يجعلها تُكتب على عجالة فتبدو ركيكة وناقصة. المادة تُؤكد أنه لا بد من إعداد الخطة مسبقاً وإعطائها الوقت الكافي.\n\n\n          أما الخيارات الأخرى فهي ممارسات صحيحة ومُوصى بها في المادة: التركيز على التدفقات النقدية، تحديد الأولويات، وجعل الخطة مرنة."
+  },
+  {
+    "file": "exam_business_plan_ch13.html",
+    "chapter": 13,
+    "chapter_title": "خطة العمل في الأعمال الصغيرة والريادية",
+    "q_num": 12,
+    "q_text": "لمن يمتلك الريادي معرفة ودراية أولية في مجاله، ما هو المصدر الأفضل للمعلومات عند إعداد خطة العمل؟",
+    "q_type": "mcq",
+    "options": [
+      "التقارير الحكومية الرسمية حصراً",
+      "المعلومات القريبة من الشخص نفسه ومن أعمال تجارية مماثلة في المنطقة",
+      "الدراسات الأكاديمية الدولية المتخصصة",
+      "آراء العائلة والأصدقاء فقط"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "أشارت المادة إلى أنه بينما توسّعت استخدامات الإنترنت وجعلت جمع المعلومات أسهل، إلا أن أفضل المعلومات قد تكون قريبة من الشخص (الريادي) نفسه، ومن الأفضل البدء بأعمال تجارية لديه معرفة ودراية أولية بها.\n\n\n          وللحصول على المعلومات الضرورية تُوصي المادة بـ:\n\n          • النظر إلى مشاريع الأعمال المماثلة في المنطقة.\n\n          • محاولة إيجاد مشاريع مماثلة في مناطق أخرى.\n\n          • البحث في الصحف المحلية عن المشاريع المماثلة المعروضة للبيع.\n\n          • الاطلاع على أحوال المنافسين شهرياً من خلال الزيارات الميدانية."
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 1,
+    "q_text": "ما هي البدائل المتاحة أمام المدير/المالك للمشروع الصغير عند التخطيط لنقل ملكية مشروعه؟",
+    "q_type": "mcq",
+    "options": [
+      "الإغلاق الكلي للمشروع، أو البيع بالمزاد العلني، أو التبرع به لجهة خيرية",
+      "نقل الملكية إلى أحد الورثة، أو إلى موظف أو عدد من الموظفين، أو إلى شخص خارج المشروع، أو الاندماج مع مؤسسة أخرى",
+      "رهن المشروع للبنك، أو تحويله إلى شركة مساهمة عامة فقط",
+      "الاستمرار في العمل بغض النظر عن الظروف، أو تأجير المشروع بالكامل"
+    ],
+    "correct_index": 1,
+    "correct_letter": "B",
+    "explanation": "✅ الإجابة الصحيحة: (ب)\n\n\n    حدّد الكتاب أربعة بدائل أمام المدير/المالك لنقل ملكية مشروعه:\n\n    ١- نقل الملكية إلى أحد الورثة (التوريث الأسري)\n\n    ٢- نقل الملكية إلى موظف أو عدد من الموظفين في المشروع (من داخل المنظمة)\n\n    ٣- نقل الملكية إلى شخص خارج المشروع (بيع خارجي)\n\n    ٤- الاندماج مع مؤسسة أخرى\n\n\n    هذه الخيارات تُتيح للمالك المرونة في اختيار الأنسب بحسب ظروفه الشخصية والمالية."
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 2,
+    "q_text": "أيّ من العبارات التالية تُعدّ من مزايا شراء مشروع صغير قائم؟",
+    "q_type": "mcq",
+    "options": [
+      "يتيح الشراء للمشتري الاستفادة من التنظيم القائم والهيكل الإداري الموجود، وتوفّر شبكة من العملاء والموردين، وموقع المشروع الجيد، وتوفر المكائن والمخزون، والسمعة التجارية المبنية مسبقاً",
+      "يمكّن المشتري دائماً من الحصول على المشروع بسعر يقل عن قيمته الحقيقية بغض النظر عن الظروف",
+      "يضمن للمشتري الاستغناء التام عن جميع الموظفين القدامى وتعيين كادر جديد بالكامل",
+      "يتيح الشراء دائماً الحصول على مشروع معفى من الضرائب والرسوم الحكومية"
+    ],
+    "correct_index": 0,
+    "correct_letter": "A",
+    "explanation": "✅ الإجابة الصحيحة: (أ)\n\n\n    ذكر الكتاب سبع مزايا لشراء مشروع صغير قائم:\n\n    ١- الاستفادة من التنظيم القائم والهيكل الإداري والموظفين المهرة\n\n    ٢- توفّر شبكة من العملاء والموردين (ضمانة للاستمرار)\n\n    ٣- موقع المشروع الجيد الجاذب للزبائن\n\n    ٤- توفّر المكائن والتجهيزات اللازمة للعمل\n\n    ٥- توفّر المخزون بحجم اقتصادي أمثل\n\n    ٦- قد يكون صفقة رابحة عند اضطرار المالك للتنازل بسرعة\n\n    ٧- السمعة التجارية التي بناها المشروع مسبقاً"
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 3,
+    "q_text": "ما هي الطرق الثلاث لتقدير قيمة الموجودات الملموسة في المشروع الصغير؟",
+    "q_type": "mcq",
+    "options": [
+      "القيمة الدفترية (Book Value)، قيمة الإحلال (Replacement Value)، قيمة التصفية (Liquidation Value)",
+      "القيمة السوقية، القيمة الاستثمارية، القيمة العادلة",
+      "قيمة الاستثمار، قيمة التأمين، قيمة الضريبة",
+      "قيمة الشراء الأصلية، قيمة التأجير، قيمة الرهن"
+    ],
+    "correct_index": 0,
+    "correct_letter": "A",
+    "explanation": "✅ الإجابة الصحيحة: (أ)\n\n\n    حدّد الكتاب ثلاث طرق لتقدير قيمة الموجودات الملموسة:\n\n\n    \n      الطريقةالتعريف\n      القيمة الدفترية (Book Value)القيمة الموجودة في السجلات المحاسبية\n      قيمة الإحلال (Replacement Value)قيمة شراء الموجودات بالأسعار الحالية\n      قيمة التصفية (Liquidation Value)القيمة في حالة المزاد - الأكثر عملية"
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 4,
+    "q_text": "قيمة التصفية (Liquidation Value) هي أكثر الطرق عملية لتحديد قيمة الموجودات، لأنها تمثّل الحد الذي لن يتنازل عنه البائع.",
+    "q_type": "tf",
+    "options": [
+      "صواب",
+      "خطأ"
+    ],
+    "correct_index": 0,
+    "correct_letter": "T",
+    "explanation": "✅ صواب - الإجابة صحيحة تماماً.\n\n\n    نصّ الكتاب على أن قيمة التصفية (Liquidation Value) هي أكثر الطرق عملية لتحديد قيمة الموجودات.\n\n\n    السبب: لأنها القيمة التي تمثّل الحد الذي لن يتنازل عنه البائع، إذ هي القيمة التي ترسو عليها المنشأة في حالة المزاد في السوق. لذلك فهي تعكس الحد الأدنى الواقعي للسعر في أي صفقة بيع."
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 5,
+    "q_text": "ما الذي تتشكّل منه السمعة التجارية (Goodwill) للمنشأة؟",
+    "q_type": "mcq",
+    "options": [
+      "قيمة الآلات والمعدات المادية الموجودة في المنشأة فقط",
+      "تتشكّل من قدرة المنشأة على تحقيق الربح عبر سنوات عمرها، والعلاقات التجارية، وحقوق الامتياز التي تملكها، وتمثّل فائض السعر الذي يدفعه المالك الجديد عن قيمة الموجودات الملموسة",
+      "مجموع الديون والالتزامات المترتبة على المنشأة تجاه الغير",
+      "قيمة المخزون السلعي المتوفر في المنشأة بسعر الكلفة الأصلية"
+    ],
+    "correct_index": 1,
+    "correct_letter": "B",
+    "explanation": "✅ الإجابة الصحيحة: (ب)\n\n\n    السمعة التجارية (Goodwill) هي موجود غير ملموس يتشكّل من:\n\n    ✔ قدرة المنشأة على تحقيق الربح عبر سنوات عمرها\n\n    ✔ العلاقات التجارية المبنية مع العملاء والموردين\n\n    ✔ حقوق الامتياز التي تملكها المنشأة\n\n\n    وهي تمثّل فائض السعر الذي يدفعه المالك الجديد فوق قيمة الموجودات الملموسة.\n\n    يُحتسب من خلال رسملة العوائد التي تزيد عن العوائد الطبيعية."
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 6,
+    "q_text": "قيمة العمل التجاري القائم تساوي تماماً قيمة موجوداته الملموسة، ولا يوجد أي فائض يُحتسب فوق ذلك.",
+    "q_type": "tf",
+    "options": [
+      "صواب",
+      "خطأ"
+    ],
+    "correct_index": 1,
+    "correct_letter": "F",
+    "explanation": "✅ صواب في الإجابة (العبارة خاطئة).\n\n\n    الكتاب يؤكد بوضوح: قيمة العمل القائم أكبر من موجوداته الفعلية؛ لأن هناك:\n\n    ✔ التنظيم الإداري القائم والمُجرَّب\n\n    ✔ السمعة التجارية المبنية عبر سنوات في أذهان المستهلكين\n\n\n    لذلك لا بد أن تُؤخذ هذه العناصر في الاعتبار عند تقدير سعر الشراء، وهي تُضاف فوق قيمة الموجودات الملموسة."
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 7,
+    "q_text": "ما هي العوامل التي تعتمد عليها القيمة المدفوعة لقاء السمعة التجارية؟",
+    "q_type": "mcq",
+    "options": [
+      "سعر المنافسين في السوق فقط، وتقديرات الخبراء الماليين",
+      "طول المدة اللازمة لإنشاء مثل ذلك العمل، والزيادة المحتملة في الدخل عند الشراء بدلاً من التأسيس، والأسعار النسبية لأعمال مماثلة، ومدى موافقة المالك القديم على الامتناع عن عمل مماثل في المنطقة",
+      "عدد سنوات تأسيس المشروع فقط، بصرف النظر عن الربحية",
+      "عدد الموظفين في المشروع وحجم رأس المال المسجّل قانونياً"
+    ],
+    "correct_index": 1,
+    "correct_letter": "B",
+    "explanation": "✅ الإجابة الصحيحة: (ب)\n\n\n    حدّد الكتاب أربعة عوامل تعتمد عليها القيمة المدفوعة لقاء السمعة التجارية:\n\n    ١- طول المدة اللازمة لإنشاء مثل ذلك العمل من قِبَل المشتري\n\n    ٢- الزيادة المحتملة في الدخل لقاء شراء المشروع بدلاً من تأسيسه\n\n    ٣- الأسعار النسبية للسمعة التجارية مع أعمال مماثلة في السوق\n\n    ٤- مدى موافقة المالك القديم على الامتناع عن القيام بعمل مماثل ضمن المنطقة"
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 8,
+    "q_text": "في مثال مؤسسة النسر المذكور في الكتاب: حقوق الملكية = 62,000 دينار، الربح العادي (15%) = 9,300 دينار، الربح الفعلي = 18,300 دينار، رواتب المدير/المالك = 6,000 دينار. ما هي الأرباح التي يجب رسملتها؟",
+    "q_type": "mcq",
+    "options": [
+      "3,000 دينار",
+      "9,000 دينار",
+      "12,300 دينار",
+      "18,300 دينار"
+    ],
+    "correct_index": 0,
+    "correct_letter": "A",
+    "explanation": "✅ الإجابة الصحيحة: (أ) — 3,000 دينار\n\n\n    خطوات الحل التفصيلية:\n    \n      البندالمبلغ (دينار)\n      الأرباح الفعلية الناتجة عن السمعة التجارية18,300\n      يُطرح: رواتب المدير/المالك السنوية المقدّرة(6,000)\n      الربح بعد خصم رواتب المدير12,300\n      يُطرح: الربح العادي (15% × 62,000)(9,300)\n      الأرباح التي يجب رسملتها3,000\n    \n    هذه الـ 3,000 دينار هي الجزء الذي يعكس قدرة المنشأة الزائدة عن المعدل الطبيعي للعوائد."
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 9,
+    "q_text": "في مثال مؤسسة النسر: إذا كان 20% فقط من الأرباح يُعزى إلى السمعة التجارية، والأرباح المرسملة = 3,000 دينار، والمشتري يتوقع استرداد القيمة خلال 5 سنوات. ما هو سعر العرض النهائي لشراء المؤسسة؟",
+    "q_type": "mcq",
+    "options": [
+      "62,000 دينار",
+      "65,000 دينار",
+      "77,000 دينار",
+      "80,300 دينار"
+    ],
+    "correct_index": 2,
+    "correct_letter": "C",
+    "explanation": "✅ الإجابة الصحيحة: (ج) — 77,000 دينار\n\n\n    خطوات الحل:\n    \n      البندالمبلغ (دينار)\n      صافي حقوق الملكية62,000\n      الأرباح المرسملة3,000\n      قيمة السمعة التجارية خلال 5 سنوات (5 × 3,000)15,000\n      سعر العرض النهائي77,000\n    \n    ملاحظة: لو كان الربح الفعلي 15,300 دينار بدلاً من 18,300، لكانت الأرباح المرسملة = 0، وسيساوي سعر العرض قيمة حقوق الملكية فقط = 62,000 دينار."
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 10,
+    "q_text": "ما الذي تتضمّنه اتفاقية البيع والشراء (Transaction Agreement) وفق ما ذكره الكتاب؟",
+    "q_type": "mcq",
+    "options": [
+      "تحديد تاريخ نقل الملكية، وتحديد سعر الشراء، وتحديد شروط البيع وطريقة الدفع",
+      "تحديد عدد الموظفين المنقولين، وخطة التسويق، وأهداف المبيعات للسنة الأولى",
+      "تحديد الرواتب المستقبلية والخطة الاستراتيجية للمشروع وتوزيع الأرباح",
+      "تحديد العقود مع الموردين وقائمة العملاء وخطط التوسع المستقبلي"
+    ],
+    "correct_index": 0,
+    "correct_letter": "A",
+    "explanation": "✅ الإجابة الصحيحة: (أ)\n\n\n    حدّد الكتاب أن اتفاقية البيع والشراء تشمل ثلاثة عناصر أساسية:\n\n    ١- تحديد تاريخ نقل الملكية: اليوم الرسمي الذي تنتقل فيه ملكية المشروع\n\n    ٢- تحديد سعر الشراء: القيمة النهائية المتفق عليها للمشروع\n\n    ٣- تحديد شروط البيع وطريقة الدفع: نقداً أم بالتقسيط، وشروط كل منها\n\n\n    على المالك القيام بهذه الترتيبات قبل مدة زمنية معقولة من تركه للعمل."
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 11,
+    "q_text": "من مزايا البيع بالتقسيط في الأعمال الصغيرة تفادي دفع ضرائب كبيرة دفعةً واحدة، ويجب أن تُحدَّد الأقساط بناءً على التدفقات النقدية المتوقعة للمشروع.",
+    "q_type": "tf",
+    "options": [
+      "صواب",
+      "خطأ"
+    ],
+    "correct_index": 0,
+    "correct_letter": "T",
+    "explanation": "✅ صواب - الإجابة صحيحة تماماً.\n\n\n    يذكر الكتاب أن البيع بالتقسيط (Installment Sale):\n\n    ✔ من الأمور الشائعة في عالم الأعمال وخاصة الصغيرة\n\n    ✔ يفيد في تفادي دفع ضرائب كبيرة دفعة واحدة\n\n    ✔ يجب أن تُحدَّد الأقساط بناءً على التدفقات النقدية المتوقعة للمشروع\n\n    ✔ تحديد الأقساط ضمان للبائع لاستلام حقه، وضمان للمشتري بقدرته على السداد"
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 12,
+    "q_text": "ما هي الأساليب المتاحة لتسهيل عملية البيع وتخفيض الثمن النقدي المطلوب عند بيع مشروع صغير؟",
+    "q_type": "mcq",
+    "options": [
+      "فصل الممتلكات العقارية عن ملكية المشروع وتأجيرها للمشتري، وتأجير المعدات، وبيع المخزون الزائد بطريقة منتظمة، وبيع الحسابات المدينة",
+      "خفض سعر البيع إلى أقل من قيمة الموجودات الملموسة مباشرةً",
+      "الاقتراض البنكي وإضافة الفوائد إلى سعر البيع النهائي",
+      "تحويل المشروع إلى شركة مساهمة وطرح أسهمها في البورصة"
+    ],
+    "correct_index": 0,
+    "correct_letter": "A",
+    "explanation": "✅ الإجابة الصحيحة: (أ)\n\n\n    ذكر الكتاب أربعة أساليب لتخفيض الثمن النقدي المطلوب:\n\n    ١- فصل الممتلكات العقارية عن ملكية المشروع وتأجيرها للمشتري\n\n    ٢- تأجير المعدات وبعض الأصول الأخرى (الأثاث والتجهيزات)\n\n    ٣- بيع المخزون الزائد إن وجد بطريقة منتظمة\n\n    ٤- بيع الحسابات المدينة\n\n\n    هذه الأساليب تُقلّص المبلغ النقدي الفوري المطلوب مما يُسهّل إتمام الصفقة."
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 13,
+    "q_text": "ما هي القيمة الدفترية (Book Value) للموجودات في المشروع الصغير؟",
+    "q_type": "mcq",
+    "options": [
+      "القيمة التي ترسو عليها المنشأة في حالة المزاد في السوق",
+      "قيمة شراء الموجودات المختلفة في المنشأة بالأسعار الحالية",
+      "القيمة الموجودة في السجلات المحاسبية في المنشأة",
+      "القيمة السوقية الحالية للموجودات بعد خصم الديون والالتزامات"
+    ],
+    "correct_index": 2,
+    "correct_letter": "C",
+    "explanation": "✅ الإجابة الصحيحة: (ج)\n\n\n    القيمة الدفترية (Book Value) هي القيمة الموجودة في السجلات المحاسبية في المنشأة.\n\n\n    مقارنة بين طرق التقدير الثلاث:\n\n    \n      الطريقةالتعريف\n      القيمة الدفتريةما هو مسجّل في دفاتر المحاسبة\n      قيمة الإحلالسعر شراء الموجودات بالأسعار الحالية\n      قيمة التصفيةما يُباع في المزاد (الأكثر عملية)"
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 14,
+    "q_text": "يُعدّ موقع المشروع الجيد في مدينة أو منطقة صناعية أو تجارية جاذبة للزبائن أحد العوامل التي تعزّز رغبة المشتري في شراء المشروع القائم.",
+    "q_type": "tf",
+    "options": [
+      "صواب",
+      "خطأ"
+    ],
+    "correct_index": 0,
+    "correct_letter": "T",
+    "explanation": "✅ صواب - الإجابة صحيحة.\n\n\n    الكتاب يذكر صراحةً أن موقع المشروع من العوامل المهمة في قرار الشراء:\n\n\n    \"إن موقع المشروع الجيد يعزز من الرغبة في الشراء لدى المشتري خاصة إذا كان المشروع يقع في موقع مميز في المدينة أو في منطقة صناعية أو تجارية جاذبة للزبائن\"\n\n\n    الموقع المميز يوفّر تدفقاً طبيعياً من الزبائن ويُعزّز فرص النجاح مما يجعله ميزة تنافسية حقيقية."
+  },
+  {
+    "file": "exam_ch4_small_business_foundation.html",
+    "chapter": 4,
+    "chapter_title": "تأسيس الأعمال الصغيرة",
+    "q_num": 15,
+    "q_text": "في مسألة المؤسسة المتحدة (من أسئلة الكتاب): حقوق الملكية = 43,000 دينار، الربح العادي (14%) = 6,020 دينار، الربح الفعلي = 16,820 دينار، رواتب المدير = 7,800 دينار. ما هي الأرباح التي يجب رسملتها؟",
+    "q_type": "mcq",
+    "options": [
+      "1,000 دينار",
+      "3,000 دينار",
+      "9,020 دينار",
+      "16,820 دينار"
+    ],
+    "correct_index": 1,
+    "correct_letter": "B",
+    "explanation": "✅ الإجابة الصحيحة: (ب) — 3,000 دينار\n\n\n    خطوات الحل التفصيلية للمؤسسة المتحدة:\n    \n      البندالمبلغ (دينار)\n      الأرباح الفعلية16,820\n      يُطرح: رواتب المدير/المالك السنوية(7,800)\n      الربح بعد خصم الرواتب9,020\n      يُطرح: الربح العادي (14% × 43,000)(6,020)\n      الأرباح التي يجب رسملتها3,000\n    \n    \n\n    سعر العرض النهائي: إذا كان 20% فقط يُعزى للسمعة، وفترة الاسترداد 4 سنوات:\n\n    قيمة السمعة = 3,000 × 4 = 12,000 ... ولكن بـ20% فقط = 2,400\n\n    سعر العرض = 43,000 + الجزء المعزى للسمعة"
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 1,
+    "q_text": "ما هو التعريف الأشمل والأدق للريادة وفق المادة الدراسية؟",
+    "q_type": "mcq",
+    "options": [
+      "هي القدرة على إدارة الأموال واستثمارها في الأسواق المالية لتحقيق الأرباح",
+      "هي عملية إنشاء شيء جديد ذي قيمة، وتخصيص الوقت والجهد والمال، وتحمّل المخاطر، واستقبال المكافآت الناتجة، وهي عملية ديناميكية لتأمين تراكم الثروة",
+      "هي مجرد تأسيس شركات كبيرة متعددة الجنسيات تعمل في أسواق دولية",
+      "هي الإدارة الحكومية للمشاريع الصناعية الكبرى لتحقيق التنمية الوطنية"
+    ],
+    "correct_index": 1,
+    "correct_letter": "B",
+    "explanation": "✅ الإجابة الصحيحة: (ب)\n\n\n    وفقاً للمادة الدراسية، الريادة هي عملية ديناميكية تتكوّن من أربعة عناصر جوهرية:\n\n    ١- إنشاء شيء جديد ذي قيمة\n\n    ٢- تخصيص الوقت والجهد والمال اللازم للمشروع\n\n    ٣- تحمّل المخاطر المصاحبة\n\n    ٤- استقبال المكافأة الناتجة (الاستقلال، الاعتمادية، المال)\n\n\n    كما أنها عملية لتأمين تراكم الثروة يقدّمها أفراد يتخذون المخاطرة ويلتزمون بالتطبيق لإضافة قيمة للمنتجات أو الخدمات."
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 2,
+    "q_text": "ما هي الجوانب الأربعة الرئيسية التي يتضمّنها تعريف الريادة؟",
+    "q_type": "mcq",
+    "options": [
+      "التخطيط، التنظيم، القيادة، الرقابة",
+      "الإنتاج، التسويق، التمويل، الموارد البشرية",
+      "إنشاء شيء جديد ذي قيمة، تخصيص الوقت والجهد والمال، تقبّل المخاطر المختلفة، استقبال المكافآت الناتجة",
+      "الابتكار، الاستثمار، الإنتاج، التصدير"
+    ],
+    "correct_index": 2,
+    "correct_letter": "C",
+    "explanation": "✅ الإجابة الصحيحة: (ج)\n\n\n    حدّد الكتاب أربعة جوانب رئيسية في تعريف الريادة:\n\n    ١- عملية إنشاء شيء جديد ذا قيمة\n\n    ٢- تخصيص الوقت والجهد والمال\n\n    ٣- تقبّل المخاطر المختلفة (المالية، المهنية، الأسرية)\n\n    ٤- استقبال المكافآت الناتجة مثل: الاعتمادية، الاستقلال، والمال\n\n\n    هذه الجوانب الأربعة تشكّل المحاور الأساسية لأي تعريف شامل للريادة."
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 3,
+    "q_text": "الريادة تعتمد بشكل رئيسي على الاختلاف والتنويع والتوافقات الجديدة والطرق الجديدة، وليس على النسخ المطابق أو اتباع ما يفعله الآخرون.",
+    "q_type": "tf",
+    "options": [
+      "صواب",
+      "خطأ"
+    ],
+    "correct_index": 0,
+    "correct_letter": "T",
+    "explanation": "✅ صواب - الإجابة صحيحة تماماً.\n\n\n    نصّ الكتاب صراحةً على أن الريادة بشكل رئيسي تعتمد على: الاختلاف والتنويع (Variation)، والتوافقات الجديدة، والطرق الجديدة.\n\n\n    وأن الريادة ليست النسخ المطابق أو اتباع ما يفعله الآخرون، بل هي عمل شيء جديد وفريد. ومن خلال الريادة يمكن الوصول إلى منتجات وطرق فريدة."
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 4,
+    "q_text": "ما هو تعريف بيتر دراكر (Peter Drucker) للريادي؟",
+    "q_type": "mcq",
+    "options": [
+      "هو الشخص الذي يدير الأموال ويوزّع الأرباح على المساهمين",
+      "هو الذي ينظّم وينفّذ الفرص",
+      "هو من يعمل في المنظمات الحكومية الكبرى ويضع السياسات الاقتصادية",
+      "هو صاحب الثروة الذي يستثمر في الأسهم والعقارات"
+    ],
+    "correct_index": 1,
+    "correct_letter": "B",
+    "explanation": "✅ الإجابة الصحيحة: (ب)\n\n\n    يرى بيتر دراكر (Peter Drucker) بأن الريادي هو الذي ينظّم وينفّذ الفرص.\n\n\n    ويرى دراكر أيضاً أن مفهوم الريادي يتضمّن نوعاً من السلوك يشمل:\n\n    ١- أخذ روح المبادرة والتحرك\n\n    ٢- قبول المخاطر والفشل\n\n    ٣- تنظيم وإعادة تنظيم الآلية الاقتصادية والاجتماعية"
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 5,
+    "q_text": "أيّ من الخصائص الشخصية التالية لا تُذكر ضمن خصائص الريادي وصاحب المشروع الصغير في الكتاب؟",
+    "q_type": "mcq",
+    "options": [
+      "الاستعداد والميل نحو المخاطرة",
+      "الرغبة في النجاح والثقة بالنفس",
+      "تجنّب العمل الجماعي والتفضيل الدائم للعمل المنفرد",
+      "الالتزام والتفاؤل والمنهجية والنظام"
+    ],
+    "correct_index": 2,
+    "correct_letter": "C",
+    "explanation": "✅ الإجابة الصحيحة: (ج)\n\n\n    الخصائص المذكورة في الكتاب للريادي وصاحب المشروع الصغير هي:\n\n    ✔ الاستعداد والميل نحو المخاطرة\n\n    ✔ الرغبة في النجاح\n\n    ✔ الثقة بالنفس\n\n    ✔ الاندفاع للعمل\n\n    ✔ الاستعداد الطوعي للعمل ساعات طويلة\n\n    ✔ الالتزام\n\n    ✔ التفاؤل\n\n    ✔ المنهجية والنظام\n\n\n    أما تجنّب العمل الجماعي فهو ليس من الخصائص المذكورة، بل الريادي يُعمل الفريق ويوزّع المهام."
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 6,
+    "q_text": "المخاطرة في الريادة تعني المقامرة، إذ تقوم كلتاهما على الحظ والمصادفة.",
+    "q_type": "tf",
+    "options": [
+      "صواب",
+      "خطأ"
+    ],
+    "correct_index": 1,
+    "correct_letter": "F",
+    "explanation": "✅ صواب في الإجابة (خطأ في العبارة).\n\n\n    يُميّز الكتاب بوضوح بين المخاطرة والمقامرة:\n\n    - المخاطرة الريادية: تقوم على العمل الشاق وانتهاز الفرص السانحة\n\n    - المقامرة: تقوم على الحظ والمصادفة\n\n\n    الريادي يتحمّل مخاطرة مدروسة ومحسوبة، وليست مقامرة. فهو يعمل بجد لتأمين النجاح وليس ينتظر الحظ."
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 7,
+    "q_text": "ما هي المصادر الرئيسية لتطوير الأفكار ذات الصلة بالمشروعات الريادية الجديدة؟",
+    "q_type": "mcq",
+    "options": [
+      "المستهلك فقط، لأنه المصدر الوحيد الموثوق للأفكار الجديدة",
+      "المستهلك، قنوات التوزيع، الحكومات، مراكز البحث والتطوير",
+      "البنوك والمؤسسات المالية الدولية فقط",
+      "وسائل الإعلام والصحف والمجلات المتخصصة"
+    ],
+    "correct_index": 1,
+    "correct_letter": "B",
+    "explanation": "✅ الإجابة الصحيحة: (ب)\n\n\n    حدّد الكتاب أربعة مصادر رئيسية لتطوير الأفكار الريادية الجديدة:\n\n    ١- المستهلك: يُعبّر عن حاجاته ومتطلباته بشكل مباشر أو غير مباشر\n\n    ٢- قنوات التوزيع: الموزعون يعرفون أحوال السوق واحتياجاته\n\n    ٣- الحكومات: تبني قاعدة معرفية للاختراعات وتنظّم التشريعات\n\n    ٤- مراكز البحث والتطوير: تُقدّم بحوثاً عن المنتجات والأسواق والحاجات"
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 8,
+    "q_text": "أيّ من العبارات التالية تُميّز المشروع الريادي عن الأعمال الصغيرة من حيث إمكانيات النمو؟",
+    "q_type": "mcq",
+    "options": [
+      "الأعمال الصغيرة لديها دائماً إمكانيات نمو أعلى لأنها تعمل في أسواق محلية مستقرة",
+      "المشروع الريادي يمتلك علاقة أقوى بإمكانيات النمو لارتكازه على الإبداع، بينما الأعمال الصغيرة تكون محدودة النمو غالباً لتوجهها المحلي",
+      "كلاهما متساوٍ في إمكانيات النمو ولا فرق بينهما في هذا الجانب",
+      "حجم الأعمال وحده هو المعيار الوحيد الفاصل بين الريادة والأعمال الصغيرة"
+    ],
+    "correct_index": 1,
+    "correct_letter": "B",
+    "explanation": "✅ الإجابة الصحيحة: (ب)\n\n\n    يُوضّح الكتاب الفرق في إمكانيات النمو:\n\n    - المشروع الريادي: يمتلك علاقة قوية بإمكانيات النمو لارتكازه على الإبداع، ويتنافس في أسواق جديدة، ويكون في مركز لتأمين سوقه الخاص\n\n    - الأعمال الصغيرة: تعمل في الصناعات المؤسّسة أصلاً، وتكون فريدة من الناحية المحلية فقط، لذلك هي محدودة النمو\n\n\n    مهم: حجم الأعمال ليس معياراً كافياً لتمييز الريادة، فالمعيار الحقيقي هو التوجه والإبداع."
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 9,
+    "q_text": "يهدف مشروع (ريادة) في الأردن إلى زيادة وتحسين مؤشرات الإنتاجية مع التركيز على المناطق الأقل حظاً وإيجاد فرص العمل المستدامة فيها.",
+    "q_type": "tf",
+    "options": [
+      "صواب",
+      "خطأ"
+    ],
+    "correct_index": 0,
+    "correct_letter": "T",
+    "explanation": "✅ صواب - الإجابة صحيحة.\n\n\n    مشروع (ريادة) هو برنامج أردني لتطوير الإنتاجية، وقد انطلق عام 2002. أهدافه:\n\n    ✔ زيادة وتحسين مؤشرات الإنتاجية في الأردن\n\n    ✔ التركيز على المناطق الأقل حظاً\n\n    ✔ توفير المتطلبات المالية والفنية والإدارية لتشجيع المشروعات الريادية\n\n    ✔ إيجاد فرص العمل والحد من معدلات البطالة في المحافظات\n\n\n    يعمل البرنامج بمبدأ توحيد الجهود بين الحكومة والقطاع الخاص المحلي والمنظمات الدولية."
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 10,
+    "q_text": "ما هي طرق تطوير اختيار الأفكار الجديدة المذكورة في المادة؟",
+    "q_type": "mcq",
+    "options": [
+      "حلقات النقاش (Focus Group)، العصف الذهني (Brainstorming)، أسلوب تحليل المشاكل، أسلوب الحل الإبداعي للمشاكل",
+      "الاستبيانات والمقابلات الشخصية فقط",
+      "الدراسات المكتبية والتحليل الإحصائي للبيانات الثانوية",
+      "التجارب المعملية والأبحاث التطبيقية في المختبرات"
+    ],
+    "correct_index": 0,
+    "correct_letter": "A",
+    "explanation": "✅ الإجابة الصحيحة: (أ)\n\n\n    ذكر الكتاب أربع طرق لتطوير اختيار الأفكار الجديدة:\n\n    ١- حلقات النقاش (Focus Group): جلسة من 8-14 مشاركاً يناقشون بعمق وحرية بهدف الوصول إلى قرارات تتعلق بالمنتجات الجديدة\n\n    ٢- العصف الذهني (Brainstorming): جلسة مفتوحة بدون نقد للأفكار، كلما كثرت كانت النتيجة أفضل\n\n    ٣- أسلوب تحليل المشاكل: التركيز على المشاكل القائمة للوصول إلى أفكار جديدة\n\n    ٤- أسلوب الحل الإبداعي للمشاكل: الجماعة تطوّر معايير للحصول على الأفكار الجديدة"
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 11,
+    "q_text": "ما هي الريادة الداخلية (Intrapreneurship)؟",
+    "q_type": "mcq",
+    "options": [
+      "هي الريادة التي تمارسها الشركات الأجنبية داخل السوق المحلي",
+      "هي الريادي الموجود داخل التنظيم، ظهرت نتيجة اشتداد المنافسة وظهور ثقافات خاصة بين العاملين، وتهدف إلى خلق الروح الريادية داخل المنظمة",
+      "هي مشاريع ريادية تُنفَّذ داخل المناطق الحرة والمدن الصناعية فقط",
+      "هي الريادة التي تتعامل مع الأسواق الداخلية دون الخارجية"
+    ],
+    "correct_index": 1,
+    "correct_letter": "B",
+    "explanation": "✅ الإجابة الصحيحة: (ب)\n\n\n    الريادة الداخلية (Intrapreneurship) هي تمثيل الريادي الموجود داخل التنظيم. ظهرت نتيجة:\n\n    - اشتداد المنافسة بين المنظمات\n\n    - ظهور ثقافات خاصة بين العاملين\n\n\n    وهي تهدف إلى خلق الروح الريادية داخل المنظمة، وذلك من خلال:\n\n    ✔ تشجيع الأفكار الجديدة والسماح بالفشل\n\n    ✔ توفير الموارد\n\n    ✔ استخدام مجموعات العمل\n\n    ✔ اتباع نظم مكافآت مناسبة"
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 12,
+    "q_text": "تكلفة فرصة العمل في المنظمات الريادية والصغيرة تساوي تكلفتها في المنظمات الكبيرة، إذ لا يوجد فارق يُذكر بينهما.",
+    "q_type": "tf",
+    "options": [
+      "صواب",
+      "خطأ"
+    ],
+    "correct_index": 1,
+    "correct_letter": "F",
+    "explanation": "✅ صواب في الإجابة (العبارة خاطئة).\n\n\n    توضح المادة أن هناك فرقاً جوهرياً في تكلفة فرصة العمل:\n\n    - المنظمات الريادية والصغيرة: معدل كثافة رأس المال ≈ 1,100 دينار/عامل\n\n    - المنظمات الكبيرة: ≈ 11,000 دينار/عامل\n\n\n    أي أن تكلفة فرصة العمل في المنظمات الكبيرة عشرة أضعاف التكلفة في المنظمات الصغيرة، وهذا يُعزّز قدرة المنظمات الصغيرة على توظيف الأيدي العاملة بموارد محدودة."
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 13,
+    "q_text": "ما هي الخصائص الثلاث التي تُشكّل علامة فارقة بين الريادة والأعمال الصغيرة؟",
+    "q_type": "mcq",
+    "options": [
+      "الحجم، عدد الموظفين، حجم رأس المال",
+      "الإبداع (Innovation)، إمكانيات النمو (Potential Growth)، الأهداف الاستراتيجية (Strategic Objectives)",
+      "الشكل القانوني، الهيكل التنظيمي، نظام المحاسبة",
+      "الموقع الجغرافي، طبيعة المنتج، نوع السوق المستهدف"
+    ],
+    "correct_index": 1,
+    "correct_letter": "B",
+    "explanation": "✅ الإجابة الصحيحة: (ب)\n\n\n    حدّد الكتاب ثلاث خصائص تُشكّل علامة فارقة بين الريادة والأعمال الصغيرة:\n\n    ١- الإبداع (Innovation): المشروع الريادي يرتكز معنوياً على طريقة جديدة في عمل الأشياء، بينما الأعمال الصغيرة تميل للمحلية\n\n    ٢- إمكانيات النمو (Potential Growth): الريادي لديه إمكانات نمو أعلى ويسعى لأسواق جديدة\n\n    ٣- الأهداف الاستراتيجية (Strategic Objectives): الريادي يمتلك أهدافاً مرتبطة بالنمو والحصة السوقية، مستمدة من الرسالة الرسمية للمشروع"
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 14,
+    "q_text": "أيّ من العبارات التالية تصف الأثر الاجتماعي للريادة والأعمال الصغيرة بشكل صحيح؟",
+    "q_type": "mcq",
+    "options": [
+      "تُسهم في تركيز الثروة في مناطق بعينها مما يزيد الفجوة بين المناطق",
+      "تُسهم في عدالة التنمية الاجتماعية، امتصاص البطالة، تشغيل المرأة، والحد من هجرة السكان من الريف إلى المدن",
+      "تقتصر مساهمتها الاجتماعية على توفير السلع الاستهلاكية الرخيصة فقط",
+      "لا يوجد أي أثر اجتماعي واضح للريادة والأعمال الصغيرة"
+    ],
+    "correct_index": 1,
+    "correct_letter": "B",
+    "explanation": "✅ الإجابة الصحيحة: (ب)\n\n\n    تشمل الآثار الاجتماعية للريادة والأعمال الصغيرة:\n\n    ١- عدالة التنمية وتوزيع الثروة: الرياديون المنتشرون جغرافياً يهيّئون تنمية إقليمية متوازنة\n\n    ٢- امتصاص البطالة وتأمين فرص عمل: تكلفتها عُشر تكلفة العمل في الكبيرة\n\n    ٣- المساهمة في تشغيل المرأة: إدخال أشغال تتناسب مع المرأة وتشجيعها على الريادة\n\n    ٤- الحد من هجرة السكان: تثبيت السكان في الأرياف وتقليل الضغط على المدن"
+  },
+  {
+    "file": "exam_entrepreneurship.html",
+    "chapter": 1,
+    "chapter_title": "الريادة وإدارة الأعمال الصغيرة",
+    "q_num": 15,
+    "q_text": "كيف يمكن للمنظمات تأمين المناخ الملائم لنمو الريادة الداخلية؟",
+    "q_type": "mcq",
+    "options": [
+      "من خلال تشديد الرقابة على الموظفين ومنعهم من اتخاذ أي قرار بدون إذن الإدارة العليا",
+      "من خلال تشجيع الأفكار الجديدة، السماح بالفشل، توفير الموارد، استخدام مجموعات العمل، اتباع نظم مكافآت مناسبة، وتأمين دعم الإدارة العليا",
+      "من خلال تقليص الهيكل التنظيمي إلى مستوى واحد وإلغاء كافة الأقسام",
+      "من خلال تعيين مديرين خارجيين فقط ممن يمتلكون خبرات ريادية سابقة"
+    ],
+    "correct_index": 1,
+    "correct_letter": "B",
+    "explanation": "✅ الإجابة الصحيحة: (ب)\n\n\n    يمكن للمنظمات تأمين مناخ الريادة الداخلية من خلال:\n\n    ✔ تشجيع الأفكار الجديدة\n\n    ✔ تشجيع المحاولة والخطأ والسماح بالفشل\n\n    ✔ اعتماد مبدأ عدم وجود حد ثابت للفرص\n\n    ✔ توفير الموارد\n\n    ✔ استخدام طريقة مجموعات العمل\n\n    ✔ النظر إلى الأفق البعيد\n\n    ✔ اتباع برامج المتطوعين\n\n    ✔ اتباع نظم مكافآت مناسبة\n\n    ✔ تأمين ممول الاقتراح والنصير\n\n    ✔ تأمين دعم الإدارة العليا"
+  },
+  {
+    "file": "exam_international_entrepreneurship.html",
+    "chapter": 2,
+    "chapter_title": "الريادة الدولية",
+    "q_num": 1,
+    "q_text": "كيف تُعرَّف الريادة الدولية وفق المادة الدراسية؟",
+    "q_type": "mcq",
+    "options": [
+      "العملية التي تقتصر على تصدير البضائع من بلد إلى آخر فقط",
+      "تركيبة من السلوكيات المتجددة ذات المخاطرة العالية التي تتم خارج الحدود الوطنية لتحقيق قيمة مقبولة",
+      "أنشطة تجارية داخلية تسعى إلى توسيع حجم المبيعات في السوق المحلي",
+      "نظام اقتصادي موجه تشرف عليه الحكومة لتنظيم التجارة الخارجية"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "تُعرَّف الريادة الدولية بأنها العملية التي تتضمن القيام بأنشطة أعمال مختلفة خارج الحدود الوطنية، وهي عبارة عن تركيبة من السلوكيات المتجددة دوماً التي تتسم بالمخاطرة العالية التي تتم خارج الحدود الوطنية لغايات تحقيق قيمة مقبولة. وتشمل أنشطة التصدير والترخيص وتأسيس مراكز البيع والتسويق في البلدان الأجنبية."
+  },
+  {
+    "file": "exam_international_entrepreneurship.html",
+    "chapter": 2,
+    "chapter_title": "الريادة الدولية",
+    "q_num": 2,
+    "q_text": "أيٌّ من الأهداف التالية تسعى الريادة الدولية إلى تحقيقه؟",
+    "q_type": "mcq",
+    "options": [
+      "الحدّ من حجم المبيعات والاكتفاء بالسوق المحلي",
+      "تجنّب التوسع في القدرة الإنتاجية",
+      "التوسع في حجم المبيعات من خلال الاستفادة من القدرة الشرائية الدولية",
+      "رفع الكُلَف الإنتاجية لزيادة الأرباح"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "من أبرز أهداف الريادة الدولية: (1) التوسع في حجم المبيعات بالاستفادة من القدرة الشرائية الدولية التي كثيراً ما تفوق القدرة الشرائية المحلية. (2) اكتساب الموارد كالأموال والقوى العاملة والتكنولوجيا لخفض الكُلَف وتحسين الجودة. (3) تقليل المخاطرة والوقاية من تذبذب الأسعار وحالات الانكماش الاقتصادي."
+  },
+  {
+    "file": "exam_international_entrepreneurship.html",
+    "chapter": 2,
+    "chapter_title": "الريادة الدولية",
+    "q_num": 3,
+    "q_text": "ما الاختلاف الجوهري بين الريادة المحلية والريادة الدولية؟",
+    "q_type": "mcq",
+    "options": [
+      "الريادة المحلية تتطلب رأس مال أكبر من الريادة الدولية",
+      "الريادة الدولية أكثر تعقيداً لشمولها على عوامل لا تكون تحت السيطرة كالاقتصاد والسياسة والقانون والثقافة",
+      "الريادة الدولية أبسط لأن الأسواق العالمية أكثر انتظاماً",
+      "لا يوجد اختلاف جوهري بينهما حيث إن عمليتَي البيع والشراء واحدة"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "يكمن الاختلاف الجوهري في الأهمية النسبية للعوامل التي يمكن تضمينها في اتخاذ القرار. الريادة الدولية أكثر تعقيداً لشمولها على عوامل لا تكون تحت السيطرة مثل: الاقتصاد، والسياسة، والقانون، والثقافة، والتكنولوجيا. وعملية اتخاذ القرار فيها أكثر صعوبةً وخطورةً وغموضاً مقارنةً بالريادة المحلية."
+  },
+  {
+    "file": "exam_international_entrepreneurship.html",
+    "chapter": 2,
+    "chapter_title": "الريادة الدولية",
+    "q_num": 4,
+    "q_text": "كم عدد القضايا الاستراتيجية التي تواجه الريادي عند التفكير في العمل دولياً، وما أبرزها؟",
+    "q_type": "mcq",
+    "options": [
+      "قضيتان: التصدير، والاستيراد",
+      "ثلاث قضايا: التخطيط، والتنفيذ، والتقييم",
+      "أربع قضايا: تحديد المسؤولية، واعتماد نمط التخطيط، واختيار الهيكل التنظيمي، وتحقيق درجة النمطية الممكنة",
+      "خمس قضايا تشمل التمويل والتسويق والإنتاج والموارد البشرية والقانون"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "هناك أربع قضايا استراتيجية تواجه الريادي عند التفكير في العمل دولياً: (أ) تحديد المسؤولية بين المركز الرئيسي والفروع في البلدان الأخرى. (ب) اعتماد نمط ملائم في التخطيط والمتابعة وأنظمة الرقابة بين البلدان. (ج) اختيار الهيكل التنظيمي الملائم. (د) تحقيق درجة حقيقية من النمطية الممكنة لتلاؤم المستهلكين ذوي الثقافات المختلفة دولياً."
+  },
+  {
+    "file": "exam_international_entrepreneurship.html",
+    "chapter": 2,
+    "chapter_title": "الريادة الدولية",
+    "q_num": 5,
+    "q_text": "أيٌّ مما يلي يجب على الريادي دراسته عند العمل في البيئة الاقتصادية الدولية؟",
+    "q_type": "mcq",
+    "options": [
+      "عدد السكان ومعدلات الإخصاب في البلد المضيف",
+      "التاريخ الجغرافي والجيولوجيا للمنطقة",
+      "النظام الاقتصادي السائد وحجم السوق ومستوى الاستقرار ومعدلات التضخم",
+      "أنماط الطقس والمناخ السائدة في البلد الأجنبي"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "أهم القضايا الاقتصادية التي يجب دراستها تشمل: (1) النظام الاقتصادي السائد (السوق أو الموجه أو المختلط). (2) حجم السوق وطاقته ومعدلات النمو والاستقرار والتضخم وميزان المدفوعات. (3) طبيعة العلاقة بين القطاعين العام والخاص. (4) نظرة الحكومة للاستثمارات الأجنبية. (5) مستوى الرقابة الحكومية. (6) توافر الأسواق المالية والبنية التحتية."
+  },
+  {
+    "file": "exam_international_entrepreneurship.html",
+    "chapter": 2,
+    "chapter_title": "الريادة الدولية",
+    "q_num": 6,
+    "q_text": "ما أحد أبرز الأبعاد الناتجة عن التطورات التكنولوجية المتسارعة في الريادة الدولية؟",
+    "q_type": "mcq",
+    "options": [
+      "إطالة فترة دورة حياة المنتج بشكل كبير",
+      "تقليل الزمن الكلي لتصميم وتطوير المنتج وإطلاقه، مما قصّر دورة حياته",
+      "ارتفاع تكاليف الإنتاج نتيجة التعقيد التكنولوجي",
+      "انخفاض التكامل بين الأسواق العالمية"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "من أبرز الأبعاد الناتجة عن التطورات التكنولوجية المتسارعة: (أ) تقليل الزمن الكلي لتصميم وتطوير المنتج وإطلاقه إلى الأسواق، مما قصّر فترة دورة حياة المنتج. (ب) اختصار الزمن اللازم لتحقيق العوائد على الاستثمار. (ج) التكامل التكنولوجي الموجه نحو تطوير المنتجات الجديدة أو تسويق المنتجات القائمة في السوق."
+  },
+  {
+    "file": "exam_international_entrepreneurship.html",
+    "chapter": 2,
+    "chapter_title": "الريادة الدولية",
+    "q_num": 7,
+    "q_text": "ما العناصر التي يجب دراستها ضمن البيئة الثقافية في الريادة الدولية؟",
+    "q_type": "mcq",
+    "options": [
+      "أسعار الصرف والسياسات النقدية للبنك المركزي",
+      "شبكات النقل والمواصلات والاتصالات",
+      "طريقة البيع والشراء، والميل إلى المركزية، والسلوك الأخلاقي، والقيم والمعتقدات السائدة",
+      "مستوى التضخم ومعدلات الفائدة الوطنية"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "لفهم البيئة الثقافية في الريادة الدولية، يجب دراسة الأمور التالية: (1) التعرف على طريقة البيع والشراء في تلك الدولة. (2) الميل إلى المركزية أو اللامركزية في العمل. (3) السلوك الأخلاقي ومدى انتشار الرشوة والفساد. (4) القيم والثقافة والمعتقدات السائدة. وفهم الثقافة المحلية يُعدّ مكوناً أساسياً في نجاح الريادي لدخول العمل الدولي."
+  },
+  {
+    "file": "exam_international_entrepreneurship.html",
+    "chapter": 2,
+    "chapter_title": "الريادة الدولية",
+    "q_num": 8,
+    "q_text": "ما الفرق بين التصدير المباشر والتصدير غير المباشر؟",
+    "q_type": "mcq",
+    "options": [
+      "التصدير المباشر هو بيع المنتجات داخل البلد لمشترٍ أجنبي يُعيد تصديرها، بينما غير المباشر يعتمد على صفقات تجارية خارجية",
+      "لا فرق بينهما؛ كلاهما يعتمد على وسطاء أجانب",
+      "التصدير غير المباشر: الريادي يجد مشترياً أجنبياً في بلده يأخذ السلعة. التصدير المباشر: بيع وتسويق مباشر للأقطار الأخرى عبر الصفقات التجارية الخارجية",
+      "التصدير المباشر أرخص تكلفةً من غير المباشر دائماً"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "التصدير هو العملية التي تتعلق بالأنشطة التجارية كتسويق وتوزيع السلع والخدمات إلى البلدان الأجنبية، وله نوعان: • التصدير غير المباشر (Indirect Exporting): حيث يجد الريادي مشترياً أجنبياً في بلده يأخذ سلعته إلى بلده أو يصدرها إلى بلد آخر. • التصدير المباشر (Direct Exporting): يكون من خلال بيع وتسويق مباشر إلى الأقطار الأخرى عن طريق الصفقات التجارية الخارجية."
+  },
+  {
+    "file": "exam_international_entrepreneurship.html",
+    "chapter": 2,
+    "chapter_title": "الريادة الدولية",
+    "q_num": 9,
+    "q_text": "ما المقصود بالمشاريع المشتركة (Joint Venture) كنمط من أنماط الاستثمار الأجنبي المباشر؟",
+    "q_type": "mcq",
+    "options": [
+      "استثمار مالي كامل من طرف واحد فقط في السوق الأجنبية",
+      "أحد أنماط التعاون أو الاندماج بين طرفين أو أكثر لكسب الفائدة المتبادلة، وتُستخدم للحصول على معرفة محلية أو دخول سريع للأسواق",
+      "شراء الريادي لنسبة تزيد على 100% من أسهم شركة أجنبية",
+      "نمط يعتمد على الترخيص فقط دون أي استثمار مالي"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "المشاريع المشتركة (Joint Venture) هي أحد أنماط التعاون أو الاندماج بين طرفين أو أكثر من أجل كسب الفائدة المتبادلة. وتُستخدم بصفة خاصة عندما يرغب الريادي في الحصول على معرفة محلية معينة، أو عندما يرغب في دخول سريع إلى الأسواق الأجنبية. وضمن الاستثمار الأجنبي المباشر توجد أيضاً: الملكية المحدودة (أقل من 50%)، وحصص الأغلبية (أكثر من 50%)، والملكية الكاملة (100%)."
+  },
+  {
+    "file": "exam_international_entrepreneurship.html",
+    "chapter": 2,
+    "chapter_title": "الريادة الدولية",
+    "q_num": 10,
+    "q_text": "ما تعريف الترخيص (Licensing) كنمط للدخول إلى السوق الدولي؟",
+    "q_type": "mcq",
+    "options": [
+      "شراء الريادي لحصص الأغلبية في شركة أجنبية",
+      "اتفاقية مع طرف في البلد الأجنبي يُخوّله استخدام عمليات الإنتاج والعلامة المسجلة وبراءة الاختراع مقابل رسوم معينة",
+      "إنشاء مصانع ومعدات مباشرة في الأسواق الأجنبية",
+      "عقد لإدارة شركة أجنبية دون أي رسوم أو عوائد"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "الترخيص (Licensing) يُعرَّف بأنه نمط من أنماط الدخول إلى السوق الأجنبي من خلال اتفاقية مع الطرف الثاني الموجود في البلد الأجنبي بحيث يحق بموجبها للطرف الأول استخدام أشياء مختلفة في الشركة مثل: عمليات الإنتاج، والعلامة المسجلة، وبراءة الاختراع، وغيرها — وذلك مقابل رسوم معينة. ويُصنَّف ضمن الترتيبات مع عدم ملكية (Non-Equity Arrangements) أي لا تتضمن استثمارات مالية مباشرة."
+  },
+  {
+    "file": "exam_international_entrepreneurship.html",
+    "chapter": 2,
+    "chapter_title": "الريادة الدولية",
+    "q_num": 11,
+    "q_text": "ما أبرز الأدوات التي تستخدمها الحكومات لتقييد الريادة الدولية؟",
+    "q_type": "mcq",
+    "options": [
+      "تخفيض الضرائب وتحرير التجارة وإلغاء الرسوم الجمركية",
+      "فرض الضرائب والتعريفة الجمركية، وربط الإعانات بشروط، وتحديد السياسات السعرية، وتطبيق نظام الكوتا، والمطالبة بتراخيص",
+      "تشجيع الاستثمار الأجنبي المباشر دون أي قيود",
+      "توحيد العملات وإلغاء الحواجز التجارية بين الدول"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "أهم الأدوات التي تستخدمها الحكومات لتحقيق استراتيجياتها الوطنية (كمكافحة البطالة وحماية الصناعات الوليدة): • فرض الضرائب والتعريفة الجمركية. • ربط الإعانات والقروض ببعض الشروط. • تحديد السياسات السعرية المعنية. • اعتماد أسلوب الحصص التجارية (نظام الكوتا). • المطالبة بالالتزام بالمعايير المعنية داخل البلد. • الحصول على التراخيص وغيرها."
+  },
+  {
+    "file": "exam_international_entrepreneurship.html",
+    "chapter": 2,
+    "chapter_title": "الريادة الدولية",
+    "q_num": 12,
+    "q_text": "وفق تقرير هيئة رقابة الريادة الدولية لعام 2002، ما الصحيح من المؤشرات التالية؟",
+    "q_type": "mcq",
+    "options": [
+      "بلغ عدد الرياديين حوالي 100 مليون رياديٍّ في 10 دول فقط",
+      "بلغ عدد الرياديين حوالي 286 مليون رياديٍّ، ما يمثّل 12% من بين 4.2 بليون شخص تتراوح أعمارهم بين 18-64 عاماً",
+      "تتساوى نسبة النساء الرياديات بالرجال الرياديين في جميع البلدان",
+      "كل الأنشطة الريادية تعتبر أعمالاً جديدة وغير مكررة"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "أبرز مؤشرات تقرير هيئة رقابة الريادة الدولية لعام 2002: • بلغت الأنشطة الريادية حوالي 286 مليون رياديٍّ أي ما نسبته 12% من 4.2 بليون شخص (18-64 عاماً). • تتباين الأنشطة الريادية بين الدول: من 3% في اليابان وروسيا وبلجيكيا إلى 18% في الهند وتايلاند. • نسبة الرجال الرياديين ضعف نسبة النساء الرياديات. • 7% فقط يعتقدون أن عملهم جديد وغير مكرر. • العمل الريادي له أثر كبير على النمو الاقتصادي."
+  },
+  {
+    "file": "exam_small_business_ch3.html",
+    "chapter": 3,
+    "chapter_title": "نظرة عامة إلى الأعمال الصغيرة",
+    "q_num": 1,
+    "q_text": "ما هو التعريف العام لمنظمة الأعمال وفقاً للكتاب؟",
+    "q_type": "mcq",
+    "options": [
+      "وحدة اقتصادية تضم أكثر من شخص وتستخدم الموارد لتحويلها إلى مخرجات بهدف إشباع حاجات الناس وتحصل مقابل ذلك على ربح يؤمن استمراريتها",
+      "مؤسسة تجارية تعمل في القطاع الخاص فقط بهدف تحقيق الربح المالي المباشر",
+      "منظمة تضم أكثر من عشرة موظفين وتعمل في السوق المحلية",
+      "وحدة إنتاجية حكومية تهدف إلى تقديم الخدمات العامة للمجتمع"
+    ],
+    "correct_index": 0,
+    "correct_letter": "أ",
+    "explanation": "تُعرَّف منظمة الأعمال بشكل عام بأنها \"وحدة اقتصادية تضم أكثر من شخص، وتستخدم موارد (عناصر إنتاج) لتحويلها إلى مخرجات نتيجة القيام بأنشطة وتفاعلات، بهدف إشباع حاجات ورغبات الناس عن طريق إنتاج وتوزيع تلك المخرجات، والتي قد تكون سلعة أو خدمة؛ وتحصل مقابل ذلك على ربح يؤمن استمرارية بقائها وتطورها\"."
+  },
+  {
+    "file": "exam_small_business_ch3.html",
+    "chapter": 3,
+    "chapter_title": "نظرة عامة إلى الأعمال الصغيرة",
+    "q_num": 2,
+    "q_text": "وفقاً لمعيار دائرة الإحصاءات العامة في الأردن، تُعدّ المنظمة صغيرة إذا:",
+    "q_type": "mcq",
+    "options": [
+      "يعمل بها من 5 إلى 19 عاملاً",
+      "يعمل بها أقل من عشرة عمال",
+      "يعمل بها أقل من خمسة عمال",
+      "يعمل بها أقل من ثلاثين عاملاً"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "تعتبر المنظمات الصغيرة في الأردن حسب معيار دائرة الإحصاءات العامة \"تلك المنظمات التي يعمل بها أقل من خمسة عمال\". كما اعتمدت مؤسسة الضمان الاجتماعي المعيار ذاته، إذ أعفت المنظمات التي يعمل بها أقل من خمسة عمال من الاشتراك الإلزامي في الضمان الاجتماعي."
+  },
+  {
+    "file": "exam_small_business_ch3.html",
+    "chapter": 3,
+    "chapter_title": "نظرة عامة إلى الأعمال الصغيرة",
+    "q_num": 3,
+    "q_text": "ما تعريف الأعمال الصغرى (Micro Business) وفق مجلس الاتحاد الأوروبي (European Commission)؟",
+    "q_type": "mcq",
+    "options": [
+      "الأعمال التي يعمل بها أقل من خمسة وعشرين عاملاً وتعمل في أكثر من موقع",
+      "الأعمال التي يعمل بها أقل من عشرة عمال وفي موقع محلي واحد",
+      "الأعمال التي يعمل بها أقل من خمسين عاملاً في القطاع الصناعي",
+      "الأعمال التي تعمل في نطاق جغرافي محلي بصرف النظر عن عدد العمال"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "اعتمد مجلس الاتحاد الأوروبي تعريف المشروعات الصغرى بأنها \"تلك الأعمال التي يعمل بها أقل من عشرة عمال وفي موقع محلي\". أما في الأردن، فيمكن اعتبار المؤسسات الحرفية منظمات صغرى، وهي كل نشاط إنتاجي لا يزيد عدد عماله عن خمسة عمال ولا يقل حجم الاستثمار فيه عن ألف دينار أردني."
+  },
+  {
+    "file": "exam_small_business_ch3.html",
+    "chapter": 3,
+    "chapter_title": "نظرة عامة إلى الأعمال الصغيرة",
+    "q_num": 4,
+    "q_text": "ما هو معيار تصنيف حجم المنظمات الأكثر انتشاراً واستخداماً على المستوى العالمي؟",
+    "q_type": "mcq",
+    "options": [
+      "حجم المبيعات السنوية",
+      "قيمة الأصول الثابتة",
+      "رأس المال المستثمر",
+      "عدد العاملين في المنظمة"
+    ],
+    "correct_index": 3,
+    "correct_letter": "د",
+    "explanation": "معيار عدد العاملين في المنظمة هو الأكثر انتشاراً واستخداماً على المستوى العالمي لتصنيف المنظمات الصغيرة، وذلك لسهولته في التعامل وثباته لفترة من الزمن. وتشمل المعايير الكمية أيضاً: رأس المال، وقيمة الأصول، وصافي القيمة المضافة، وقيمة المبيعات، ومعدل استخدام الطاقة."
+  },
+  {
+    "file": "exam_small_business_ch3.html",
+    "chapter": 3,
+    "chapter_title": "نظرة عامة إلى الأعمال الصغيرة",
+    "q_num": 5,
+    "q_text": "ما هو التصنيف المقترح للمنظمات في الأردن للمنظمة التي يعمل بها 50 عاملاً؟",
+    "q_type": "mcq",
+    "options": [
+      "منظمة صغرى (1-4 عمال)",
+      "منظمة صغيرة (5-19 عاملاً)",
+      "منظمة متوسطة (20-99 عاملاً)",
+      "منظمة كبيرة (100 عامل فأكثر)"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "وفقاً للتصنيف المقترح للمنظمات في الأردن المعتمد على عدد العمال:\n• المنظمات الصغرى: 1-4 عمال\n• المنظمات الصغيرة: 5-19 عاملاً\n• المنظمات المتوسطة: 20-99 عاملاً\n• المنظمات الكبيرة: 100 عامل فأكثر\nلذلك فإن المنظمة التي يعمل بها 50 عاملاً تُصنَّف ضمن المنظمات المتوسطة."
+  },
+  {
+    "file": "exam_small_business_ch3.html",
+    "chapter": 3,
+    "chapter_title": "نظرة عامة إلى الأعمال الصغيرة",
+    "q_num": 6,
+    "q_text": "ما الذي يميز الأعمال العائلية (Family Business) عن سائر الأعمال؟",
+    "q_type": "mcq",
+    "options": [
+      "أن تكون الأعمال مسجلة باسم فرد من العائلة فقط دون مشاركة",
+      "أن تكون العائلة متضمنة مباشرة في الملكية و/أو الوظائف، ويشترك فيها عضوان أو أكثر من العائلة",
+      "أن تعمل في مجال الزراعة أو الحرف اليدوية التقليدية فقط",
+      "أن يقل حجم الاستثمار فيها عن حد أدنى معين"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "الأعمال العائلية هي الأعمال التي تكون العائلة فيها متضمنة مباشرة في الملكية و/أو الوظائف، حيث يملكها عضوان أو أكثر من العائلة نفسها مشتركين في الحياة والوظائف. وتتميز بأن ملكية العائلة تجعلها تملك التزاماً أقوى نحو الأعمال وبنسبة عالية من الأخلاق في العمل (High Ethical Standards)، وتلتزم شخصياً بخدمة الزبائن والمجتمع المحلي."
+  },
+  {
+    "file": "exam_small_business_ch3.html",
+    "chapter": 3,
+    "chapter_title": "نظرة عامة إلى الأعمال الصغيرة",
+    "q_num": 7,
+    "q_text": "كم تبلغ نسبة المنظمات الصغرى (1-4 عمال) من إجمالي عدد المنظمات في الأردن وفقاً لمسح الاستخدام 2002؟",
+    "q_type": "mcq",
+    "options": [
+      "حوالي 60%",
+      "حوالي 89%",
+      "حوالي 75%",
+      "حوالي 98%"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "يتبين من الجدول (4/3) واعتماداً على الإحصاءات الصادرة عن دائرة الإحصاءات العامة (مسح الاستخدام 2002) أن عدد المنظمات الصغرى التي يعمل بها من (1-4 عمال) تشكل ما نسبته 89% من إجمالي عدد المنظمات في الأردن، وتستوعب حوالي 27.5% من إجمالي الأيدي العاملة في الأردن."
+  },
+  {
+    "file": "exam_small_business_ch3.html",
+    "chapter": 3,
+    "chapter_title": "نظرة عامة إلى الأعمال الصغيرة",
+    "q_num": 8,
+    "q_text": "ما هي التحديات الحقيقية الثلاثة التي تواجهها الأعمال الصغيرة نتيجة تغيّر ظروف البيئة الحالية؟",
+    "q_type": "mcq",
+    "options": [
+      "ارتفاع الأجور، وشح التمويل، وضعف الطلب المحلي",
+      "نمو المخازن والمحلات العامة، والتوسع في التكنولوجيا والإنترنت، والوكالات المختلفة للاقتصاد العالمي",
+      "التضخم، وانخفاض القوة الشرائية، وصعوبة التصدير",
+      "نقص الكوادر البشرية المؤهلة، وغياب التشريعات الداعمة، وارتفاع الضرائب"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "نتيجة لتغير ظروف البيئة، أصبحت الأعمال الصغيرة تواجه مجموعة من التحديات الحقيقية أهمها:\n1. نمو المخازن والمحلات العامة\n2. التوسع في المعلومات التكنولوجية والإنترنت\n3. الوكالات المختلفة للاقتصاد العالمي\nولذلك لا بد من أخذ هذه التحديات والتطورات بعين الاعتبار إذا أرادت الأعمال الصغيرة البقاء في موقع تنافسي فعال."
+  },
+  {
+    "file": "exam_small_business_ch3.html",
+    "chapter": 3,
+    "chapter_title": "نظرة عامة إلى الأعمال الصغيرة",
+    "q_num": 9,
+    "q_text": "ما المقصود بخاصية \"المحلية\" (Locality) في المنظمات الصغيرة؟",
+    "q_type": "mcq",
+    "options": [
+      "أن تعتمد المنظمة على المواد الخام المحلية فقط في الإنتاج",
+      "أن تقتصر خدماتها على أبناء المنطقة الذين يحملون نفس الجنسية",
+      "أن تكون أغلب العمليات في منطقة جغرافية واحدة ويكون مركز عملياتها في موقع محلي عدا العمليات التسويقية",
+      "أن تكون المنظمة مملوكة لمواطنين محليين دون أي شراكة أجنبية"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "تكون أغلب العمليات في المنظمات الصغيرة في منطقة جغرافية واحدة، عدا العمليات التسويقية، لذا يُعدّ الموقع خاصية من خصائصها. وتستطيع هذه المنظمات الانتشار جغرافياً في الأقاليم والمحافظات والقرى، مما يساعد على استغلال الموارد المحلية المتاحة. وهذا يعطيها مرونة في الإقامة وتوزيعها على معظم المناطق، بخلاف المنظمات الكبيرة التي تحتاج إلى بنية أساسية كبيرة."
+  },
+  {
+    "file": "exam_small_business_ch3.html",
+    "chapter": 3,
+    "chapter_title": "نظرة عامة إلى الأعمال الصغيرة",
+    "q_num": 10,
+    "q_text": "ما هو التأثير السلبي الرئيسي لعدم اتفاق المؤسسات الرسمية الأردنية على معيار موحد لتصنيف المنظمات الصغيرة؟",
+    "q_type": "mcq",
+    "options": [
+      "زيادة الأعباء الضريبية على أصحاب الأعمال الصغيرة",
+      "انعكاسه سلباً على توجيه خطط التنمية الاقتصادية وصعوبة متابعة تطور هذا القطاع علمياً",
+      "إضعاف ثقة المستثمرين الأجانب في الاقتصاد الأردني",
+      "تقليص فرص الحصول على التمويل من البنوك والمؤسسات المالية"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "إن عدم اتفاق المؤسسات الرسمية على معيار موحد للمنظمات الصغيرة يؤثر سلباً على:\n• توجيه خطط التنمية الاقتصادية\n• صعوبة ملاحظة التطورات الحاصلة في هذا القطاع بشكل علمي\n• خلق صعوبات عند التعامل مع المؤسسات العالمية التي تهتم بأمور المنظمات الصغيرة والتنمية في الدول النامية\nولذلك لا بد لمؤسسات الدولة المختلفة من العمل على توحيد هذه المعايير."
+  },
+  {
+    "file": "exam_small_business_ch8.html",
+    "chapter": 8,
+    "chapter_title": "تمويل الأعمال الصغيرة",
+    "q_num": 1,
+    "q_text": "ما هي أولى خطوات النجاح في المشروع الصغير وفقاً للفصل الثامن؟",
+    "q_type": "mcq",
+    "options": [
+      "القدرة على تقدير الاحتياجات الرأسمالية المختلفة للمشروع في مراحله المختلفة بشكل واقعي",
+      "اختيار الموقع الجغرافي المناسب للمشروع وتوفير العمالة المدربة",
+      "دراسة المنافسين في السوق وتحديد الميزة التنافسية للمشروع",
+      "الحصول على الترخيص اللازم وتسجيل المشروع رسمياً لدى الجهات المختصة"
+    ],
+    "correct_index": 0,
+    "correct_letter": "أ",
+    "explanation": "أولى خطوات النجاح في المشروع الصغير هي القدرة على تقدير الاحتياجات الرأسمالية المختلفة للمشروع في مراحله المختلفة. حيث لا بد من تحديد هذه الاحتياجات بواقعية؛ لأن المبالغة فيها يجعل الأموال معطلة، والتقصير فيها يضع المشروع في صعوبات مالية طارئة قد لا يستطيع حلها."
+  },
+  {
+    "file": "exam_small_business_ch8.html",
+    "chapter": 8,
+    "chapter_title": "تمويل الأعمال الصغيرة",
+    "q_num": 2,
+    "q_text": "ما هي المراحل الثلاث لتمويل المشروع خلال حياته الإنتاجية بالترتيب الصحيح؟",
+    "q_type": "mcq",
+    "options": [
+      "مرحلة التخطيط، مرحلة التنفيذ، مرحلة التقييم",
+      "مرحلة الإنشاء، مرحلة التشغيل، مرحلة التوسع",
+      "مرحلة البداية، مرحلة النضج، مرحلة الانحدار",
+      "مرحلة التأسيس، مرحلة الإنتاج، مرحلة التصفية"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "تمر المشاريع الصغيرة بثلاث مراحل تمويلية خلال حياتها الإنتاجية:\n1. مرحلة الإنشاء: حيث إقامة المصنع وشراء الآلات والتجهيزات، وتُغطَّى برأس المال والقروض.\n2. مرحلة التشغيل: ويكون تمويلها عن طريق القروض.\n3. مرحلة التوسع: وتبدأ عندما يزداد الطلب على المنتجات."
+  },
+  {
+    "file": "exam_small_business_ch8.html",
+    "chapter": 8,
+    "chapter_title": "تمويل الأعمال الصغيرة",
+    "q_num": 3,
+    "q_text": "ما الفرق الجوهري بين رأس المال الثابت (Fixed Capital) ورأس المال العامل (Working Capital)؟",
+    "q_type": "mcq",
+    "options": [
+      "رأس المال الثابت يُستخدم لتمويل الموجودات طويلة الأجل كالأراضي والآلات، بينما يمثل رأس المال العامل الموجودات التي يمكن تحويلها بسرعة إلى نقدية",
+      "رأس المال الثابت يأتي من مصادر خارجية بينما رأس المال العامل يأتي من مصادر داخلية فقط",
+      "رأس المال الثابت مخصص للمشاريع الكبيرة ورأس المال العامل للمشاريع الصغيرة",
+      "لا يوجد فرق جوهري بينهما إذ يمكن استخدام كل منهما لنفس الأغراض"
+    ],
+    "correct_index": 0,
+    "correct_letter": "أ",
+    "explanation": "رأس المال الثابت: ذو طبيعة ثابتة، لا يُحوَّل إلى نقدية بسهولة، ويُستخدم لتمويل الموجودات التي يتطلب الاحتفاظ بها مدة طويلة مثل: الأراضي، والمباني، والآلات، والتجهيزات، والأثاث.\nرأس المال العامل: يمثل الموجودات التي يمكن تحويلها بسرعة إلى نقدية، ويتغير من شكل إلى آخر خلال العمل، ومن أمثلته: النقدية، والمخزون، وأوراق القبض، والحسابات المدينة."
+  },
+  {
+    "file": "exam_small_business_ch8.html",
+    "chapter": 8,
+    "chapter_title": "تمويل الأعمال الصغيرة",
+    "q_num": 4,
+    "q_text": "ما هي العوامل الثلاثة المحددة لرأس المال العامل الواردة في الكتاب؟",
+    "q_type": "mcq",
+    "options": [
+      "الربحية، والسيولة، والملاءة المالية",
+      "الكلفة، والوقت، والحجم",
+      "الإيرادات، والمصروفات، والأرباح المحتجزة",
+      "التضخم، وسعر الصرف، ومعدل الفائدة"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "أهم العوامل المحددة لرأس المال العامل هي:\n1. الكلفة: مثل شروط سداد قيمة المواد الخام، وشروط البيع المختلفة ومدى الائتمان الممنوح للزبائن.\n2. الوقت: يلعب وقت انتظار وصول المواد الخام دوراً مهماً، وكذلك سياسات الشراء المختلفة.\n3. الحجم: تلعب التقلبات الموسمية والمناسبات المختلفة دوراً في تحديد رأس المال العامل، خاصة عند تخزين كميات كبيرة للبيع في فترة موسمية قصيرة."
+  },
+  {
+    "file": "exam_small_business_ch8.html",
+    "chapter": 8,
+    "chapter_title": "تمويل الأعمال الصغيرة",
+    "q_num": 5,
+    "q_text": "ما تعريف رأس المال المقترض (Borrowed Capital) وما شرطه الأساسي؟",
+    "q_type": "mcq",
+    "options": [
+      "رأس المال الذي يُستثمر في العمل دون أي التزام قانوني لإعادته أو دفع فوائد عليه",
+      "رأس المال الذي ينطوي على التزام بإعادته مع فوائده في وقت محدد، ويجب أن تتوفر سبل إعادته",
+      "رأس المال المقدَّم من الأسرة والأقارب دون فوائد محددة سلفاً",
+      "رأس المال الذي تقدمه البنوك فقط مقابل ضمانات عقارية"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "رأس المال المقترض هو رأس المال الذي ينطوي على التزام بإعادته مع فوائده في وقت محدد. ولا بد من التأكيد أن سبل استخدام رأس المال المقترض يجب أن توفر سبل إعادته وفوائده. وقد يكون من المناسب تمويل الأصول المتداولة المختلفة من رأس المال المقترض."
+  },
+  {
+    "file": "exam_small_business_ch8.html",
+    "chapter": 8,
+    "chapter_title": "تمويل الأعمال الصغيرة",
+    "q_num": 6,
+    "q_text": "أيٌّ من الآتي يُعدّ مصدراً من مصادر التمويل الداخلية للأعمال الصغيرة؟",
+    "q_type": "mcq",
+    "options": [
+      "الائتمان التجاري من الموردين",
+      "القروض من البنوك التجارية",
+      "الأرباح المحتجزة والاحتياطات",
+      "القروض من بنك الإنماء الصناعي"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "مصادر التمويل الداخلية تشمل:\n1. المدخرات الشخصية للمالكين\n2. القروض ذات الطابع الشخصي من الأسرة والأقارب والأصدقاء\n3. المخزون (تحليله والتخلص من الفوائض)\n4. الحسابات بطيئة التسديد والمشكوك فيها\n5. مراقبة الإيرادات والنفقات المختلفة\n6. الاحتياطات والأرباح المحتجزة ✓\n7. إصدار أسهم جديدة\nبينما الائتمان التجاري والبنوك التجارية وبنك الإنماء الصناعي تُعدّ مصادر خارجية."
+  },
+  {
+    "file": "exam_small_business_ch8.html",
+    "chapter": 8,
+    "chapter_title": "تمويل الأعمال الصغيرة",
+    "q_num": 7,
+    "q_text": "ما هي ميزة الائتمان التجاري (Trade Credit) للمشاريع الصغيرة؟",
+    "q_type": "mcq",
+    "options": [
+      "يوفر أسعار فائدة منخفضة مقارنة بالبنوك التجارية",
+      "لا يحتاج إلى ضمانات تقليدية بل يعتمد على السمعة التجارية الحسنة",
+      "يمنح فترة سداد طويلة تصل إلى عشر سنوات",
+      "تضمنه الحكومة بالكامل في حالة إعسار المشروع"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "الائتمان التجاري هو وسيلة للشراء مع تأجيل الدفع على فترات مختلفة مع أخذ فترة سماح معينة. ميزته الرئيسية أنه لا يحتاج إلى تقديم الضمانات التقليدية مثل الرهونات المختلفة، ولكنه يحتاج إلى السمعة التجارية الحسنة. ويتخذ هذا النوع من الائتمان عادة شكل الحسابات الدائنة أو أوراق الدفع، ويساعد على توفير جزء كبير من احتياجات رأس المال العامل."
+  },
+  {
+    "file": "exam_small_business_ch8.html",
+    "chapter": 8,
+    "chapter_title": "تمويل الأعمال الصغيرة",
+    "q_num": 8,
+    "q_text": "متى تأسس صندوق التنمية والتشغيل في الأردن، وما هو سقف التمويل الذي يقدمه؟",
+    "q_type": "mcq",
+    "options": [
+      "تأسس عام 1965، وسقف التمويل 5000 دينار على 4 سنوات",
+      "تأسس عام 1975، وسقف التمويل 15000 دينار على 10 سنوات",
+      "تأسس عام 1990، وسقف التمويل 10000 دينار أردني على فترة سداد 6 سنوات",
+      "تأسس عام 1986، وسقف التمويل 350 دينار على أقساط شهرية"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "تم إنشاء صندوق التنمية والتشغيل عام 1990 ويعتبر من أهم مؤسسات الإقراض الحكومية في الأردن. يهدف إلى تقديم القروض الميسرة للأفراد لإقامة وتشغيل المشاريع الصغيرة المدرة للدخل، ويوجه اهتمامه للمناطق ذات معدلات البطالة والفقر المرتفعة. ويبلغ سقف التمويل 10000 دينار أردني على فترة سداد تبلغ 6 سنوات. يمكن أن يقدم القروض عن طريق أسعار الفائدة البسيطة (9%) أو عن طريق المرابحة الإسلامية."
+  },
+  {
+    "file": "exam_small_business_ch8.html",
+    "chapter": 8,
+    "chapter_title": "تمويل الأعمال الصغيرة",
+    "q_num": 9,
+    "q_text": "ما الفرق بين بنك الإنماء الصناعي وصندوق الحرفيين في الأردن؟",
+    "q_type": "mcq",
+    "options": [
+      "لا فرق بينهما فكلاهما يخدمان نفس الأهداف والفئات",
+      "بنك الإنماء الصناعي تأسس عام 1965 ويخدم الصناعة والسياحة، وصندوق الحرفيين أنشأه البنك عام 1975 ليعني بالفئات الحرفية الصغيرة",
+      "بنك الإنماء الصناعي يمنح قروضاً بدون فوائد، أما صندوق الحرفيين فيفرض فائدة 20%",
+      "بنك الإنماء الصناعي يختص بالقطاع الزراعي فقط، بينما صندوق الحرفيين يختص بالصناعة"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "بنك الإنماء الصناعي: تأسس عام 1965 بمشاركة حكومية ومصرفية تجارية خاصة كمؤسسة إقراضية في قطاعي الصناعة والسياحة، بهدف تشجيع الصناعة الأردنية بشكل عام وتطوير الصناعات الصغيرة بشكل خاص. وتتراوح قيمة القرض للمشروع الواحد بين 5-10 آلاف دينار.\nصندوق الحرفيين: أنشأه بنك الإنماء الصناعي عام 1975 ليعني بالفئات الحرفية الصغيرة، ويقدم ما قيمته 50-75% من قيمة الأرض ورأس المال بفائدة تصل إلى 11%، وفترة سداد من 5-8 سنوات."
+  },
+  {
+    "file": "exam_small_business_ch8.html",
+    "chapter": 8,
+    "chapter_title": "تمويل الأعمال الصغيرة",
+    "q_num": 10,
+    "q_text": "ما هو المبدأ الأساسي في اختيار مصادر التمويل الملائمة للأصول؟",
+    "q_type": "mcq",
+    "options": [
+      "يجب دائماً تمويل جميع الأصول من مصدر واحد لتبسيط الإجراءات المالية",
+      "يجب تمويل الأصول الدائمة من المصادر الدائمة، وتمويل الأصول المؤقتة من المصادر قصيرة الأجل",
+      "يُفضَّل دائماً تمويل جميع الأصول من الاقتراض لزيادة العائد على حقوق الملكية",
+      "لا يوجد مبدأ محدد وتترك المسألة لتقدير مالك المشروع"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "المبدأ الأساسي في اختيار مصادر التمويل: يجب تمويل الأصول الدائمة عن طريق المصادر الدائمة؛ أما الأصول المؤقتة فيمكن تمويلها من المصادر المالية المؤقتة وقصيرة الأجل. كما يجب أن تكون مصادر التمويل المستخدمة ملائمة لطبيعة الأصول التي ستُقدَّم هذه الأموال لتمويلها، بحيث تكون مناسبة ومتمشية مع طبيعة الأصول المستخدمة."
+  },
+  {
+    "file": "exam_small_business_ch8.html",
+    "chapter": 8,
+    "chapter_title": "تمويل الأعمال الصغيرة",
+    "q_num": 11,
+    "q_text": "ما هي القيود العملية التي تمنع المنشأة من اللجوء إلى الاقتراض إلى ما لا نهاية؟",
+    "q_type": "mcq",
+    "options": [
+      "القانون الأردني يحدد سقفاً للاقتراض لا يجوز تجاوزه",
+      "المركز المالي للشركة لا يسمح بالتمويل الكامل بالاقتراض، ولا بد من تسديد القروض في أوقاتها وإلا فُرضت رقابة الدائنين، وزيادة نسبة القروض يرفع أسعار الفائدة",
+      "البنوك تمنع الإقراض الزائد بموجب تعليمات البنك المركزي فقط",
+      "لا توجد قيود عملية وبإمكان المنشأة الاقتراض إلى ما لا نهاية طالما تحقق أرباحاً"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "القيود العملية على الاقتراض ثلاثة:\n1. مركز الشركة المالي لا يسمح بالتمويل الكامل عن طريق الاقتراض؛ يجب أن لا تقل نسبة حقوق الملكية إلى الموجودات عن 25%.\n2. لا بد من تسديد القروض في أوقاتها، وأي فشل سيؤدي إلى فرض رقابة من الدائنين أو التصفية والإفلاس.\n3. زيادة نسبة القروض المستخدمة يخلق صعوبات للحصول على قروض جديدة، وقد يرفع من نسب الفائدة المفروضة مما يقلل فعالية العائد."
+  },
+  {
+    "file": "exam_small_business_ch8.html",
+    "chapter": 8,
+    "chapter_title": "تمويل الأعمال الصغيرة",
+    "q_num": 12,
+    "q_text": "ما هي المحاور الأربعة التي يركز عليها المشروع الأوروبي الأردني (EJADA) لتحديث وتطوير المؤسسات الصغيرة والمتوسطة؟",
+    "q_type": "mcq",
+    "options": [
+      "التسويق، والإنتاج، والتوزيع، وخدمة ما بعد البيع",
+      "الدعم المالي، ومساندة السياسات والتقوية المؤسسية، والتدريب المهني وتنمية الموارد البشرية، والدعم الفني",
+      "إنشاء المصانع، وتوفير العمالة، ودعم الصادرات، وفتح الأسواق الجديدة",
+      "التمويل المباشر، والتدريب، والتسويق، وإدارة الجودة فقط"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "المشروع الأوروبي الأردني (EJADA) ممول بقيمة 41.6 مليون يورو ويركز على أربعة محاور:\n1. الدعم المالي: من خلال صندوق ضمان القروض (يتحمل 70% من مخاطر القروض) وصندوق المؤسسات الناشئة.\n2. مساندة السياسات والتقوية المؤسسية: دعم بيئة السياسات الملائمة وتعزيز القدرات المؤسسية.\n3. التدريب المهني وتنمية الموارد البشرية: تطوير الشراكة بين القطاعين العام والخاص ودعم برامج تنمية الموارد البشرية.\n4. الدعم الفني: من خلال الخدمات الاستشارية للمؤسسات الصغيرة والمتوسطة."
+  },
+  {
+    "file": "exam_small_business_location.html",
+    "chapter": 5,
+    "chapter_title": "موقع المشروع الصغير",
+    "q_num": 1,
+    "q_text": "لماذا تُعدّ عملية اختيار موقع المشروع الصغير قراراً بالغ الأهمية؟",
+    "q_type": "mcq",
+    "options": [
+      "لأنها تحدد فقط مقدار الإيجار الذي سيدفعه صاحب المشروع",
+      "لأن القرار غير المناسب يؤدي إلى خسائر مادية ومالية ليست قليلة، ليس فقط لأصحاب المشروع بل للاقتصاد الوطني بشكل عام",
+      "لأن الموقع يؤثر فقط على عدد العاملين في المشروع",
+      "لأن اختيار الموقع يقتصر على تحديد أقرب مركز تسوق"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "تستند عملية اختيار الموقع الجغرافي للمشروع الصغير على العديد من العوامل. وإن قرار الاختيار غير المناسب للموقع يؤدي إلى خسائر مادية ومالية ليست قليلة، ليس فقط لأصحاب المشروع الصغير وإنما للاقتصاد الوطني بشكل عام. لذا يجب أن تعتمد مسألة الاختيار على إجراء الدراسة التحليلية للعديد من العوامل التي تساعد في تطوير العلاقة الشبكية بين المشروع الصغير والمشاريع الأخرى على اختلاف أحجامها وأنماطها."
+  },
+  {
+    "file": "exam_small_business_location.html",
+    "chapter": 5,
+    "chapter_title": "موقع المشروع الصغير",
+    "q_num": 2,
+    "q_text": "ما العامل الأساسي الحاسم في عملية المفاضلة والاختيار لموقع المشروع الصغير بين المواقع المقترحة؟",
+    "q_type": "mcq",
+    "options": [
+      "مدى توافر الخدمات الترفيهية والجمالية قرب الموقع",
+      "القرب من مناطق المواد الأولية والأسواق مما يحقق الوفر الكبير في كلف النقل والتوزيع",
+      "حجم المساحة الجغرافية المتاحة لبناء المشروع",
+      "طبيعة المناخ السائد في المنطقة المقترحة"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "يُعتبر عامل القرب من المناطق التي تتوفر فيها المواد الأولية العاملَ الأساسي في عملية الاختيار والمفاضلة لموقع المشروع الصغير، لأن قرب المشروع من هذه المناطق بالإضافة إلى القرب من الأسواق (مراكز الاستهلاك) يحقق الوفر الكبير في كلف النقل والتوزيع وكذلك تقليل الزمن المستغرق لدورة العمليات. وتكلفة النقل تُعتبر العنصر الحاسم في عملية المفاضلة والاختيار."
+  },
+  {
+    "file": "exam_small_business_location.html",
+    "chapter": 5,
+    "chapter_title": "موقع المشروع الصغير",
+    "q_num": 3,
+    "q_text": "ما المقصود بمبدأ التوزيع الأمثل للمشروعات بين المناطق والأقاليم؟",
+    "q_type": "mcq",
+    "options": [
+      "تمركز جميع المشروعات في المدن الكبرى فقط لضمان أعلى ربحية",
+      "توزيع المشروعات الصغيرة بما ينسجم مع التخطيط الحضري والإقليمي مما يستغل الثروات والموارد في كل منطقة لتحقيق التطور الاقتصادي المتكامل",
+      "تخصيص منطقة واحدة لجميع أنواع المشروعات بغض النظر عن طبيعتها",
+      "توزيع المشروعات بالتساوي المطلق بين جميع المناطق بصرف النظر عن إمكاناتها"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "يقود التطور المتعدد والمتكامل لاقتصاديات المناطق إلى تأسيس وتعميق الميزة التخصصية لها من خلال تحقيق التوزيع الأمثل للعمل فيما بينها، أي توزيع المشروعات الصغيرة بما ينسجم مع التخطيط الحضري والإقليمي. فاحتواء بعض المناطق على الثروات الطبيعية والموارد البشرية يستوجب توجيهها في تحقيق التطور الاقتصادي المتكامل لعموم الوطن، مما يؤدي إلى ظهور مستويات معقولة من التخصص في إدارة الأعمال."
+  },
+  {
+    "file": "exam_small_business_location.html",
+    "chapter": 5,
+    "chapter_title": "موقع المشروع الصغير",
+    "q_num": 4,
+    "q_text": "أيٌّ مما يلي يُعدّ صحيحاً بشأن دور وسائط النقل والطاقة في اختيار موقع المشروع؟",
+    "q_type": "mcq",
+    "options": [
+      "وسائط النقل لا تؤثر في اختيار الموقع لأن التكنولوجيا الحديثة أتاحت التوصيل لأي مكان",
+      "تشكل نفقات نقل المواد الأولية والوقود نسبة كبيرة من التكلفة الكلية للمنتج النهائي في العديد من الصناعات، ووفرة الموارد الطبيعية ومصادر الطاقة تلعب دوراً أساسياً في المفاضلة",
+      "الطاقة عامل ثانوي لا يؤخذ بعين الاعتبار عند اختيار مواقع المشروعات الصناعية",
+      "تُفضَّل المواقع البعيدة عن الطرق الرئيسية لتجنب ازدحام المرور"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "تلعب وسائط النقل دوراً بارزاً في المفاضلة، حيث تشكل نفقات نقل المواد الأولية والوقود نسبة كبيرة من التكلفة الكلية للمنتج النهائي في كثير من المنتجات الصناعية. كما تلعب وفرة الموارد الطبيعية ومصادر الطاقة دوراً أساسياً في عملية المفاضلة لأنواع المشروعات كافة، إذ تؤثر جودة ونوعية الموارد وسهولة الحصول عليها على مسألة التمركز الجغرافي."
+  },
+  {
+    "file": "exam_small_business_location.html",
+    "chapter": 5,
+    "chapter_title": "موقع المشروع الصغير",
+    "q_num": 5,
+    "q_text": "ما طبيعة العوامل الاجتماعية والبيئية في اختيار موقع المشروع، وكيف تُقاس؟",
+    "q_type": "mcq",
+    "options": [
+      "عوامل تُقاس بالأرقام والإحصاءات فقط، مثل معدلات الدخل والبطالة",
+      "عوامل تتعلق بالطبيعة الجغرافية ومدى توفر الخدمات الثقافية والتعليمية والترفيهية، وتُقاس بمعايير نوعية كأسلوب النقاط أو الأوزان",
+      "عوامل تقتصر على مدى توافر الطاقة الكهربائية وشبكات المياه",
+      "عوامل تهتم فقط بمدى قرب الموقع من أسواق البيع الرئيسية"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "العوامل الاجتماعية والبيئية هي تلك المتعلقة بالطبيعة الجغرافية ومدى توفر الخدمات الثقافية والتعليمية والترفيهية والجمالية، وقياس جمالية الموقع الجغرافي وتوفر الغابات والحدائق والملاعب والمراكز الثقافية. وقياس هذه العوامل يتطلب استخدام معايير التقييم النوعي مثل أسلوب النقاط أو الأوزان في عملية المفاضلة. أما العوامل البيئية كمقدار التلوث البيئي فيجب أن تُعطى الأهمية الضرورية عند الاختيار."
+  },
+  {
+    "file": "exam_small_business_location.html",
+    "chapter": 5,
+    "chapter_title": "موقع المشروع الصغير",
+    "q_num": 6,
+    "q_text": "ما العوامل التي تندرج ضمن «القاعدة الاقتصادية» عند اختيار المنطقة التجارية للمشروع الصغير؟",
+    "q_type": "mcq",
+    "options": [
+      "المناخ، والتضاريس، وخصوبة التربة، ومدى توفر الأمطار",
+      "تركيب الهيكل المهني للمجتمع، والقوة الشرائية، وكيفية توزيع الدخل، ومدى انتشار مؤسسات المجتمع المدني",
+      "عدد المنافسين المحليين فقط، وأسعار الإيجارات في المنطقة",
+      "مدى توفر شبكة الإنترنت السريع والخدمات الرقمية في المنطقة"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "تلعب القاعدة الاقتصادية المتوفرة في المجتمع دوراً كبيراً في تأمين الفرص المتاحة للمشروعات التجارية الصغيرة، وتشمل دراسة العوامل التالية: (أ) تركيب الهيكل المهني للمجتمع (صناعي، زراعي...) ومدى توفر الوظائف. (ب) القوة الشرائية من خلال التعرف على مستوى دخل الفرد في المنطقة. (ج) كيفية توزيع الدخل على بنود المصروفات المختلفة. (د) مدى انتشار مؤسسات المجتمع المدني ومساهمتها في تنمية المجتمع."
+  },
+  {
+    "file": "exam_small_business_location.html",
+    "chapter": 5,
+    "chapter_title": "موقع المشروع الصغير",
+    "q_num": 7,
+    "q_text": "كيف تختلف النظرة إلى المنافسة بين أصحاب المشروعات التجارية المختلفة؟",
+    "q_type": "mcq",
+    "options": [
+      "جميع أصحاب المشروعات يرون المنافسة شيئاً سلبياً يجب تجنبه",
+      "المنافسة تضر المشروعات الكبيرة ولا تؤثر في الصغيرة",
+      "قد ينظر صاحب المشروع الكفء إلى المنافسة على أنها شيء إيجابي وضروري للاستمرار والنمو، بينما ينظر إليها آخر بعين سلبية",
+      "المنافسة لا تُدرس ضمن عوامل اختيار الموقع"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "تختلف النظرة إلى المنافسة حسب نوع المشروع التجاري ومدى كفاءة صاحبه. فقد ينظر صاحب المشروع الكفء المؤهل إلى المنافسة على أنها شيء إيجابي وضروري للاستمرار والنمو، بينما ينظر آخر إلى المنافسة بعين سلبية. لذلك لا بد من دراسة: وضع المنافسة المحتملة في المنطقة، ومدى تشابه أو اختلاف المشاريع المقامة فيها، ومدى التنافس أو التكامل بين المشاريع."
+  },
+  {
+    "file": "exam_small_business_location.html",
+    "chapter": 5,
+    "chapter_title": "موقع المشروع الصغير",
+    "q_num": 8,
+    "q_text": "ما الفرق بين مراكز المدينة التجارية ومراكز التسوق النائية؟",
+    "q_type": "mcq",
+    "options": [
+      "لا فرق بينهما؛ كلاهما يقع في وسط المدينة",
+      "مراكز المدينة تقع في وسط البلد وهي الأشد ازدحاماً لكنها بدأت تفقد أهميتها، بينما مراكز التسوق النائية بعيدة عن الشارع العام وتوفر مواقف للسيارات وتُدار كمشروع متكامل",
+      "مراكز التسوق النائية أرخص تكلفةً ولكنها أقل جودةً وخدماتٍ",
+      "مراكز المدينة تختص بتجار الجملة، ومراكز التسوق النائية تختص بتجار التجزئة فقط"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "مراكز المدينة التجارية تقع في وسط البلد أو على الشارع الرئيسي، وهي الأشد ازدحاماً بالمستهلكين، لكنها بدأت تفقد أهميتها نتيجة انتشار المراكز المتخصصة، وانتقلت كمراكز للخدمات الإدارية والمالية. أما مراكز التسوق النائية فهي مجموعة من المراكز المتلاصقة الحديثة، بعيدة عن الشارع العام، وتوفر مواقف السيارات، وتُدار كمشروع متكامل يقوم بحملات إعلانية وترويجية للمركز كوحدة واحدة."
+  },
+  {
+    "file": "exam_small_business_location.html",
+    "chapter": 5,
+    "chapter_title": "موقع المشروع الصغير",
+    "q_num": 9,
+    "q_text": "ما الموقع «النموذجي» لمتجر التجزئة من حيث سهولة الوصول؟",
+    "q_type": "mcq",
+    "options": [
+      "الموقع الذي يقع في منتصف الطريق بين مركزين تجاريين بغض النظر عن الاتجاه",
+      "الموقع الذي يستطيع أكبر عدد من المشاة الوصول إليه، مع مراعاة حركة المرور ووسائل النقل وموقع المركز على يمين الطريق الذي يسلكه الزبائن أثناء عودتهم",
+      "الموقع الأكثر بعداً عن ازدحام المرور حتى وإن كان يصعب الوصول إليه",
+      "الموقع الأرخص إيجاراً بصرف النظر عن حركة المرور"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "إن سهولة الوصول إلى متاجر التجزئة من العوامل الهامة لنجاحها. الموقع النموذجي هو الموقع الذي يستطيع أكبر عدد من المشاة الوصول إليه. وتلعب حركة المرور دوراً كبيراً في ذلك، وكذلك وسائل النقل التي يستخدمها الزبائن، وموقع المركز على يمين الشارع أو يساره. فالمركز الذي يقع على يمين الطريق التي يسلكها الزبائن أثناء عودتهم إلى البيت سيكون موقعاً أكثر مناسبةً. كما أن توفر التسهيلات الخاصة بمواقف السيارات يُسهل وصول الزبائن."
+  },
+  {
+    "file": "exam_small_business_location.html",
+    "chapter": 5,
+    "chapter_title": "موقع المشروع الصغير",
+    "q_num": 10,
+    "q_text": "أيٌّ من الأنواع التالية من المتاجر يستفيد من التواجد في منطقة واحدة مع متاجر متشابهة؟",
+    "q_type": "mcq",
+    "options": [
+      "متاجر السلع الاستهلاكية الميسرة التي يُفضَّل توزعها الجغرافي الواسع",
+      "محلات البقالة اليومية التي يجب توزيعها قرب المنازل",
+      "المطاعم وصالونات التجميل ومتاجر الذهب والحلويات التي تتواجد في الغالب في منطقة واحدة",
+      "متاجر الأدوية التي يجب توزيعها في مختلف أحياء المدينة"
+    ],
+    "correct_index": 2,
+    "correct_letter": "ج",
+    "explanation": "تحقق بعض الأعمال نجاحاً في حالة كون الأعمال المتشابهة في منطقة واحدة. ومن الأمثلة على ذلك: المطاعم، وصالونات التجميل، ومتاجر الذهب والحلويات، حيث تتواجد في الغالب في منطقة واحدة وبالقرب من المسارح. كما تجتمع محلات الأزهار في الغالب حول متاجر الأحذية وملابس النساء. في المقابل، المتاجر المتخصصة بالسلع الاستهلاكية الميسرة لا توجد في منطقة واحدة ولا تتواجد بالقرب من بعضها إلا إذا كانت حركة الزبائن شديدة."
+  },
+  {
+    "file": "exam_small_business_location.html",
+    "chapter": 5,
+    "chapter_title": "موقع المشروع الصغير",
+    "q_num": 11,
+    "q_text": "ما العوامل التي تُؤخذ بعين الاعتبار عند تحديد موقع مشروع زراعي؟",
+    "q_type": "mcq",
+    "options": [
+      "القرب من مراكز المدينة ومحطات المترو وتوافر الأيدي العاملة غير المتخصصة فقط",
+      "مساحة الأرض وخصوبتها، والمناخ، وتوفر البنية التحتية والطاقة والمياه، والبُعد عن التلوث، ومدى توسط الموقع بين المستهلكين الزراعيين",
+      "نسبة الضرائب المفروضة على الأراضي الزراعية وقوانين الملكية فقط",
+      "قرب الموقع من مراكز التسوق الكبيرة والمطارات الدولية"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "العوامل التي تُؤخذ بعين الاعتبار عند تحديد موقع مشروع زراعي هي: (1) مساحة الأرض المتوفرة وخصوبة التربة ومدى مناسبتها. (2) المناخ المتوفر في المنطقة. (3) توفر البنية التحتية من المواصلات ووسائط النقل. (4) البُعد عن التلوث البيئي. (5) مدى توفر الطاقة الكهربائية. (6) تكلفة الأرض ومدى تحملها لإقامة المنشآت. (7) مدى توفر الأيدي العاملة الماهرة. (8) مدى توفر المياه ومستوى أسعارها. (9) مدى توسط الموقع بين المستهلكين الزراعيين."
+  },
+  {
+    "file": "exam_small_business_location.html",
+    "chapter": 5,
+    "chapter_title": "موقع المشروع الصغير",
+    "q_num": 12,
+    "q_text": "ما العوامل التي يجب أخذها بعين الاعتبار عند تحديد موقع مشروع صناعي؟",
+    "q_type": "mcq",
+    "options": [
+      "الجمال الجغرافي للمنطقة وتوافر الخدمات الترفيهية للعاملين فقط",
+      "القرب من الموردين وتوفر القوى العاملة والطاقة الكهربائية وخدمات النقل وتوفر المواد الأولية والقرب من الأسواق وتكلفة الأرض وكلف التشييد وشبكات المياه",
+      "مستوى الضجيج وعدد المنافسين في المنطقة الصناعية فقط",
+      "مدى شهرة المنطقة الصناعية وسمعتها بين المستثمرين دون النظر إلى التكاليف"
+    ],
+    "correct_index": 1,
+    "correct_letter": "ب",
+    "explanation": "عند تحديد موقع المشروع الصناعي لا بد من مراعاة: (1) القرب من الموردين. (2) مدى توفر القوى العاملة. (3) الطاقة الكهربائية اللازمة للمشروع. (4) خدمات النقل وتكلفتها. (5) مدى توفر المواد الخام والأولية. (6) القرب من الأسواق ومراكز الاستهلاك والكثافة السكانية. (7) تكلفة الأرض المقترحة ومدى توفرها. (8) كلف التشييد والبناء ومتطلبات إسكان العاملين. (9) شبكات تجهيز المياه، إذ يُفضَّل القرب من مصادر المياه لأن المشاريع الصناعية تحتاج كميات كبيرة منها."
+  }
+];
+
+const CHAPTERS = [
+  { ch: 1,  name: "الفصل 1: الريادة وإدارة الأعمال الصغيرة",     count: 15 },
+  { ch: 2,  name: "الفصل 2: الريادة الدولية",                     count: 12 },
+  { ch: 3,  name: "الفصل 3: نظرة عامة إلى الأعمال الصغيرة",       count: 10 },
+  { ch: 4,  name: "الفصل 4: تأسيس الأعمال الصغيرة",               count: 15 },
+  { ch: 5,  name: "الفصل 5: موقع المشروع الصغير",                  count: 12 },
+  { ch: 8,  name: "الفصل 8: تمويل الأعمال الصغيرة",               count: 12 },
+  { ch: 13, name: "الفصل 13: خطة العمل في الأعمال الصغيرة",       count: 12 }
+];
+
+// ===== STATE =====
+let selectedChapters = [];
+let quizQuestions    = [];
+let currentIndex     = 0;
+let userAnswers      = {};
+let score            = 0;
+let timerInterval    = null;
+let timeRemaining    = 0;
+let timerType        = 'none';
+let isReviewMode     = false;
+let fontSizeLevel    = 0; // -2 to +3
+const FONT_SIZES     = [0.82, 0.9, 1.0, 1.08, 1.18, 1.3];
+
+// ===== FONT SIZE =====
+function changeFontSize(delta) {
+  fontSizeLevel = Math.max(0, Math.min(FONT_SIZES.length - 1, fontSizeLevel + delta));
+  document.documentElement.style.setProperty('--font-size-base', FONT_SIZES[fontSizeLevel] + 'rem');
+  localStorage.setItem('fontSizeLevel', fontSizeLevel);
+}
+
+// ===== FULLSCREEN =====
+function toggleFullScreen() {
+  const card  = document.getElementById('cardContainer');
+  const fsBtn = document.getElementById('fullscreenBtn');
+  if (!document.fullscreenElement) {
+    (card.requestFullscreen || card.webkitRequestFullscreen || card.msRequestFullscreen).call(card);
+  } else {
+    (document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen).call(document);
+  }
+}
+document.addEventListener('fullscreenchange', () => {
+  document.getElementById('fullscreenBtn').innerHTML =
+    document.fullscreenElement ? '<span>✕ ملء</span>' : '<span>📺 ملء</span>';
+});
+
+// ===== THEME =====
+function toggleTheme() {
+  document.body.classList.toggle('dark-theme');
+  const dark = document.body.classList.contains('dark-theme');
+  document.getElementById('themeBtn').innerHTML = dark ? '🌙' : '☀️';
+  localStorage.setItem('theme', dark ? 'dark' : 'light');
+}
+function loadSavedTheme() {
+  const saved = localStorage.getItem('theme');
+  const lvl   = parseInt(localStorage.getItem('fontSizeLevel') || '2');
+  if (saved === 'dark') { document.body.classList.add('dark-theme'); document.getElementById('themeBtn').innerHTML = '🌙'; }
+  fontSizeLevel = Math.max(0, Math.min(FONT_SIZES.length - 1, lvl));
+  document.documentElement.style.setProperty('--font-size-base', FONT_SIZES[fontSizeLevel] + 'rem');
+}
+
+// ===== DASHBOARD =====
+function initDashboard() {
+  loadSavedTheme();
+  const container = document.getElementById('chaptersContainer');
+  container.innerHTML = '';
+  CHAPTERS.forEach(chap => {
+    const item = document.createElement('div');
+    item.className = 'chapter-item' + (selectedChapters.includes(chap.ch) ? ' selected' : '');
+    item.onclick = () => toggleChapter(chap.ch, item);
+    item.innerHTML = `<div class="checkbox-custom"></div><div class="chapter-info"><div class="chapter-name">${chap.name}</div><div class="chapter-meta">يحتوي على ${chap.count} سؤالاً</div></div>`;
+    container.appendChild(item);
+  });
+  updateStartButton();
+}
+
+function toggleChapter(ch, el) {
+  const idx = selectedChapters.indexOf(ch);
+  if (idx === -1) { selectedChapters.push(ch); el.classList.add('selected'); }
+  else { selectedChapters.splice(idx, 1); el.classList.remove('selected'); }
+  updateStartButton();
+}
+function updateStartButton() {
+  document.getElementById('btnStart').disabled = selectedChapters.length === 0;
+}
+
+// ===== AUTO-SAVE PROGRESS =====
+function autoSave() {
+  const data = { quizQuestions, currentIndex, userAnswers, score, timerType, timeRemaining, isReviewMode };
+  try { localStorage.setItem('quizAutoSave', JSON.stringify(data)); } catch(e){}
+}
+function loadAutoSave() {
+  try {
+    const raw = localStorage.getItem('quizAutoSave');
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch(e) { return null; }
+}
+function clearAutoSave() {
+  localStorage.removeItem('quizAutoSave');
+}
+
+// ===== START QUIZ =====
+function startQuiz() {
+  // Check for saved session
+  const saved = loadAutoSave();
+  if (saved && saved.quizQuestions && saved.quizQuestions.length > 0) {
+    const resume = confirm(`لديك جلسة محفوظة متوقفة عند السؤال ${saved.currentIndex + 1} من ${saved.quizQuestions.length}.\nهل تريد المتابعة من حيث توقفت؟\n(اضغط إلغاء لبدء امتحان جديد)`);
+    if (resume) {
+      quizQuestions = saved.quizQuestions;
+      currentIndex  = saved.currentIndex;
+      userAnswers   = saved.userAnswers;
+      score         = saved.score;
+      timerType     = saved.timerType;
+      timeRemaining = saved.timeRemaining;
+      isReviewMode  = false;
+      resetHomeButton();
+      const timerContainer = document.getElementById('timerContainer');
+      if (timerType === 'none') { timerContainer.style.display = 'none'; }
+      else {
+        timerContainer.style.display = 'flex';
+        timerContainer.classList.remove('warning');
+        if (timerType === 't15' || timerType === 't30') startGlobalTimer();
+      }
+      changeView('viewDashboard', 'viewQuiz');
+      buildSlideDots(); renderQuestion(); return;
+    } else { clearAutoSave(); }
+  }
+
+  let filtered = ALL_QUESTIONS.filter(q => selectedChapters.includes(q.chapter));
+  const typeFilter = document.getElementById('selectType').value;
+  if (typeFilter !== 'all') filtered = filtered.filter(q => q.q_type === typeFilter);
+  if (filtered.length === 0) { alert("لم يتم العثور على أسئلة تطابق الفلاتر المحددة."); return; }
+
+  const mode = document.getElementById('selectMode').value;
+  if (mode === 'random20') filtered = shuffleArray(filtered).slice(0, 20);
+  else if (mode === 'random50') filtered = shuffleArray(filtered).slice(0, 50);
+  else filtered.sort((a, b) => a.chapter - b.chapter || a.q_num - b.q_num);
+
+  const shuffleOpts = document.getElementById('selectShuffle').value === 'yes';
+  quizQuestions = filtered.map(q => {
+    const qCopy = { ...q, options: [...q.options] };
+    if (shuffleOpts) {
+      const correctText = qCopy.options[qCopy.correct_index];
+      qCopy.options = shuffleArray(qCopy.options);
+      qCopy.correct_index = qCopy.options.indexOf(correctText);
+    }
+    return qCopy;
+  });
+
+  currentIndex = 0; userAnswers = {}; score = 0; isReviewMode = false;
+  resetHomeButton();
+  clearInterval(timerInterval);
+  timerType = document.getElementById('selectTimer').value;
+  const timerContainer = document.getElementById('timerContainer');
+  if (timerType === 'none') { timerContainer.style.display = 'none'; }
+  else {
+    timerContainer.style.display = 'flex'; timerContainer.classList.remove('warning');
+    if (timerType === 't15') { timeRemaining = 15 * 60; startGlobalTimer(); }
+    else if (timerType === 't30') { timeRemaining = 30 * 60; startGlobalTimer(); }
+  }
+  changeView('viewDashboard', 'viewQuiz');
+  buildSlideDots(); renderQuestion();
+}
+
+function startGlobalTimer() {
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeRemaining--;
+    updateTimerDisplay();
+    autoSave();
+    if (timeRemaining <= 0) { clearInterval(timerInterval); alert("انتهى وقت الاختبار!"); showResult(); }
+  }, 1000);
+}
+function updateTimerDisplay() {
+  const c = document.getElementById('timerContainer');
+  const t = document.getElementById('timerText');
+  if (timerType === 'none' || isReviewMode) { c.style.display = 'none'; return; }
+  c.style.display = 'flex';
+  if (timerType === 'q45') {
+    t.textContent = timeRemaining + ' ثانية';
+    timerContainer.classList.toggle('warning', timeRemaining <= 10);
+  } else {
+    const m = Math.floor(timeRemaining / 60), s = timeRemaining % 60;
+    t.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    document.getElementById('timerContainer').classList.toggle('warning', timeRemaining <= 60);
+  }
+}
+
+function changeView(fromId, toId) {
+  const from = document.getElementById(fromId);
+  const to   = document.getElementById(toId);
+  from.classList.remove('active'); from.style.display = 'none';
+  to.style.display = 'flex';
+  setTimeout(() => to.classList.add('active'), 50);
+}
+
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+// ===== SLIDE DOTS =====
+function buildSlideDots() {
+  const container = document.getElementById('slideDotsContainer');
+  container.innerHTML = '';
+  quizQuestions.forEach((_, idx) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot'; dot.id = 'dot-' + idx;
+    dot.textContent = idx + 1;
+    dot.onclick = () => jumpToSlide(idx);
+    container.appendChild(dot);
+  });
+}
+function jumpToSlide(idx) { currentIndex = idx; renderQuestion(); }
+function updateSlideDots() {
+  const showFeedback = document.getElementById('selectFeedback').value === 'immediate' || isReviewMode;
+  quizQuestions.forEach((_, idx) => {
+    const dot = document.getElementById('dot-' + idx);
+    if (!dot) return;
+    dot.className = 'dot';
+    if (idx === currentIndex) { dot.classList.add('current'); dot.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); }
+    const ans = userAnswers[idx];
+    if (ans !== undefined) {
+      if (showFeedback) { dot.classList.add(ans === quizQuestions[idx].correct_index ? 'correct' : 'wrong'); }
+      else { dot.classList.add('answered'); }
+    }
+  });
+}
+
+// ===== FORMAT EXPLANATION =====
+function formatExplanation(text) {
+  if (!text) return '';
+  let f = text;
+  // Convert arabic-indic digits
+  f = f.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+  // Numbered lists (1) (2) ...
+  if (/\(\s*1\s*\)/.test(f) && /\(\s*2\s*\)/.test(f)) {
+    f = f.replace(/\(\s*(\d+)\s*\)/g, (_, n) => '\n' + n + '. ');
+  }
+  // Lettered lists (أ) (ب) ...
+  if ((/\(\s*أ\s*\)/.test(f) || /\(\s*ا\s*\)/.test(f)) && /\(\s*ب\s*\)/.test(f)) {
+    f = f.replace(/\(\s*([أابجدهوزحطيكلمنسعفصقرتثخذضظغ])\s*\)/g, (_, l) => '\n' + l + '. ');
+  }
+  // Clean up newlines
+  const lines = f.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+  return lines.join('<br>');
+}
+
+// ===== RENDER QUESTION =====
+function renderQuestion() {
+  const q = quizQuestions[currentIndex];
+  document.getElementById('badgeChapter').textContent = q.chapter_title;
+  document.getElementById('badgeType').textContent = q.q_type === 'mcq' ? 'اختيار من متعدد' : q.q_type === 'tf' ? 'صواب أم خطأ' : 'إكمال الفراغ';
+  document.getElementById('quizCounter').textContent = `السؤال ${currentIndex + 1} من ${quizQuestions.length}`;
+  document.getElementById('progressBar').style.width = (((currentIndex + 1) / quizQuestions.length) * 100) + '%';
+  document.getElementById('qText').innerHTML = q.q_text;
+
+  const optionsContainer = document.getElementById('optionsContainer');
+  optionsContainer.innerHTML = '';
+  const letters    = ['أ', 'ب', 'ج', 'د'];
+  const hasAnswered = userAnswers[currentIndex] !== undefined;
+  const showFeedback = document.getElementById('selectFeedback').value === 'immediate';
+
+  q.options.forEach((opt, optIdx) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.onclick = () => selectOption(optIdx);
+    let statusHtml = '';
+    if (hasAnswered || isReviewMode) {
+      btn.disabled = true;
+      const selected = userAnswers[currentIndex];
+      if (isReviewMode || showFeedback) {
+        if (optIdx === q.correct_index) {
+          btn.classList.add('correct');
+          statusHtml = '<span class="status-icon" style="color:var(--success);">✅</span>';
+        } else if (optIdx === selected) {
+          btn.classList.add('wrong');
+          statusHtml = '<span class="status-icon" style="color:var(--error);">❌</span>';
+        }
+      } else {
+        if (optIdx === selected) btn.classList.add('selected-feedback');
+      }
+    }
+    btn.innerHTML = `<span class="letter-circle">${letters[optIdx]}</span><span style="flex-grow:1; text-align:right;">${opt}</span>${statusHtml}`;
+    optionsContainer.appendChild(btn);
+  });
+
+  // Explanation
+  const expBox = document.getElementById('explanationBox');
+  if (hasAnswered || isReviewMode) {
+    const selected = userAnswers[currentIndex];
+    if (isReviewMode || showFeedback) {
+      expBox.classList.add('show');
+      document.getElementById('explanationIndicator').textContent =
+        selected === -1 ? '⏱️' : (selected === q.correct_index ? '🎉 إجابة صحيحة!' : '💡 شرح الإجابة:');
+      document.getElementById('explanationText').innerHTML = formatExplanation(q.explanation);
+    } else { expBox.classList.remove('show'); }
+  } else { expBox.classList.remove('show'); }
+
+  // Controls
+  document.getElementById('btnPrev').disabled = currentIndex === 0;
+  const nextBtn = document.getElementById('btnNext');
+  const isLast  = currentIndex === quizQuestions.length - 1;
+  if (isReviewMode) { nextBtn.disabled = false; nextBtn.innerHTML = isLast ? 'العودة للنتيجة 🏁' : 'التالي ←'; }
+  else { nextBtn.disabled = !hasAnswered; nextBtn.innerHTML = isLast ? 'عرض النتيجة 🏁' : 'التالي ←'; }
+
+  document.getElementById('scoreMini').textContent = `النقاط: ${score}`;
+
+  // Per-question timer
+  if (timerType === 'q45' && !isReviewMode) {
+    clearInterval(timerInterval);
+    if (!hasAnswered) {
+      timeRemaining = 45; updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        timeRemaining--; updateTimerDisplay();
+        if (timeRemaining <= 0) { clearInterval(timerInterval); selectOption(-1); }
+      }, 1000);
+    } else { document.getElementById('timerText').textContent = "تمت الإجابة"; document.getElementById('timerContainer').classList.remove('warning'); }
+  } else if (timerType !== 'none' && !isReviewMode) { updateTimerDisplay(); }
+
+  updateSlideDots();
+  autoSave();
+}
+
+// ===== SELECT OPTION =====
+function selectOption(optIdx) {
+  if (userAnswers[currentIndex] !== undefined || isReviewMode) return;
+  const q = quizQuestions[currentIndex];
+  if (optIdx !== -1 && (optIdx < 0 || optIdx >= q.options.length)) return;
+  if (timerType === 'q45') clearInterval(timerInterval);
+  userAnswers[currentIndex] = optIdx;
+  if (optIdx === q.correct_index) score++;
+  renderQuestion();
+}
+
+// ===== NAVIGATE =====
+function navigateQuestion(direction) {
+  if (direction === 1) {
+    if (currentIndex < quizQuestions.length - 1) { currentIndex++; renderQuestion(); }
+    else { isReviewMode ? changeView('viewQuiz', 'viewResult') : showResult(); }
+  } else if (direction === -1 && currentIndex > 0) { currentIndex--; renderQuestion(); }
+}
+
+function confirmGoHome() {
+  if (isReviewMode) {
+    if (confirm("هل تريد العودة لصفحة النتيجة والإحصائيات؟")) { changeView('viewQuiz', 'viewResult'); }
+    return;
+  }
+  if (confirm("هل أنت متأكد من العودة للرئيسية؟ سيتم حفظ تقدمك تلقائياً.")) {
+    clearInterval(timerInterval); autoSave();
+    isReviewMode = false; resetHomeButton();
+    changeView('viewQuiz', 'viewDashboard'); initDashboard();
+  }
+}
+
+function resetHomeButton() {
+  const btn = document.getElementById('btnHome');
+  btn.innerHTML = 'الرئيسية 🏠'; btn.style.color = 'var(--error)'; btn.style.borderColor = 'var(--error-border)';
+  document.getElementById('reviewBadge').style.display = 'none';
+}
+
+// ===== REVIEW MODE =====
+function startReviewMode() {
+  isReviewMode = true; currentIndex = 0;
+  changeView('viewResult', 'viewQuiz');
+  document.getElementById('reviewBadge').style.display = 'inline-block';
+  document.getElementById('timerContainer').style.display = 'none';
+  const btn = document.getElementById('btnHome');
+  btn.innerHTML = 'النتيجة 🏁'; btn.style.color = 'var(--accent)'; btn.style.borderColor = 'var(--accent)';
+  buildSlideDots(); renderQuestion();
+}
+
+// ===== SHOW RESULT =====
+function showResult() {
+  clearInterval(timerInterval);
+  clearAutoSave();
+  changeView('viewQuiz', 'viewResult');
+
+  const total = quizQuestions.length;
+  document.getElementById('resultScore').textContent = score;
+  document.getElementById('resultTotal').textContent = `من ${total}`;
+  document.getElementById('statCorrect').textContent = score;
+  document.getElementById('statWrong').textContent = total - score;
+
+  const pct = Math.round((score / total) * 100);
+  document.getElementById('statPct').textContent = pct + '%';
+
+  let title, msg;
+  if (pct === 100) { title = '🏆 درجة كاملة! ممتاز جداً'; msg = 'أحسنت صنعاً! لقد أجبت على كافة الأسئلة بشكل صحيح.'; }
+  else if (pct >= 85) { title = '🌟 أداء ممتاز ومتميز'; msg = 'إلمام شبه كامل بالمادة! استمر في هذا المستوى الرائع.'; }
+  else if (pct >= 70) { title = '👍 جيد جداً'; msg = 'أداء جيد جداً! راجع شروحات الأسئلة التي أخطأت بها.'; }
+  else if (pct >= 50) { title = '📘 جيد - تحتاج لبعض التركيز'; msg = 'اجتزت الامتحان بنجاح، يُنصح بمراجعة الفصول التي حصلت فيها على نسبة منخفضة.'; }
+  else { title = '📖 تحتاج لمزيد من المراجعة'; msg = 'لا تقلق، راجع المادة وأعد المحاولة. انظر تحليل الفصول أدناه للتركيز على نقاط ضعفك.'; }
+
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultMsg').textContent = msg;
+
+  // Weakness analysis by chapter
+  renderChapterBars();
+
+  // Save to history
+  saveToHistory(pct, total, score);
+}
+
+function renderChapterBars() {
+  const barsContainer = document.getElementById('chapterBars');
+  barsContainer.innerHTML = '';
+
+  // Calculate per-chapter stats from answered questions
+  const chStats = {};
+  quizQuestions.forEach((q, idx) => {
+    const ch = q.chapter;
+    if (!chStats[ch]) chStats[ch] = { correct: 0, total: 0, title: q.chapter_title };
+    if (userAnswers[idx] !== undefined && userAnswers[idx] !== -1) {
+      chStats[ch].total++;
+      if (userAnswers[idx] === q.correct_index) chStats[ch].correct++;
+    }
+  });
+
+  const chKeys = Object.keys(chStats);
+  if (chKeys.length === 0) { barsContainer.innerHTML = '<div style="color:var(--text-muted); font-size:0.82rem; text-align:center;">لا توجد بيانات كافية.</div>'; return; }
+
+  chKeys.forEach(ch => {
+    const s   = chStats[ch];
+    const pct = s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0;
+    const col = pct >= 70 ? 'var(--success)' : pct >= 50 ? 'var(--accent)' : 'var(--error)';
+    const shortTitle = s.title.replace('الريادة وإدارة الأعمال الصغيرة', 'ريادة أعمال').replace('نظرة عامة إلى الأعمال الصغيرة', 'نظرة عامة').replace('خطة العمل في الأعمال الصغيرة والريادية', 'خطة العمل').replace('تأسيس الأعمال الصغيرة', 'تأسيس أعمال').replace('تمويل الأعمال الصغيرة', 'تمويل').replace('موقع المشروع الصغير', 'موقع المشروع').replace('الريادة الدولية', 'ريادة دولية');
+    const row = document.createElement('div');
+    row.className = 'ch-bar-row';
+    row.innerHTML = `
+      <div class="ch-bar-label">${shortTitle}</div>
+      <div class="ch-bar-wrap"><div class="ch-bar-fill" style="width:${pct}%; background:${col};"></div></div>
+      <div class="ch-bar-pct" style="color:${col};">${pct}%</div>
+    `;
+    barsContainer.appendChild(row);
+  });
+}
+
+// ===== HISTORY =====
+function saveToHistory(pct, total, correct) {
+  const now   = new Date();
+  const label = now.toLocaleDateString('ar-EG') + ' - ' + now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+  const chaps = [...new Set(quizQuestions.map(q => q.chapter_title.split(':')[0]))].join('، ');
+  const entry = { date: label, pct, total, correct, chapters: chaps };
+  try {
+    const raw  = localStorage.getItem('quizHistory') || '[]';
+    const hist = JSON.parse(raw);
+    hist.unshift(entry);
+    if (hist.length > 30) hist.pop();
+    localStorage.setItem('quizHistory', JSON.stringify(hist));
+  } catch(e){}
+}
+
+function showHistoryView() {
+  const container = document.getElementById('historyContainer');
+  try {
+    const raw  = localStorage.getItem('quizHistory') || '[]';
+    const hist = JSON.parse(raw);
+    if (hist.length === 0) {
+      container.innerHTML = '<div class="empty-history">📭 لا توجد محاولات سابقة محفوظة بعد.</div>';
+    } else {
+      let html = '<table class="history-table"><thead><tr><th>#</th><th>التاريخ</th><th>الفصول</th><th>النتيجة</th><th>النسبة</th></tr></thead><tbody>';
+      hist.forEach((h, i) => {
+        const badgeClass = h.pct >= 70 ? 'good' : h.pct >= 50 ? 'mid' : 'low';
+        html += `<tr>
+          <td>${i + 1}</td>
+          <td style="font-size:0.72rem;">${h.date}</td>
+          <td style="font-size:0.7rem; max-width:140px;">${h.chapters}</td>
+          <td>${h.correct}/${h.total}</td>
+          <td><span class="history-badge ${badgeClass}">${h.pct}%</span></td>
+        </tr>`;
+      });
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+  } catch(e) { container.innerHTML = '<div class="empty-history">خطأ في تحميل السجل.</div>'; }
+
+  // Find active view to come back from
+  const panels = ['viewDashboard','viewQuiz','viewResult','viewHistory'];
+  const activeFrom = panels.find(id => document.getElementById(id).classList.contains('active')) || 'viewDashboard';
+  document.getElementById('historyContainer').dataset.from = activeFrom;
+  changeView(activeFrom, 'viewHistory');
+}
+
+function clearHistory() {
+  if (confirm("هل تريد حذف سجل المحاولات كاملاً؟ لا يمكن التراجع.")) {
+    localStorage.removeItem('quizHistory');
+    document.getElementById('historyContainer').innerHTML = '<div class="empty-history">📭 تم حذف السجل بنجاح.</div>';
+  }
+}
+
+function restartQuiz() {
+  isReviewMode = false; resetHomeButton();
+  changeView('viewResult', 'viewDashboard');
+  updateStartButton();
+}
+
+// ===== SWIPE GESTURE (Mobile) =====
+(function initSwipe() {
+  let startX = 0, startY = 0;
+  const body = document.getElementById('quizSplitBody');
+  document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const quizView = document.getElementById('viewQuiz');
+    if (!quizView.classList.contains('active')) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx)) return; // Ignore small or vertical swipes
+    const hasAnswered = userAnswers[currentIndex] !== undefined;
+    if (dx < 0) { // Swipe left = next (in LTR; in RTL UI this means "forward")
+      if (hasAnswered || isReviewMode) navigateQuestion(1);
+    } else { // Swipe right = previous
+      if (currentIndex > 0) navigateQuestion(-1);
+    }
+  }, { passive: true });
+})();
+
+// ===== KEYBOARD =====
+document.addEventListener('keydown', e => {
+  const quizView = document.getElementById('viewQuiz');
+  if (!quizView.classList.contains('active')) return;
+  const key = e.key.toLowerCase();
+  const hasAnswered = userAnswers[currentIndex] !== undefined;
+  if (key==='1'||key==='a'||e.key==='ش'||e.key==='أ'||e.key==='ا'||key==='t'||e.key==='ص') { if (!hasAnswered&&!isReviewMode) selectOption(0); }
+  else if (key==='2'||key==='b'||e.key==='لا'||e.key==='ب'||key==='f'||e.key==='خ') { if (!hasAnswered&&!isReviewMode) selectOption(1); }
+  else if (key==='3'||key==='c'||e.key==='ؤ'||e.key==='ج') { if (!hasAnswered&&!isReviewMode) selectOption(2); }
+  else if (key==='4'||key==='d'||e.key==='ي'||e.key==='د') { if (!hasAnswered&&!isReviewMode) selectOption(3); }
+  else if (e.key===' '||e.key==='Enter') { e.preventDefault(); if (hasAnswered||isReviewMode) navigateQuestion(1); }
+  else if (e.key==='ArrowRight'||e.key==='PageUp') { if (currentIndex>0) navigateQuestion(-1); }
+  else if (e.key==='ArrowLeft'||e.key==='PageDown') { if (hasAnswered||isReviewMode) navigateQuestion(1); }
+  else if (e.key==='Escape'||key==='h') { confirmGoHome(); }
+});
+
+window.onload = initDashboard;
+</script>
+</body>
+</html>
