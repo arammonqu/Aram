@@ -1926,19 +1926,21 @@ html.dark-mode .nlist li .nn{background:var(--badge-bg);color:var(--badge-c);}
       flex-direction: column !important;
       overflow: hidden !important;
     }
-    .shead {
+    .shead, .slide-header, .hdr, .sh {
       height: 60px !important;
       min-height: 60px !important;
       padding: 0 20px !important;
       flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
-    .shead .stitle {
+    .shead .stitle, .slide-header h2, .hdr h2, .sh-title, .stitle, .ht {
       font-size: 18px !important;
     }
-    .shead .snum {
+    .shead .snum, .slide-header .en-title, .slide-header .sub-en, .hdr .badge, .sh-tag, .eye, .en-sub, .hsub, .sh-en, .sh-num, .sep {
       font-size: 11px !important;
     }
-    .sbody {
+    .sbody, .slide-body, .body, .sb {
       flex-grow: 1 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
@@ -1949,6 +1951,7 @@ html.dark-mode .nlist li .nn{background:var(--badge-bg);color:var(--badge-c);}
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
+      height: auto !important; /* clear fixed heights */
     }
     .g2, .g3, .aspect-grid, .toc-grid, .eco-grid, .eco-grid-l, .char-grid, .soc-grid, .sum-cols, .intra-grid, .beh-row, .mrow, .src-grid {
       grid-template-columns: 1fr !important;
@@ -2049,19 +2052,21 @@ html.mobile-view .slide {
       flex-direction: column !important;
       overflow: hidden !important;
     }
-html.mobile-view .shead {
+html.mobile-view .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
       height: 60px !important;
       min-height: 60px !important;
       padding: 0 20px !important;
       flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
-html.mobile-view .shead .stitle {
+html.mobile-view .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
       font-size: 18px !important;
     }
-html.mobile-view .shead .snum {
+html.mobile-view .shead .snum, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge, html.mobile-view .sh-tag, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .sh-num, html.mobile-view .sep {
       font-size: 11px !important;
     }
-html.mobile-view .sbody {
+html.mobile-view .sbody, html.mobile-view .slide-body, html.mobile-view .body, html.mobile-view .sb {
       flex-grow: 1 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
@@ -2072,6 +2077,7 @@ html.mobile-view .sbody {
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
+      height: auto !important; /* clear fixed heights */
     }
 html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .aspect-grid, html.mobile-view .toc-grid, html.mobile-view .eco-grid, html.mobile-view .eco-grid-l, html.mobile-view .char-grid, html.mobile-view .soc-grid, html.mobile-view .sum-cols, html.mobile-view .intra-grid, html.mobile-view .beh-row, html.mobile-view .mrow, html.mobile-view .src-grid {
       grid-template-columns: 1fr !important;
@@ -2459,19 +2465,21 @@ html.mobile-view /* Constrain layouts to viewport width */
   window.addEventListener('touchstart', e => {
     _tX = e.changedTouches[0].clientX;
     _tY = e.changedTouches[0].clientY;
-  }, { passive: true });
+  }, true); // capture phase
   window.addEventListener('touchend', e => {
     if (_tX === null) return;
     const dx = e.changedTouches[0].clientX - _tX;
     const dy = e.changedTouches[0].clientY - _tY;
     // Only forward horizontal swipes (not vertical scrolling)
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
       if (window.parent && window.parent.handleGlobalSwipe) {
         window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
       }
     }
     _tX = null; _tY = null;
-  }, { passive: true });
+  }, true); // capture phase
 <\/script>
 <div class="presentation" id="presentation">
 <!-- ████ SLIDE 1 — HERO ████ -->
@@ -3837,19 +3845,21 @@ window.__presentationApi = {
       flex-direction: column !important;
       overflow: hidden !important;
     }
-    .shead {
+    .shead, .slide-header, .hdr, .sh {
       height: 60px !important;
       min-height: 60px !important;
       padding: 0 20px !important;
       flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
-    .shead .stitle {
+    .shead .stitle, .slide-header h2, .hdr h2, .sh-title, .stitle, .ht {
       font-size: 18px !important;
     }
-    .shead .snum {
+    .shead .snum, .slide-header .en-title, .slide-header .sub-en, .hdr .badge, .sh-tag, .eye, .en-sub, .hsub, .sh-en, .sh-num, .sep {
       font-size: 11px !important;
     }
-    .sbody {
+    .sbody, .slide-body, .body, .sb {
       flex-grow: 1 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
@@ -3860,6 +3870,7 @@ window.__presentationApi = {
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
+      height: auto !important; /* clear fixed heights */
     }
     .g2, .g3, .aspect-grid, .toc-grid, .eco-grid, .eco-grid-l, .char-grid, .soc-grid, .sum-cols, .intra-grid, .beh-row, .mrow, .src-grid {
       grid-template-columns: 1fr !important;
@@ -3960,19 +3971,21 @@ html.mobile-view .slide {
       flex-direction: column !important;
       overflow: hidden !important;
     }
-html.mobile-view .shead {
+html.mobile-view .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
       height: 60px !important;
       min-height: 60px !important;
       padding: 0 20px !important;
       flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
-html.mobile-view .shead .stitle {
+html.mobile-view .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
       font-size: 18px !important;
     }
-html.mobile-view .shead .snum {
+html.mobile-view .shead .snum, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge, html.mobile-view .sh-tag, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .sh-num, html.mobile-view .sep {
       font-size: 11px !important;
     }
-html.mobile-view .sbody {
+html.mobile-view .sbody, html.mobile-view .slide-body, html.mobile-view .body, html.mobile-view .sb {
       flex-grow: 1 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
@@ -3983,6 +3996,7 @@ html.mobile-view .sbody {
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
+      height: auto !important; /* clear fixed heights */
     }
 html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .aspect-grid, html.mobile-view .toc-grid, html.mobile-view .eco-grid, html.mobile-view .eco-grid-l, html.mobile-view .char-grid, html.mobile-view .soc-grid, html.mobile-view .sum-cols, html.mobile-view .intra-grid, html.mobile-view .beh-row, html.mobile-view .mrow, html.mobile-view .src-grid {
       grid-template-columns: 1fr !important;
@@ -4121,19 +4135,21 @@ html.mobile-view /* Constrain layouts to viewport width */
   window.addEventListener('touchstart', e => {
     _tX = e.changedTouches[0].clientX;
     _tY = e.changedTouches[0].clientY;
-  }, { passive: true });
+  }, true); // capture phase
   window.addEventListener('touchend', e => {
     if (_tX === null) return;
     const dx = e.changedTouches[0].clientX - _tX;
     const dy = e.changedTouches[0].clientY - _tY;
     // Only forward horizontal swipes (not vertical scrolling)
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
       if (window.parent && window.parent.handleGlobalSwipe) {
         window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
       }
     }
     _tX = null; _tY = null;
-  }, { passive: true });
+  }, true); // capture phase
 <\/script>
 <div id="deck-wrapper">
 <div id="progress-bar"><div id="progress-fill"></div></div>
@@ -5628,19 +5644,21 @@ html[data-theme="dark"]  .geo-corner{opacity:.14;}
       flex-direction: column !important;
       overflow: hidden !important;
     }
-    .shead {
+    .shead, .slide-header, .hdr, .sh {
       height: 60px !important;
       min-height: 60px !important;
       padding: 0 20px !important;
       flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
-    .shead .stitle {
+    .shead .stitle, .slide-header h2, .hdr h2, .sh-title, .stitle, .ht {
       font-size: 18px !important;
     }
-    .shead .snum {
+    .shead .snum, .slide-header .en-title, .slide-header .sub-en, .hdr .badge, .sh-tag, .eye, .en-sub, .hsub, .sh-en, .sh-num, .sep {
       font-size: 11px !important;
     }
-    .sbody {
+    .sbody, .slide-body, .body, .sb {
       flex-grow: 1 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
@@ -5651,6 +5669,7 @@ html[data-theme="dark"]  .geo-corner{opacity:.14;}
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
+      height: auto !important; /* clear fixed heights */
     }
     .g2, .g3, .aspect-grid, .toc-grid, .eco-grid, .eco-grid-l, .char-grid, .soc-grid, .sum-cols, .intra-grid, .beh-row, .mrow, .src-grid {
       grid-template-columns: 1fr !important;
@@ -5751,19 +5770,21 @@ html.mobile-view .slide {
       flex-direction: column !important;
       overflow: hidden !important;
     }
-html.mobile-view .shead {
+html.mobile-view .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
       height: 60px !important;
       min-height: 60px !important;
       padding: 0 20px !important;
       flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
-html.mobile-view .shead .stitle {
+html.mobile-view .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
       font-size: 18px !important;
     }
-html.mobile-view .shead .snum {
+html.mobile-view .shead .snum, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge, html.mobile-view .sh-tag, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .sh-num, html.mobile-view .sep {
       font-size: 11px !important;
     }
-html.mobile-view .sbody {
+html.mobile-view .sbody, html.mobile-view .slide-body, html.mobile-view .body, html.mobile-view .sb {
       flex-grow: 1 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
@@ -5774,6 +5795,7 @@ html.mobile-view .sbody {
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
+      height: auto !important; /* clear fixed heights */
     }
 html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .aspect-grid, html.mobile-view .toc-grid, html.mobile-view .eco-grid, html.mobile-view .eco-grid-l, html.mobile-view .char-grid, html.mobile-view .soc-grid, html.mobile-view .sum-cols, html.mobile-view .intra-grid, html.mobile-view .beh-row, html.mobile-view .mrow, html.mobile-view .src-grid {
       grid-template-columns: 1fr !important;
@@ -5912,19 +5934,21 @@ html.mobile-view /* Constrain layouts to viewport width */
   window.addEventListener('touchstart', e => {
     _tX = e.changedTouches[0].clientX;
     _tY = e.changedTouches[0].clientY;
-  }, { passive: true });
+  }, true); // capture phase
   window.addEventListener('touchend', e => {
     if (_tX === null) return;
     const dx = e.changedTouches[0].clientX - _tX;
     const dy = e.changedTouches[0].clientY - _tY;
     // Only forward horizontal swipes (not vertical scrolling)
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
       if (window.parent && window.parent.handleGlobalSwipe) {
         window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
       }
     }
     _tX = null; _tY = null;
-  }, { passive: true });
+  }, true); // capture phase
 <\/script>
 <div id="stage"><div id="scaler">
 <!-- ═══════════════════════════════════
@@ -7497,19 +7521,21 @@ body.dark .ibtn:hover { background: rgba(255,255,255,0.10); }
       flex-direction: column !important;
       overflow: hidden !important;
     }
-    .shead {
+    .shead, .slide-header, .hdr, .sh {
       height: 60px !important;
       min-height: 60px !important;
       padding: 0 20px !important;
       flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
-    .shead .stitle {
+    .shead .stitle, .slide-header h2, .hdr h2, .sh-title, .stitle, .ht {
       font-size: 18px !important;
     }
-    .shead .snum {
+    .shead .snum, .slide-header .en-title, .slide-header .sub-en, .hdr .badge, .sh-tag, .eye, .en-sub, .hsub, .sh-en, .sh-num, .sep {
       font-size: 11px !important;
     }
-    .sbody {
+    .sbody, .slide-body, .body, .sb {
       flex-grow: 1 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
@@ -7520,6 +7546,7 @@ body.dark .ibtn:hover { background: rgba(255,255,255,0.10); }
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
+      height: auto !important; /* clear fixed heights */
     }
     .g2, .g3, .aspect-grid, .toc-grid, .eco-grid, .eco-grid-l, .char-grid, .soc-grid, .sum-cols, .intra-grid, .beh-row, .mrow, .src-grid {
       grid-template-columns: 1fr !important;
@@ -7620,19 +7647,21 @@ html.mobile-view .slide {
       flex-direction: column !important;
       overflow: hidden !important;
     }
-html.mobile-view .shead {
+html.mobile-view .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
       height: 60px !important;
       min-height: 60px !important;
       padding: 0 20px !important;
       flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
-html.mobile-view .shead .stitle {
+html.mobile-view .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
       font-size: 18px !important;
     }
-html.mobile-view .shead .snum {
+html.mobile-view .shead .snum, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge, html.mobile-view .sh-tag, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .sh-num, html.mobile-view .sep {
       font-size: 11px !important;
     }
-html.mobile-view .sbody {
+html.mobile-view .sbody, html.mobile-view .slide-body, html.mobile-view .body, html.mobile-view .sb {
       flex-grow: 1 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
@@ -7643,6 +7672,7 @@ html.mobile-view .sbody {
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
+      height: auto !important; /* clear fixed heights */
     }
 html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .aspect-grid, html.mobile-view .toc-grid, html.mobile-view .eco-grid, html.mobile-view .eco-grid-l, html.mobile-view .char-grid, html.mobile-view .soc-grid, html.mobile-view .sum-cols, html.mobile-view .intra-grid, html.mobile-view .beh-row, html.mobile-view .mrow, html.mobile-view .src-grid {
       grid-template-columns: 1fr !important;
@@ -7781,19 +7811,21 @@ html.mobile-view /* Constrain layouts to viewport width */
   window.addEventListener('touchstart', e => {
     _tX = e.changedTouches[0].clientX;
     _tY = e.changedTouches[0].clientY;
-  }, { passive: true });
+  }, true); // capture phase
   window.addEventListener('touchend', e => {
     if (_tX === null) return;
     const dx = e.changedTouches[0].clientX - _tX;
     const dy = e.changedTouches[0].clientY - _tY;
     // Only forward horizontal swipes (not vertical scrolling)
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
       if (window.parent && window.parent.handleGlobalSwipe) {
         window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
       }
     }
     _tX = null; _tY = null;
-  }, { passive: true });
+  }, true); // capture phase
 <\/script>
 <div class="pres">
 <div class="frame">
@@ -9091,19 +9123,21 @@ body.dark .tag.t{background:rgba(50,189,168,.15);color:#32BDA8;border-color:rgba
       flex-direction: column !important;
       overflow: hidden !important;
     }
-    .shead {
+    .shead, .slide-header, .hdr, .sh {
       height: 60px !important;
       min-height: 60px !important;
       padding: 0 20px !important;
       flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
-    .shead .stitle {
+    .shead .stitle, .slide-header h2, .hdr h2, .sh-title, .stitle, .ht {
       font-size: 18px !important;
     }
-    .shead .snum {
+    .shead .snum, .slide-header .en-title, .slide-header .sub-en, .hdr .badge, .sh-tag, .eye, .en-sub, .hsub, .sh-en, .sh-num, .sep {
       font-size: 11px !important;
     }
-    .sbody {
+    .sbody, .slide-body, .body, .sb {
       flex-grow: 1 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
@@ -9114,6 +9148,7 @@ body.dark .tag.t{background:rgba(50,189,168,.15);color:#32BDA8;border-color:rgba
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
+      height: auto !important; /* clear fixed heights */
     }
     .g2, .g3, .aspect-grid, .toc-grid, .eco-grid, .eco-grid-l, .char-grid, .soc-grid, .sum-cols, .intra-grid, .beh-row, .mrow, .src-grid {
       grid-template-columns: 1fr !important;
@@ -9214,19 +9249,21 @@ html.mobile-view .slide {
       flex-direction: column !important;
       overflow: hidden !important;
     }
-html.mobile-view .shead {
+html.mobile-view .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
       height: 60px !important;
       min-height: 60px !important;
       padding: 0 20px !important;
       flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
-html.mobile-view .shead .stitle {
+html.mobile-view .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
       font-size: 18px !important;
     }
-html.mobile-view .shead .snum {
+html.mobile-view .shead .snum, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge, html.mobile-view .sh-tag, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .sh-num, html.mobile-view .sep {
       font-size: 11px !important;
     }
-html.mobile-view .sbody {
+html.mobile-view .sbody, html.mobile-view .slide-body, html.mobile-view .body, html.mobile-view .sb {
       flex-grow: 1 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
@@ -9237,6 +9274,7 @@ html.mobile-view .sbody {
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
+      height: auto !important; /* clear fixed heights */
     }
 html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .aspect-grid, html.mobile-view .toc-grid, html.mobile-view .eco-grid, html.mobile-view .eco-grid-l, html.mobile-view .char-grid, html.mobile-view .soc-grid, html.mobile-view .sum-cols, html.mobile-view .intra-grid, html.mobile-view .beh-row, html.mobile-view .mrow, html.mobile-view .src-grid {
       grid-template-columns: 1fr !important;
@@ -9375,19 +9413,21 @@ html.mobile-view /* Constrain layouts to viewport width */
   window.addEventListener('touchstart', e => {
     _tX = e.changedTouches[0].clientX;
     _tY = e.changedTouches[0].clientY;
-  }, { passive: true });
+  }, true); // capture phase
   window.addEventListener('touchend', e => {
     if (_tX === null) return;
     const dx = e.changedTouches[0].clientX - _tX;
     const dy = e.changedTouches[0].clientY - _tY;
     // Only forward horizontal swipes (not vertical scrolling)
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
       if (window.parent && window.parent.handleGlobalSwipe) {
         window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
       }
     }
     _tX = null; _tY = null;
-  }, { passive: true });
+  }, true); // capture phase
 <\/script>
 <div class="deck" id="dk">
 <!-- ════════════════════════════════════════════════════
@@ -10519,19 +10559,21 @@ body{
       flex-direction: column !important;
       overflow: hidden !important;
     }
-    .shead {
+    .shead, .slide-header, .hdr, .sh {
       height: 60px !important;
       min-height: 60px !important;
       padding: 0 20px !important;
       flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
-    .shead .stitle {
+    .shead .stitle, .slide-header h2, .hdr h2, .sh-title, .stitle, .ht {
       font-size: 18px !important;
     }
-    .shead .snum {
+    .shead .snum, .slide-header .en-title, .slide-header .sub-en, .hdr .badge, .sh-tag, .eye, .en-sub, .hsub, .sh-en, .sh-num, .sep {
       font-size: 11px !important;
     }
-    .sbody {
+    .sbody, .slide-body, .body, .sb {
       flex-grow: 1 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
@@ -10542,6 +10584,7 @@ body{
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
+      height: auto !important; /* clear fixed heights */
     }
     .g2, .g3, .aspect-grid, .toc-grid, .eco-grid, .eco-grid-l, .char-grid, .soc-grid, .sum-cols, .intra-grid, .beh-row, .mrow, .src-grid {
       grid-template-columns: 1fr !important;
@@ -10642,19 +10685,21 @@ html.mobile-view .slide {
       flex-direction: column !important;
       overflow: hidden !important;
     }
-html.mobile-view .shead {
+html.mobile-view .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
       height: 60px !important;
       min-height: 60px !important;
       padding: 0 20px !important;
       flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
-html.mobile-view .shead .stitle {
+html.mobile-view .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
       font-size: 18px !important;
     }
-html.mobile-view .shead .snum {
+html.mobile-view .shead .snum, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge, html.mobile-view .sh-tag, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .sh-num, html.mobile-view .sep {
       font-size: 11px !important;
     }
-html.mobile-view .sbody {
+html.mobile-view .sbody, html.mobile-view .slide-body, html.mobile-view .body, html.mobile-view .sb {
       flex-grow: 1 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
@@ -10665,6 +10710,7 @@ html.mobile-view .sbody {
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
+      height: auto !important; /* clear fixed heights */
     }
 html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .aspect-grid, html.mobile-view .toc-grid, html.mobile-view .eco-grid, html.mobile-view .eco-grid-l, html.mobile-view .char-grid, html.mobile-view .soc-grid, html.mobile-view .sum-cols, html.mobile-view .intra-grid, html.mobile-view .beh-row, html.mobile-view .mrow, html.mobile-view .src-grid {
       grid-template-columns: 1fr !important;
@@ -10803,19 +10849,21 @@ html.mobile-view /* Constrain layouts to viewport width */
   window.addEventListener('touchstart', e => {
     _tX = e.changedTouches[0].clientX;
     _tY = e.changedTouches[0].clientY;
-  }, { passive: true });
+  }, true); // capture phase
   window.addEventListener('touchend', e => {
     if (_tX === null) return;
     const dx = e.changedTouches[0].clientX - _tX;
     const dy = e.changedTouches[0].clientY - _tY;
     // Only forward horizontal swipes (not vertical scrolling)
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
       if (window.parent && window.parent.handleGlobalSwipe) {
         window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
       }
     }
     _tX = null; _tY = null;
-  }, { passive: true });
+  }, true); // capture phase
 <\/script>
 <div id="stage">
 <!-- GEO BACKGROUND -->
@@ -12714,19 +12762,21 @@ html, body {
       flex-direction: column !important;
       overflow: hidden !important;
     }
-    .shead {
+    .shead, .slide-header, .hdr, .sh {
       height: 60px !important;
       min-height: 60px !important;
       padding: 0 20px !important;
       flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
-    .shead .stitle {
+    .shead .stitle, .slide-header h2, .hdr h2, .sh-title, .stitle, .ht {
       font-size: 18px !important;
     }
-    .shead .snum {
+    .shead .snum, .slide-header .en-title, .slide-header .sub-en, .hdr .badge, .sh-tag, .eye, .en-sub, .hsub, .sh-en, .sh-num, .sep {
       font-size: 11px !important;
     }
-    .sbody {
+    .sbody, .slide-body, .body, .sb {
       flex-grow: 1 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
@@ -12737,6 +12787,7 @@ html, body {
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
+      height: auto !important; /* clear fixed heights */
     }
     .g2, .g3, .aspect-grid, .toc-grid, .eco-grid, .eco-grid-l, .char-grid, .soc-grid, .sum-cols, .intra-grid, .beh-row, .mrow, .src-grid {
       grid-template-columns: 1fr !important;
@@ -12837,19 +12888,21 @@ html.mobile-view .slide {
       flex-direction: column !important;
       overflow: hidden !important;
     }
-html.mobile-view .shead {
+html.mobile-view .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
       height: 60px !important;
       min-height: 60px !important;
       padding: 0 20px !important;
       flex-shrink: 0 !important;
+      display: flex !important;
+      align-items: center !important;
     }
-html.mobile-view .shead .stitle {
+html.mobile-view .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
       font-size: 18px !important;
     }
-html.mobile-view .shead .snum {
+html.mobile-view .shead .snum, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge, html.mobile-view .sh-tag, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .sh-num, html.mobile-view .sep {
       font-size: 11px !important;
     }
-html.mobile-view .sbody {
+html.mobile-view .sbody, html.mobile-view .slide-body, html.mobile-view .body, html.mobile-view .sb {
       flex-grow: 1 !important;
       min-height: 0 !important;
       overflow-y: auto !important;
@@ -12860,6 +12913,7 @@ html.mobile-view .sbody {
       flex-direction: column !important;
       justify-content: flex-start !important;
       align-items: stretch !important;
+      height: auto !important; /* clear fixed heights */
     }
 html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .aspect-grid, html.mobile-view .toc-grid, html.mobile-view .eco-grid, html.mobile-view .eco-grid-l, html.mobile-view .char-grid, html.mobile-view .soc-grid, html.mobile-view .sum-cols, html.mobile-view .intra-grid, html.mobile-view .beh-row, html.mobile-view .mrow, html.mobile-view .src-grid {
       grid-template-columns: 1fr !important;
@@ -13022,19 +13076,21 @@ html.mobile-view /* Constrain layouts to viewport width */
   window.addEventListener('touchstart', e => {
     _tX = e.changedTouches[0].clientX;
     _tY = e.changedTouches[0].clientY;
-  }, { passive: true });
+  }, true); // capture phase
   window.addEventListener('touchend', e => {
     if (_tX === null) return;
     const dx = e.changedTouches[0].clientX - _tX;
     const dy = e.changedTouches[0].clientY - _tY;
     // Only forward horizontal swipes (not vertical scrolling)
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
       if (window.parent && window.parent.handleGlobalSwipe) {
         window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
       }
     }
     _tX = null; _tY = null;
-  }, { passive: true });
+  }, true); // capture phase
 <\/script>
 <div id="prog"></div>
 <div id="app">
