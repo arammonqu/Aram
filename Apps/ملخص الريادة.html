@@ -10707,15 +10707,23 @@ html.mobile-view #s1 {
 
   /* ══ CHAPTER 5 MOBILE OVERRIDES ══ */
   @media (max-width: 1024px) {
-    /* Override the viewport-fitted deck to fill the full iframe */
-    html, body {
+    /* Kill the flex-center body layout, use simple block so .deck fills correctly */
+    html {
+      overflow: hidden !important;
       width: 100% !important;
       height: 100% !important;
-      overflow: hidden !important;
-      display: flex !important;
-      align-items: stretch !important;
-      justify-content: stretch !important;
     }
+    body {
+      display: block !important;
+      align-items: unset !important;
+      justify-content: unset !important;
+      overflow: hidden !important;
+      width: 100% !important;
+      height: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    /* .deck fills the full iframe - kill vw/vh min() sizing */
     .deck {
       position: absolute !important;
       inset: 0 !important;
@@ -10728,12 +10736,21 @@ html.mobile-view #s1 {
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
+      overflow: hidden !important;
     }
-    /* Header: compact for mobile */
-    .hdr { padding: 8px 14px !important; min-height: 46px !important; }
-    .htxt .t { font-size: 15px !important; }
+    /* Header: compact, no overflow */
+    .hdr {
+      padding: 8px 14px !important;
+      min-height: 46px !important;
+      height: auto !important;
+      overflow: hidden !important;
+      flex-wrap: nowrap !important;
+    }
+    .htxt .t { font-size: 15px !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
     .htxt .s { font-size: 10px !important; margin-top: 1px !important; }
-    /* Make the body area scrollable */
+    /* Badge: fix vh-based size */
+    .badge { width: 28px !important; height: 28px !important; font-size: 13px !important; flex-shrink: 0 !important; }
+    /* Make the body area scrollable, no horizontal overflow */
     .body {
       overflow-y: auto !important;
       overflow-x: hidden !important;
@@ -10741,6 +10758,7 @@ html.mobile-view #s1 {
       padding: 10px 14px 20px !important;
       flex: 1 1 0 !important;
       min-height: 0 !important;
+      max-width: 100% !important;
       scrollbar-width: thin !important;
       scrollbar-color: #C8892B rgba(255,255,255,0.08) !important;
     }
@@ -10748,12 +10766,13 @@ html.mobile-view #s1 {
     .body::-webkit-scrollbar-thumb { background: #C8892B !important; border-radius: 4px !important; }
     /* Stack all multi-column grids */
     .g2, .g3, .g4, .g23, .tc { grid-template-columns: 1fr !important; height: auto !important; }
+    /* Card widths: prevent overflow */
+    .card, .zc, .fc, .hl, .acc-item { max-width: 100% !important; box-sizing: border-box !important; }
     /* Fix vh-based font sizes to readable px */
-    .cv-title { font-size: 32px !important; }
-    .cv-sub { font-size: 16px !important; }
-    .cv-eyebrow { font-size: 12px !important; }
+    .cv-title { font-size: 30px !important; }
+    .cv-sub { font-size: 15px !important; }
+    .cv-eyebrow { font-size: 11px !important; }
     .cv-en { font-size: 11px !important; }
-    .htxt .t { font-size: 15px !important; }
     .ct { font-size: 14px !important; }
     .cx { font-size: 13px !important; }
     .fl { font-size: 13px !important; }
@@ -10764,14 +10783,16 @@ html.mobile-view #s1 {
     .acc-qtext { font-size: 13px !important; }
     .sum-label { font-size: 13px !important; }
     .sum-body { font-size: 12px !important; }
-    .tag { font-size: 10px !important; }
-    .tbl { font-size: 12px !important; }
+    .tag { font-size: 10px !important; padding: 3px 8px !important; }
+    .tbl { font-size: 12px !important; width: 100% !important; }
     /* Card padding */
     .zc, .fc { padding: 10px 10px !important; }
   }
-  html.mobile-view .deck { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; min-width: unset !important; max-width: unset !important; min-height: unset !important; max-height: unset !important; transform: none !important; }
-  html.mobile-view .body { overflow-y: auto !important; overflow-x: hidden !important; -webkit-overflow-scrolling: touch !important; padding: 10px 14px 20px !important; flex: 1 1 0 !important; min-height: 0 !important; }
+  html.mobile-view body { display: block !important; overflow: hidden !important; width: 100% !important; height: 100% !important; padding: 0 !important; }
+  html.mobile-view .deck { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; min-width: unset !important; max-width: unset !important; min-height: unset !important; max-height: unset !important; transform: none !important; overflow: hidden !important; }
+  html.mobile-view .body { overflow-y: auto !important; overflow-x: hidden !important; -webkit-overflow-scrolling: touch !important; padding: 10px 14px 20px !important; flex: 1 1 0 !important; min-height: 0 !important; max-width: 100% !important; }
   html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .g4, html.mobile-view .g23, html.mobile-view .tc { grid-template-columns: 1fr !important; height: auto !important; }
+  html.mobile-view .badge { width: 28px !important; height: 28px !important; font-size: 13px !important; }
 </style></head>
 <body><script>
   // ── Mobile layout fixer: runs after DOM is ready ─────────────────────
@@ -14985,13 +15006,14 @@ html.mobile-view #s1 {
   /* ══ CHAPTER 13 MOBILE OVERRIDES ══ */
   @media (max-width: 1024px) {
     html, body { overflow: hidden !important; width: 100% !important; height: 100% !important; }
-    /* #app is the flex-centering wrapper; kill centering */
+    /* #app is the flex-centering wrapper; kill centering to prevent overflow */
     #app {
       display: block !important;
       align-items: unset !important;
       justify-content: unset !important;
       position: absolute !important;
       inset: 0 !important;
+      overflow: hidden !important;
     }
     /* #stage is the actual 1920x1080 canvas - override to fill viewport */
     #stage {
@@ -15003,58 +15025,74 @@ html.mobile-view #s1 {
       left: 0 !important;
       top: 0 !important;
       overflow: hidden !important;
+      min-width: unset !important;
     }
-    /* Slide header: reduce giant desktop padding */
+    /* Slide header: change from 80px-padded horizontal row to compact column layout */
     .sh {
-      padding: 10px 16px 8px !important;
+      padding: 8px 14px !important;
       flex-shrink: 0 !important;
       height: auto !important;
-      min-height: 50px !important;
+      min-height: unset !important;
+      overflow: hidden !important;
+      flex-wrap: wrap !important;
+      gap: 4px !important;
     }
-    .sh-title { font-size: 18px !important; }
-    .sh-en { font-size: 11px !important; }
-    .sh-tag { font-size: 10px !important; }
-    /* Slide body: make scrollable, reduce giant 80px side padding */
+    /* Hide the decorative separator - causes overflow when tags wrap */
+    .sh-sep { display: none !important; }
+    /* Fix white-space:nowrap that causes overflow */
+    .sh-tag { white-space: normal !important; font-size: 10px !important; max-width: 100% !important; }
+    .sh-title { font-size: 16px !important; flex: unset !important; width: 100% !important; order: 2 !important; }
+    .sh-en { font-size: 10px !important; width: 100% !important; order: 3 !important; }
+    .sh-num { font-size: 10px !important; order: 1 !important; }
+    /* Slide body: make scrollable, kill the 80px side padding */
     .sb {
       overflow-y: auto !important;
       overflow-x: hidden !important;
       -webkit-overflow-scrolling: touch !important;
-      padding: 12px 16px 24px !important;
+      padding: 10px 14px 20px !important;
       flex: 1 1 0 !important;
       min-height: 0 !important;
+      max-width: 100% !important;
       scrollbar-width: thin !important;
       scrollbar-color: #C8892B rgba(255,255,255,0.08) !important;
     }
     .sb::-webkit-scrollbar { width: 5px !important; display: block !important; }
     .sb::-webkit-scrollbar-thumb { background: #C8892B !important; border-radius: 4px !important; }
-    /* Stack all grids — remove height:100% which prevents stacking */
+    /* Stack all grids */
     .g2, .g3, .g4, .g23, .g32 { grid-template-columns: 1fr !important; height: auto !important; gap: 12px !important; }
-    /* Stack SWOT cards (keep 2 col since they're short) */
+    /* Keep SWOT as 2-column (small cards) */
     .swot { grid-template-columns: 1fr 1fr !important; height: auto !important; }
+    /* All items must not overflow */
+    .tcard, .sc, .item, .b, .pstep, .stat, .card-full { max-width: 100% !important; box-sizing: border-box !important; overflow: hidden !important; }
     /* Fix font sizes tuned for 1920px canvas */
     .b { font-size: 13px !important; }
     .sc li { font-size: 12px !important; }
     .sc-h { font-size: 14px !important; }
     .pstep-ar { font-size: 14px !important; }
-    .pstep-desc { font-size: 12px !important; max-width: 100% !important; margin-right: 0 !important; }
+    .pstep-desc { font-size: 12px !important; max-width: 100% !important; margin-right: 0 !important; text-align: right !important; }
     /* Fix Q&A cards */
     .qa-grid { grid-template-columns: 1fr !important; height: auto !important; }
-    .qa-card { padding: 10px 14px !important; }
+    .qa-card { padding: 10px 14px !important; max-width: 100% !important; }
     /* Summary grid */
     .mp-grid { grid-template-columns: 1fr !important; height: auto !important; }
     /* Items list */
-    .items { flex-direction: column !important; }
+    .items { flex-direction: column !important; max-width: 100% !important; }
+    /* Fix the cover slide number */
+    #s1 .cover-num { font-size: 80px !important; }
   }
-  html.mobile-view #app { display: block !important; position: absolute !important; inset: 0 !important; }
-  html.mobile-view #stage { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; transform: none !important; }
-  html.mobile-view .sb { overflow-y: auto !important; overflow-x: hidden !important; -webkit-overflow-scrolling: touch !important; padding: 12px 16px 24px !important; flex: 1 1 0 !important; min-height: 0 !important; }
-  html.mobile-view .sh { padding: 10px 16px 8px !important; flex-shrink: 0 !important; height: auto !important; }
-  html.mobile-view .sh-title { font-size: 18px !important; }
+  html.mobile-view #app { display: block !important; position: absolute !important; inset: 0 !important; overflow: hidden !important; }
+  html.mobile-view #stage { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; transform: none !important; min-width: unset !important; overflow: hidden !important; }
+  html.mobile-view .sb { overflow-y: auto !important; overflow-x: hidden !important; -webkit-overflow-scrolling: touch !important; padding: 10px 14px 20px !important; flex: 1 1 0 !important; min-height: 0 !important; max-width: 100% !important; }
+  html.mobile-view .sh { padding: 8px 14px !important; flex-shrink: 0 !important; height: auto !important; overflow: hidden !important; flex-wrap: wrap !important; gap: 4px !important; }
+  html.mobile-view .sh-sep { display: none !important; }
+  html.mobile-view .sh-tag { white-space: normal !important; font-size: 10px !important; max-width: 100% !important; }
+  html.mobile-view .sh-title { font-size: 16px !important; flex: unset !important; width: 100% !important; order: 2 !important; }
+  html.mobile-view .sh-en { font-size: 10px !important; width: 100% !important; order: 3 !important; }
   html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .g4, html.mobile-view .g23, html.mobile-view .g32 { grid-template-columns: 1fr !important; height: auto !important; }
   html.mobile-view .swot { grid-template-columns: 1fr 1fr !important; height: auto !important; }
   html.mobile-view .qa-grid { grid-template-columns: 1fr !important; height: auto !important; }
   html.mobile-view .mp-grid { grid-template-columns: 1fr !important; height: auto !important; }
-
+  html.mobile-view .tcard, html.mobile-view .sc, html.mobile-view .item, html.mobile-view .b, html.mobile-view .pstep { max-width: 100% !important; box-sizing: border-box !important; }
 </style></head>
 <body><script>
   // ── Mobile layout fixer: runs after DOM is ready ─────────────────────
