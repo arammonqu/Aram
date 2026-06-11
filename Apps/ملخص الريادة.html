@@ -65,7 +65,8 @@
       width: 100%; height: 100%; overflow: hidden;
       font-family: 'Cairo', 'Arial Unicode MS', Arial, sans-serif;
       background: var(--parent-bg);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      flex-direction: column;
       transition: background 0.3s;
     }
     
@@ -74,14 +75,16 @@
     }
     
     #stage {
-      position: fixed; inset: 0;
-      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      flex-grow: 1;
+      width: 100%;
+      overflow: hidden;
     }
     
     #scaler {
-      display: flex;
-      flex-direction: column;
       transform-origin: top left; position: absolute;
+      width: 1280px;
+      height: 720px;
       overflow: hidden;
       box-shadow: 0 25px 60px rgba(0,0,0,0.8);
       border-radius: 12px;
@@ -92,7 +95,7 @@
     #slide-container {
       position: relative;
       width: 100%;
-      flex-grow: 1;
+      height: 100%;
       overflow: hidden;
       background: var(--parent-bg);
     }
@@ -257,14 +260,15 @@
       padding: 0 40px; background: var(--parent-control-bg);
       backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       border-top: 1px solid var(--parent-control-border);
-      height: 44px;
+      height: 56px;
       flex-shrink: 0;
       color: var(--parent-control-text);
+      width: 100%;
     }
     .nav-btn {
-      width: 30px; height: 30px; border-radius: 4px; 
+      width: 38px; height: 38px; border-radius: 6px; 
       border: 1px solid var(--parent-control-btn-border); cursor: pointer;
-      background: none; color: var(--parent-control-btn-color); font-size: 14px;
+      background: none; color: var(--parent-control-btn-color); font-size: 16px;
       display: flex; align-items: center; justify-content: center; 
       transition: all 0.2s;
     }
@@ -276,8 +280,8 @@
     
     .ui-btn {
       background: none; border: 1px solid var(--parent-control-btn-border);
-      color: var(--parent-control-btn-color); padding: 5px 14px; border-radius: 4px; cursor: pointer;
-      font-family: inherit; font-weight: bold; font-size: 12px; height: 30px;
+      color: var(--parent-control-btn-color); padding: 0 16px; border-radius: 6px; cursor: pointer;
+      font-family: inherit; font-weight: bold; font-size: 13px; height: 38px;
       transition: all 0.2s;
       display: flex; align-items: center; gap: 6px;
     }
@@ -290,6 +294,64 @@
     #progress-fill { height: 100%; background: linear-gradient(to left, #1A8C89, #C8892B); transition: width 0.3s; }
     .footer-info { font-size: 13px; color: var(--parent-control-text); opacity: 0.7; font-weight: 700; }
     #slideCounter { direction: ltr; unicode-bidi: isolate; }
+
+    /* ══ PORTRAIT ORIENTATION TIP ══ */
+    #portrait-tip {
+      display: none;
+      position: fixed;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(11, 114, 104, 0.95);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: bold;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+      z-index: 9999;
+      pointer-events: none;
+      align-items: center;
+      gap: 8px;
+      animation: bounceTip 2s infinite;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      direction: rtl;
+    }
+    
+    @keyframes bounceTip {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, -6px); }
+    }
+    
+    @media (max-width: 768px) and (orientation: portrait) {
+      #portrait-tip {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 600px) {
+      #controls {
+        padding: 0 15px;
+        height: 52px;
+      }
+      .nav-btn {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 14px !important;
+      }
+      .ui-btn {
+        padding: 0 8px !important;
+        font-size: 11px !important;
+        height: 36px !important;
+        gap: 4px !important;
+      }
+      #currentChapterName {
+        display: none !important;
+      }
+      #slideCounter {
+        font-size: 11px !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -472,25 +534,29 @@
     <iframe class="iframe-slide" id="iframe-ch8" srcdoc="" onload="window.syncIframeTheme(this)"></iframe>
     <iframe class="iframe-slide" id="iframe-ch13" srcdoc="" onload="window.syncIframeTheme(this)"></iframe>
     </div>
+  </div>
+</div>
 
-    <!-- Unified Footer Controls inside scaler -->
-    <div id="controls">
-      <div id="progress-bg">
-        <div id="progress-fill" style="width: 0.8%"></div>
-      </div>
-      <div class="footer-info" id="currentChapterName">شريحة الغلاف</div>
-      <div style="display: flex; align-items: center; gap: 15px;">
-        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" title="السابق">❮</button>
-        <div class="footer-info" id="slideCounter">1 / 120</div>
-        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)" title="التالي">❯</button>
-      </div>
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <button class="ui-btn" onclick="goToSlide(1)" title="الذهاب للفهرس التفاعلي">🏠 الفهرس</button>
-        <button class="ui-btn" onclick="toggleGlobalTheme()" title="تبديل المظهر النهاري/الليلي">🌓 المظهر</button>
-        <button class="ui-btn" onclick="toggleFullscreen()" title="ملء الشاشة / خروج">📺 ملء الشاشة</button>
-      </div>
-    </div>
+<!-- Portrait mode helper tip -->
+<div id="portrait-tip">
+  <span>🔄 يرجى تدوير الهاتف للوضع الأفقي لعرض أفضل</span>
+</div>
 
+<!-- Unified Footer Controls outside stage -->
+<div id="controls">
+  <div id="progress-bg">
+    <div id="progress-fill" style="width: 0.8%"></div>
+  </div>
+  <div class="footer-info" id="currentChapterName">شريحة الغلاف</div>
+  <div style="display: flex; align-items: center; gap: 15px;">
+    <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" title="السابق">❮</button>
+    <div class="footer-info" id="slideCounter">1 / 120</div>
+    <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)" title="التالي">❯</button>
+  </div>
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <button class="ui-btn" onclick="goToSlide(1)" title="الذهاب للفهرس التفاعلي">🏠 الفهرس</button>
+    <button class="ui-btn" onclick="toggleGlobalTheme()" title="تبديل المظهر النهاري/الليلي">🌓 المظهر</button>
+    <button class="ui-btn" id="fsBtn" onclick="toggleFullscreen()" title="ملء الشاشة / خروج">📺 ملء الشاشة</button>
   </div>
 </div>
 
@@ -11478,20 +11544,25 @@ html, body {
   function scalePresentation() {
     const s = document.getElementById('scaler');
     
-    // All slides now use a unified 1280x720 resolution
+    // Slide resolution is exactly 1280x720
     const activeWidth = 1280;
-    const activeHeight = 720 + 44; // Slide height + 44px controls height
+    const activeHeight = 720;
     
     s.style.width = activeWidth + 'px';
     s.style.height = activeHeight + 'px';
     
-    const scaleX = window.innerWidth / activeWidth;
-    const scaleY = window.innerHeight / activeHeight;
+    const availableWidth = window.innerWidth;
+    const controls = document.getElementById('controls');
+    const controlsHeight = controls ? controls.offsetHeight : 56;
+    const availableHeight = window.innerHeight - controlsHeight;
+    
+    const scaleX = availableWidth / activeWidth;
+    const scaleY = availableHeight / activeHeight;
     const scale = Math.min(scaleX, scaleY);
     
     s.style.transform = `scale(${scale})`;
-    s.style.left = `${(window.innerWidth - activeWidth * scale) / 2}px`;
-    s.style.top = `${(window.innerHeight - activeHeight * scale) / 2}px`;
+    s.style.left = `${(availableWidth - activeWidth * scale) / 2}px`;
+    s.style.top = `${(availableHeight - activeHeight * scale) / 2}px`;
   }
 
   function syncIframeTheme(iframe) {
@@ -11645,19 +11716,22 @@ html, body {
   // Fullscreen manager
   function toggleFullscreen() {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().then(() => {
-        setTimeout(scalePresentation, 150);
-      }).catch(err => {
-        alert("تعذر تفعيل ملء الشاشة: " + err.message);
-      });
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().then(() => {
+          setTimeout(scalePresentation, 150);
+        }).catch(err => {
+          console.log("Fullscreen error: " + err.message);
+        });
+      }
     } else {
-      document.exitFullscreen().then(() => {
-        setTimeout(scalePresentation, 150);
-      });
+      if (document.exitFullscreen) {
+        document.exitFullscreen().then(() => {
+          setTimeout(scalePresentation, 150);
+        });
+      }
     }
   }
   window.toggleFullscreen = toggleFullscreen;
-
   window.addEventListener('resize', scalePresentation);
   window.addEventListener('DOMContentLoaded', () => {
     // Load theme preference
@@ -11673,6 +11747,12 @@ html, body {
     const startMapping = slideMapping[cur];
     if (startMapping && startMapping.type === 'iframe') {
       loadIframeIfNeeded(startMapping.ch_num);
+    }
+    
+    // Hide fullscreen button if not supported (e.g. on iOS / iPhones)
+    if (!document.documentElement.requestFullscreen) {
+      const fsBtn = document.getElementById('fsBtn');
+      if (fsBtn) fsBtn.style.display = 'none';
     }
     
     scalePresentation();
