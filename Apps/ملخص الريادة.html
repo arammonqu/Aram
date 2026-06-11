@@ -16026,7 +16026,8 @@ html.mobile-view #s1 {
     /* All items must not overflow */
     .tcard, .sc, .item, .b, .pstep, .stat, .card-full { max-width: 100% !important; box-sizing: border-box !important; overflow: hidden !important; }
     /* Stack pstep vertically on mobile */
-    .pstep { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; padding: 12px 16px !important; }
+    .psteps { height: auto !important; display: flex !important; flex-direction: column !important; gap: 12px !important; }
+    .pstep { flex: none !important; height: auto !important; flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; padding: 12px 16px !important; }
     .pstep-sep { display: none !important; }
     /* Fix font sizes tuned for 1920px canvas */
     .b { font-size: 13px !important; }
@@ -16057,7 +16058,8 @@ html.mobile-view #s1 {
   html.mobile-view .qa-grid { grid-template-columns: 1fr !important; height: auto !important; }
   html.mobile-view .mp-grid { grid-template-columns: 1fr !important; height: auto !important; }
   html.mobile-view .tcard, html.mobile-view .sc, html.mobile-view .item, html.mobile-view .b, html.mobile-view .pstep { max-width: 100% !important; box-sizing: border-box !important; }
-  html.mobile-view .pstep { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; padding: 12px 16px !important; }
+  html.mobile-view .psteps { height: auto !important; display: flex !important; flex-direction: column !important; gap: 12px !important; }
+  html.mobile-view .pstep { flex: none !important; height: auto !important; flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; padding: 12px 16px !important; }
   html.mobile-view .pstep-sep { display: none !important; }
   html.mobile-view .pstep-desc { margin-right: 0 !important; margin-left: 0 !important; max-width: 100% !important; text-align: right !important; }
 </style></head>
