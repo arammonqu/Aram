@@ -1702,6 +1702,255 @@ html.dark-mode .nlist li .nn{background:var(--badge-bg);color:var(--badge-c);}
   .pstep-n, .pstep-en, .tcard-en, .tcard-feat, .merr-n, .mp-en, .qa-num, .qa-ans-title, .qa-ans-let, .qa-hint, .badge {
     font-size: 12px !important;
   }
+
+  /* ══ CHAPTER 1 LIGHT MODE OVERRIDES FOR DARK SLIDES ══ */
+  html:not(.dark-mode) .sd {
+    background: var(--sl-bg) !important;
+  }
+  html:not(.dark-mode) .sbody.dk {
+    background: var(--sl-bg) !important;
+  }
+  html:not(.dark-mode) .s-hero {
+    background: radial-gradient(circle at center, #F8F6F2, #EAE5DC) !important;
+  }
+  
+  /* Hero slide (s1) text overrides */
+  html:not(.dark-mode) #s1 .main-t {
+    color: var(--t1) !important;
+  }
+  html:not(.dark-mode) #s1 .en-t {
+    color: var(--t3) !important;
+  }
+  html:not(.dark-mode) #s1 .eyebrow {
+    color: var(--gold2) !important;
+    border-color: rgba(200, 137, 43, 0.4) !important;
+  }
+  html:not(.dark-mode) #s1 .book-badge {
+    color: var(--t3) !important;
+    border-color: var(--bdr) !important;
+  }
+  html:not(.dark-mode) #s1 .ch-bubble {
+    color: var(--gold2) !important;
+    border-color: var(--gold) !important;
+    background: rgba(200, 137, 43, 0.08) !important;
+  }
+  
+  /* Drucker box in s6 */
+  html:not(.dark-mode) #s6 .drucker-box {
+    background: rgba(200, 137, 43, 0.06) !important;
+    border-color: rgba(200, 137, 43, 0.25) !important;
+    color: var(--t1) !important;
+  }
+  html:not(.dark-mode) #s6 .drucker-box .attr {
+    color: var(--t3) !important;
+  }
+  
+  /* Behavior cards in s6 */
+  html:not(.dark-mode) #s6 .beh-card {
+    background: var(--card) !important;
+    border-color: var(--bdr) !important;
+    box-shadow: var(--shad) !important;
+  }
+  html:not(.dark-mode) #s6 .beh-title {
+    color: var(--t1) !important;
+  }
+  html:not(.dark-mode) #s6 .beh-sub {
+    color: var(--t3) !important;
+  }
+  
+  /* Bottom cards in s6 */
+  html:not(.dark-mode) #s6 .sbody.dk div[style*="display:flex"] > div {
+    background: var(--card) !important;
+    border: 1px solid var(--bdr) !important;
+    box-shadow: var(--shad) !important;
+  }
+  html:not(.dark-mode) #s6 .sbody.dk div[style*="display:flex"] > div p {
+    color: var(--t2) !important;
+  }
+  html:not(.dark-mode) #s6 .sbody.dk div[style*="display:flex"] > div p:first-child {
+    color: var(--gold2) !important;
+  }
+  
+  /* Aspect cards in s4 */
+  html:not(.dark-mode) #s4 .aspect-card {
+    background: var(--card) !important;
+    border: 1px solid var(--bdr) !important;
+    border-top: 3px solid var(--gold) !important;
+    box-shadow: var(--shad) !important;
+  }
+  html:not(.dark-mode) #s4 .aspect-card:nth-child(3),
+  html:not(.dark-mode) #s4 .aspect-card:nth-child(4) {
+    border-top-color: var(--teal) !important;
+  }
+  html:not(.dark-mode) #s4 .a-num {
+    color: rgba(200, 137, 43, 0.15) !important;
+  }
+  html:not(.dark-mode) #s4 .aspect-card:nth-child(3) .a-num,
+  html:not(.dark-mode) #s4 .aspect-card:nth-child(4) .a-num {
+    color: rgba(26, 140, 137, 0.15) !important;
+  }
+  html:not(.dark-mode) #s4 .a-title {
+    color: var(--t1) !important;
+  }
+  html:not(.dark-mode) #s4 .a-sub {
+    color: var(--t2) !important;
+  }
+  html:not(.dark-mode) #s4 .intro-txt {
+    color: var(--t2) !important;
+  }
+
+  /* Innovation cards in s10 */
+  html:not(.dark-mode) #s10 .inno-card {
+    background: var(--card) !important;
+    border-color: var(--bdr) !important;
+    border-right: 3px solid var(--teal) !important;
+    color: var(--t1) !important;
+    box-shadow: var(--shad) !important;
+  }
+  html:not(.dark-mode) #s10 .inno-card span {
+    color: var(--teal2) !important;
+  }
+  html:not(.dark-mode) #s10 .res-box {
+    background: var(--card) !important;
+    border: 1px solid var(--bdr) !important;
+    box-shadow: var(--shad) !important;
+  }
+  html:not(.dark-mode) #s10 .res-it {
+    color: var(--t2) !important;
+  }
+  html:not(.dark-mode) #s10 .res-it strong {
+    color: var(--t1) !important;
+  }
+  html:not(.dark-mode) #s10 .res-out {
+    background: rgba(200, 137, 43, 0.06) !important;
+    border-color: rgba(200, 137, 43, 0.22) !important;
+  }
+  html:not(.dark-mode) #s10 .res-out strong {
+    color: var(--gold2) !important;
+  }
+  html:not(.dark-mode) #s10 .res-out span {
+    color: var(--t3) !important;
+  }
+  html:not(.dark-mode) #s10 .res-new {
+    background: rgba(26, 140, 137, 0.06) !important;
+    border-color: rgba(26, 140, 137, 0.22) !important;
+  }
+  html:not(.dark-mode) #s10 .res-new strong {
+    color: var(--teal2) !important;
+  }
+  html:not(.dark-mode) #s10 .res-new span {
+    color: var(--t3) !important;
+  }
+
+  /* Method cards in s12 */
+  html:not(.dark-mode) #s12 .mc {
+    background: var(--card) !important;
+    border: 1px solid var(--bdr) !important;
+    box-shadow: var(--shad) !important;
+  }
+  html:not(.dark-mode) #s12 .mc:nth-child(1) { border-top: 3px solid var(--gold) !important; }
+  html:not(.dark-mode) #s12 .mc:nth-child(2) { border-top: 3px solid var(--teal) !important; }
+  html:not(.dark-mode) #s12 .mc:nth-child(3) { border-top: 3px solid #9B59B6 !important; }
+  html:not(.dark-mode) #s12 .m-num {
+    color: var(--gold2) !important;
+  }
+  html:not(.dark-mode) #s12 .m-title {
+    color: var(--t1) !important;
+  }
+  html:not(.dark-mode) #s12 .m-en {
+    color: var(--t3) !important;
+  }
+  html:not(.dark-mode) #s12 .m-pts {
+    color: var(--t2) !important;
+  }
+  html:not(.dark-mode) #s12 .cycle-box {
+    background: var(--card) !important;
+    border: 1px solid var(--bdr) !important;
+    box-shadow: var(--shad) !important;
+  }
+  html:not(.dark-mode) #s12 .cs {
+    color: var(--t2) !important;
+  }
+  html:not(.dark-mode) #s12 .cs-n {
+    color: var(--gold2) !important;
+  }
+
+  /* Eco cards in s15 */
+  html:not(.dark-mode) #s15 .eco-card {
+    background: var(--card) !important;
+    border: 1px solid var(--bdr) !important;
+    border-right: 3px solid var(--gold) !important;
+    box-shadow: var(--shad) !important;
+  }
+  html:not(.dark-mode) #s15 .ec-n {
+    color: var(--gold2) !important;
+  }
+  html:not(.dark-mode) #s15 .ec-t {
+    color: var(--t1) !important;
+  }
+  html:not(.dark-mode) #s15 .ec-d {
+    color: var(--t2) !important;
+  }
+
+  /* Intrapreneurship in s17 */
+  html:not(.dark-mode) #s17 .intra-def {
+    background: rgba(200, 137, 43, 0.08) !important;
+    border-color: rgba(200, 137, 43, 0.25) !important;
+    color: var(--t1) !important;
+  }
+  html:not(.dark-mode) #s17 .intra-def strong {
+    color: var(--t3) !important;
+  }
+  html:not(.dark-mode) #s17 .intra-section {
+    background: var(--card) !important;
+    border: 1px solid var(--bdr) !important;
+    box-shadow: var(--shad) !important;
+  }
+  html:not(.dark-mode) #s17 .intra-section h4 {
+    color: var(--gold2) !important;
+    border-bottom-color: var(--bdr) !important;
+  }
+  html:not(.dark-mode) #s17 .intra-section ul li {
+    color: var(--t2) !important;
+    border-bottom-color: var(--bdr) !important;
+  }
+
+  /* Summary in s18 */
+  html:not(.dark-mode) #s18 .q-list li {
+    color: var(--t2) !important;
+    border-bottom-color: var(--bdr) !important;
+  }
+  html:not(.dark-mode) #s18 .q-list li .qn {
+    color: var(--gold2) !important;
+  }
+  html:not(.dark-mode) #s18 .sbody.dk p {
+    color: var(--t2) !important;
+  }
+  html:not(.dark-mode) #s18 .sbody.dk p[style*="color:#E8C56A"] {
+    color: var(--gold2) !important;
+  }
+  html:not(.dark-mode) #s18 .sbody.dk p[style*="color:rgba(255,255,255,.38)"] {
+    color: var(--t3) !important;
+  }
+  html:not(.dark-mode) #s18 .kc {
+    background: var(--card) !important;
+    border: 1px solid var(--bdr) !important;
+    border-right: 3px solid var(--teal) !important;
+    box-shadow: var(--shad) !important;
+  }
+  html:not(.dark-mode) #s18 .kc-title {
+    color: var(--gold2) !important;
+  }
+  html:not(.dark-mode) #s18 .kc-text {
+    color: var(--t2) !important;
+  }
+  html:not(.dark-mode) #s18 .fquote {
+    background: linear-gradient(135deg, rgba(200, 137, 43, 0.08), rgba(26, 140, 137, 0.08)) !important;
+    border-color: rgba(200, 137, 43, 0.2) !important;
+  }
+  html:not(.dark-mode) #s18 .fquote-t {
+    color: var(--gold2) !important;
+  }
 </style></head>
 <body>
 <div class="presentation" id="presentation">
