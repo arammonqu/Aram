@@ -2745,17 +2745,19 @@ html.mobile-view #s1 {
             el.getAttribute('style').indexOf('display: grid') >= 0 ||
             el.getAttribute('style').indexOf('grid-template-columns') >= 0
           ))) {
+        // Skip small component-level flex/grid elements to keep their row/inline layout on mobile
+        if (el.classList.contains('item') || el.classList.contains('acc-q') || 
+            el.classList.contains('hdr') || el.classList.contains('sh') || 
+            el.classList.contains('pstep') || el.classList.contains('nav') || 
+            el.classList.contains('dots') || el.classList.contains('badge') ||
+            el.classList.contains('nlist') || el.classList.contains('merr') ||
+            el.classList.contains('qa-head') || el.classList.contains('qa-ans-row')) {
+          return;
+        }
         el.style.setProperty('display', 'flex', 'important');
         el.style.setProperty('flex-direction', 'column', 'important');
         el.style.setProperty('gap', '10px', 'important');
         el.style.setProperty('flex-wrap', 'wrap', 'important');
-        // Also fix children
-        Array.from(el.children).forEach(function(child) {
-          child.style.setProperty('width', '100%', 'important');
-          child.style.setProperty('max-width', '100%', 'important');
-          child.style.setProperty('box-sizing', 'border-box', 'important');
-          child.style.setProperty('flex', 'none', 'important');
-        });
       }
     }
     function applyFixes() {
@@ -4826,17 +4828,19 @@ html.mobile-view #s1 {
             el.getAttribute('style').indexOf('display: grid') >= 0 ||
             el.getAttribute('style').indexOf('grid-template-columns') >= 0
           ))) {
+        // Skip small component-level flex/grid elements to keep their row/inline layout on mobile
+        if (el.classList.contains('item') || el.classList.contains('acc-q') || 
+            el.classList.contains('hdr') || el.classList.contains('sh') || 
+            el.classList.contains('pstep') || el.classList.contains('nav') || 
+            el.classList.contains('dots') || el.classList.contains('badge') ||
+            el.classList.contains('nlist') || el.classList.contains('merr') ||
+            el.classList.contains('qa-head') || el.classList.contains('qa-ans-row')) {
+          return;
+        }
         el.style.setProperty('display', 'flex', 'important');
         el.style.setProperty('flex-direction', 'column', 'important');
         el.style.setProperty('gap', '10px', 'important');
         el.style.setProperty('flex-wrap', 'wrap', 'important');
-        // Also fix children
-        Array.from(el.children).forEach(function(child) {
-          child.style.setProperty('width', '100%', 'important');
-          child.style.setProperty('max-width', '100%', 'important');
-          child.style.setProperty('box-sizing', 'border-box', 'important');
-          child.style.setProperty('flex', 'none', 'important');
-        });
       }
     }
     function applyFixes() {
@@ -7075,17 +7079,19 @@ html.mobile-view #s1 {
             el.getAttribute('style').indexOf('display: grid') >= 0 ||
             el.getAttribute('style').indexOf('grid-template-columns') >= 0
           ))) {
+        // Skip small component-level flex/grid elements to keep their row/inline layout on mobile
+        if (el.classList.contains('item') || el.classList.contains('acc-q') || 
+            el.classList.contains('hdr') || el.classList.contains('sh') || 
+            el.classList.contains('pstep') || el.classList.contains('nav') || 
+            el.classList.contains('dots') || el.classList.contains('badge') ||
+            el.classList.contains('nlist') || el.classList.contains('merr') ||
+            el.classList.contains('qa-head') || el.classList.contains('qa-ans-row')) {
+          return;
+        }
         el.style.setProperty('display', 'flex', 'important');
         el.style.setProperty('flex-direction', 'column', 'important');
         el.style.setProperty('gap', '10px', 'important');
         el.style.setProperty('flex-wrap', 'wrap', 'important');
-        // Also fix children
-        Array.from(el.children).forEach(function(child) {
-          child.style.setProperty('width', '100%', 'important');
-          child.style.setProperty('max-width', '100%', 'important');
-          child.style.setProperty('box-sizing', 'border-box', 'important');
-          child.style.setProperty('flex', 'none', 'important');
-        });
       }
     }
     function applyFixes() {
@@ -9399,17 +9405,19 @@ html.mobile-view #s1 {
             el.getAttribute('style').indexOf('display: grid') >= 0 ||
             el.getAttribute('style').indexOf('grid-template-columns') >= 0
           ))) {
+        // Skip small component-level flex/grid elements to keep their row/inline layout on mobile
+        if (el.classList.contains('item') || el.classList.contains('acc-q') || 
+            el.classList.contains('hdr') || el.classList.contains('sh') || 
+            el.classList.contains('pstep') || el.classList.contains('nav') || 
+            el.classList.contains('dots') || el.classList.contains('badge') ||
+            el.classList.contains('nlist') || el.classList.contains('merr') ||
+            el.classList.contains('qa-head') || el.classList.contains('qa-ans-row')) {
+          return;
+        }
         el.style.setProperty('display', 'flex', 'important');
         el.style.setProperty('flex-direction', 'column', 'important');
         el.style.setProperty('gap', '10px', 'important');
         el.style.setProperty('flex-wrap', 'wrap', 'important');
-        // Also fix children
-        Array.from(el.children).forEach(function(child) {
-          child.style.setProperty('width', '100%', 'important');
-          child.style.setProperty('max-width', '100%', 'important');
-          child.style.setProperty('box-sizing', 'border-box', 'important');
-          child.style.setProperty('flex', 'none', 'important');
-        });
       }
     }
     function applyFixes() {
@@ -11495,17 +11503,19 @@ html.mobile-view #s1 {
             el.getAttribute('style').indexOf('display: grid') >= 0 ||
             el.getAttribute('style').indexOf('grid-template-columns') >= 0
           ))) {
+        // Skip small component-level flex/grid elements to keep their row/inline layout on mobile
+        if (el.classList.contains('item') || el.classList.contains('acc-q') || 
+            el.classList.contains('hdr') || el.classList.contains('sh') || 
+            el.classList.contains('pstep') || el.classList.contains('nav') || 
+            el.classList.contains('dots') || el.classList.contains('badge') ||
+            el.classList.contains('nlist') || el.classList.contains('merr') ||
+            el.classList.contains('qa-head') || el.classList.contains('qa-ans-row')) {
+          return;
+        }
         el.style.setProperty('display', 'flex', 'important');
         el.style.setProperty('flex-direction', 'column', 'important');
         el.style.setProperty('gap', '10px', 'important');
         el.style.setProperty('flex-wrap', 'wrap', 'important');
-        // Also fix children
-        Array.from(el.children).forEach(function(child) {
-          child.style.setProperty('width', '100%', 'important');
-          child.style.setProperty('max-width', '100%', 'important');
-          child.style.setProperty('box-sizing', 'border-box', 'important');
-          child.style.setProperty('flex', 'none', 'important');
-        });
       }
     }
     function applyFixes() {
@@ -11658,8 +11668,8 @@ html.mobile-view #s1 {
 <div class="badge">2</div>
 <div class="htxt"><div class="t">محاور الفصل</div><div class="s">Chapter Overview</div></div>
 </div>
-<div class="body" style="display:flex;gap:3%;align-items:flex-start;padding-top:2.4%">
-<div style="flex:1.1">
+<div class="body tc" style="padding-top:2.4%">
+<div>
 <ul class="pl">
 <li>العوامل العامة المتعلقة باختيار موقع المشروع الجغرافي</li>
 <li>العوامل الرئيسة التي تحدد اختيار المنطقة والمجتمع المناسب للمشروع الصغير بغض النظر إن كان المشروع يهدف إلى إنتاج سلع أو خدمات</li>
@@ -11668,7 +11678,7 @@ html.mobile-view #s1 {
 <li>العوامل الموضوعية والأساليب الكمية والنوعية في المفاضلة بين المواقع المقترحة</li>
 </ul>
 </div>
-<div style="flex:.88">
+<div>
 <div class="hl">
 <div style="font-size:1.48vh;color:var(--gl);font-weight:700;margin-bottom:.8%">🎯 الهدف من الفصل</div>
         تزويد رائد الأعمال بالمعايير والأدوات اللازمة لاختيار الموقع الجغرافي الأنسب لمشروعه الصغير، سواء أكان إنتاجياً أم تجارياً أم خدمياً.
@@ -13336,17 +13346,19 @@ html.mobile-view #s1 {
             el.getAttribute('style').indexOf('display: grid') >= 0 ||
             el.getAttribute('style').indexOf('grid-template-columns') >= 0
           ))) {
+        // Skip small component-level flex/grid elements to keep their row/inline layout on mobile
+        if (el.classList.contains('item') || el.classList.contains('acc-q') || 
+            el.classList.contains('hdr') || el.classList.contains('sh') || 
+            el.classList.contains('pstep') || el.classList.contains('nav') || 
+            el.classList.contains('dots') || el.classList.contains('badge') ||
+            el.classList.contains('nlist') || el.classList.contains('merr') ||
+            el.classList.contains('qa-head') || el.classList.contains('qa-ans-row')) {
+          return;
+        }
         el.style.setProperty('display', 'flex', 'important');
         el.style.setProperty('flex-direction', 'column', 'important');
         el.style.setProperty('gap', '10px', 'important');
         el.style.setProperty('flex-wrap', 'wrap', 'important');
-        // Also fix children
-        Array.from(el.children).forEach(function(child) {
-          child.style.setProperty('width', '100%', 'important');
-          child.style.setProperty('max-width', '100%', 'important');
-          child.style.setProperty('box-sizing', 'border-box', 'important');
-          child.style.setProperty('flex', 'none', 'important');
-        });
       }
     }
     function applyFixes() {
@@ -16009,12 +16021,15 @@ html.mobile-view #s1 {
     .swot { grid-template-columns: 1fr 1fr !important; height: auto !important; }
     /* All items must not overflow */
     .tcard, .sc, .item, .b, .pstep, .stat, .card-full { max-width: 100% !important; box-sizing: border-box !important; overflow: hidden !important; }
+    /* Stack pstep vertically on mobile */
+    .pstep { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; padding: 12px 16px !important; }
+    .pstep-sep { display: none !important; }
     /* Fix font sizes tuned for 1920px canvas */
     .b { font-size: 13px !important; }
     .sc li { font-size: 12px !important; }
     .sc-h { font-size: 14px !important; }
     .pstep-ar { font-size: 14px !important; }
-    .pstep-desc { font-size: 12px !important; max-width: 100% !important; margin-right: 0 !important; text-align: right !important; }
+    .pstep-desc { font-size: 12px !important; max-width: 100% !important; margin-right: 0 !important; margin-left: 0 !important; text-align: right !important; }
     /* Fix Q&A cards */
     .qa-grid { grid-template-columns: 1fr !important; height: auto !important; }
     .qa-card { padding: 10px 14px !important; max-width: 100% !important; }
@@ -16038,6 +16053,9 @@ html.mobile-view #s1 {
   html.mobile-view .qa-grid { grid-template-columns: 1fr !important; height: auto !important; }
   html.mobile-view .mp-grid { grid-template-columns: 1fr !important; height: auto !important; }
   html.mobile-view .tcard, html.mobile-view .sc, html.mobile-view .item, html.mobile-view .b, html.mobile-view .pstep { max-width: 100% !important; box-sizing: border-box !important; }
+  html.mobile-view .pstep { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; padding: 12px 16px !important; }
+  html.mobile-view .pstep-sep { display: none !important; }
+  html.mobile-view .pstep-desc { margin-right: 0 !important; margin-left: 0 !important; max-width: 100% !important; text-align: right !important; }
 </style></head>
 <body><script>
   // ── Mobile layout fixer: runs after DOM is ready ─────────────────────
@@ -16065,17 +16083,19 @@ html.mobile-view #s1 {
             el.getAttribute('style').indexOf('display: grid') >= 0 ||
             el.getAttribute('style').indexOf('grid-template-columns') >= 0
           ))) {
+        // Skip small component-level flex/grid elements to keep their row/inline layout on mobile
+        if (el.classList.contains('item') || el.classList.contains('acc-q') || 
+            el.classList.contains('hdr') || el.classList.contains('sh') || 
+            el.classList.contains('pstep') || el.classList.contains('nav') || 
+            el.classList.contains('dots') || el.classList.contains('badge') ||
+            el.classList.contains('nlist') || el.classList.contains('merr') ||
+            el.classList.contains('qa-head') || el.classList.contains('qa-ans-row')) {
+          return;
+        }
         el.style.setProperty('display', 'flex', 'important');
         el.style.setProperty('flex-direction', 'column', 'important');
         el.style.setProperty('gap', '10px', 'important');
         el.style.setProperty('flex-wrap', 'wrap', 'important');
-        // Also fix children
-        Array.from(el.children).forEach(function(child) {
-          child.style.setProperty('width', '100%', 'important');
-          child.style.setProperty('max-width', '100%', 'important');
-          child.style.setProperty('box-sizing', 'border-box', 'important');
-          child.style.setProperty('flex', 'none', 'important');
-        });
       }
     }
     function applyFixes() {
@@ -16402,7 +16422,7 @@ html.mobile-view #s1 {
 </div>
 <div class="sb">
 <div class="dn">٧</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;height:100%;">
+<div class="g2" style="gap:16px;height:100%;">
 <div class="items">
 <div class="item">
 <div class="item-n">١</div>
@@ -16460,7 +16480,7 @@ html.mobile-view #s1 {
 <div class="g23">
 <!-- LEFT: stats -->
 <div style="display:flex;flex-direction:column;gap:16px;height:100%;">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1;">
+<div class="g2" style="gap:14px;flex:1;">
 <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
 <div class="stat-n">١٥</div><div class="stat-u">–٢٠</div>
 <div class="stat-l">صفحة — الحجم الاعتيادي</div>
@@ -16763,7 +16783,7 @@ html.mobile-view #s1 {
 </div>
 <div class="sb">
 <div class="dn">٧</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;height:100%;">
+<div class="g2" style="gap:12px;height:100%;">
 <div style="display:flex;flex-direction:column;gap:10px;height:100%;">
 <div class="merr">
 <div class="merr-n">١</div>
@@ -16985,7 +17005,7 @@ html.mobile-view #s1 {
 </div>
 <div class="sb">
 <div class="dn">✓</div>
-<div style="display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:14px;height:100%;">
+<div class="g3" style="grid-template-rows:1fr 1fr;gap:14px;height:100%;">
 <!-- 1 -->
 <div class="card card-gold" style="display:flex;flex-direction:column;">
 <div style="font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">التعريف</div>
