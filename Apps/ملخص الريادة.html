@@ -58,6 +58,48 @@
       --parent-control-btn-hover-color: #EDE9E2;
       --parent-control-btn-border: rgba(255, 255, 255, 0.15);
     }
+    
+    @media (max-width: 1024px) {
+      .cover-card {
+        padding: 30px 20px !important;
+        width: 90% !important;
+      }
+      .master-cover h1 {
+        font-size: 32px !important;
+      }
+      .cover-desc-text {
+        font-size: 14px !important;
+      }
+      .toc-grid {
+        grid-template-columns: 1fr !important;
+        max-height: calc(100vh - 180px) !important;
+        padding: 0 10px !important;
+      }
+      .toc-btn {
+        padding: 12px 16px !important;
+        font-size: 15px !important;
+      }
+      .toc-btn span {
+        font-size: 20px !important;
+      }
+      .ch-divider-card {
+        padding: 30px 20px !important;
+        width: 90% !important;
+      }
+      .ch-divider h1 {
+        font-size: 28px !important;
+      }
+      .ch-divider p {
+        font-size: 14px !important;
+      }
+      #slide_toc .shead {
+        padding: 0 20px !important;
+        height: 60px !important;
+      }
+      #slide_toc .sbody {
+        padding: 15px 20px 20px !important;
+      }
+    }
 
     /* ══ GLOBAL RESET & BASICS ══ */
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -242,7 +284,12 @@
     /* ══ IFRAME SLIDES ══ */
     .iframe-slide {
       position: absolute; inset: 0;
-      width: 100%; height: 100%;
+      width: 1px !important;
+      min-width: 100% !important;
+      *width: 100% !important;
+      height: 1px !important;
+      min-height: 100% !important;
+      *height: 100% !important;
       border: none;
       opacity: 0; pointer-events: none;
       transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
@@ -1707,9 +1754,22 @@ html.dark-mode .nlist li .nn{background:var(--badge-bg);color:var(--badge-c);}
   body, html {
     background: transparent !important;
     overflow: hidden !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   /* Ensure the stage is centered inside the iframe and doesn't get clipped */
-  #stage, #deck-wrapper, .presentation, #presentation {
+  #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
+    margin: 0 !important;
+    padding: 0 !important;
+    position: absolute !important;
+    inset: 0 !important;
+    transform: none !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .slide {
     margin: 0 !important;
     padding: 0 !important;
     position: absolute !important;
@@ -1768,6 +1828,210 @@ html.dark-mode .nlist li .nn{background:var(--badge-bg);color:var(--badge-c);}
   .pstep-n, .pstep-en, .tcard-en, .tcard-feat, .merr-n, .mp-en, .qa-num, .qa-ans-title, .qa-ans-let, .qa-hint, .badge {
     font-size: 12px !important;
   }
+
+  /* ══ MOBILE RESPONSIVE OVERRIDES (width <= 1024px) ══ */
+  @media (max-width: 1024px) {
+    
+    #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .slide {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    .shead {
+      height: 60px !important;
+      padding: 0 20px !important;
+      flex-shrink: 0 !important;
+    }
+    .shead .stitle {
+      font-size: 18px !important;
+    }
+    .shead .snum {
+      font-size: 11px !important;
+    }
+    .sbody {
+      height: auto !important;
+      flex-grow: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 15px 20px 30px !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+    }
+    .g2, .g3, .aspect-grid, .toc-grid, .eco-grid, .eco-grid-l, .char-grid, .soc-grid, .sum-cols, .intra-grid, .beh-row, .mrow, .src-grid {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+    p, li, td, .intro-txt, .card-body, .item-d, .b-text, .sc li, .merr-d, .mp-body, .qa-ans-text, .tcard-desc,
+    .cbod, .lt, .hbox, .cex-item, .toc-text, .phase-desc, .calc-desc, .sec-desc, .sum-body, .acc-ans,
+    .ctext, .step-desc, .ilist li, .intro-box, .hl-txt, .ans-text, .qtable td, .qrbox .qrl,
+    .def-block p, .body-text, .type-card p, .crit-item p, .styled-table td, .class-table td,
+    .char-desc, .ci-text, .fill-item, .acc-content, .pstep-desc, .cx, .hl, .tbl, .tbl td, .zx, .fs,
+    .def-box, .nlist li, .fi .fit, .r-desc, .c-desc, .ec-d, .soc-desc, .m-pts {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+    .card-title, .type-name, .crit-num, .char-name, .sum-title, .acc-q, .flow-lbl, .ctitle, .step-title,
+    .sum-label, .sum-desc, .acc-head, .ans-lbl, .qa, .zt, .zx, .col-t, .tbl th, .acc-qtext, .ctit,
+    .phase-title, .compare-head, .sum-head, .acc-qtxt, .item-t, .sc-h, .pstep-ar, .tcard-name, .merr-t,
+    .mp-title, .summary-text, .qa-q-text, .ct, .fl, .card h3, .beh-title, .m-title, .r-title, .c-title, .ec-t, .soc-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+    #s1 .h-content {
+      height: auto !important;
+      padding: 40px 20px !important;
+      justify-content: flex-start !important;
+    }
+    #s1 .main-t, #s1 .cover-main, .s1-title {
+      font-size: 32px !important;
+    }
+    #s1 .en-t, #s1 .cover-en {
+      font-size: 16px !important;
+    }
+    .card, .dcard, .card-gold, .aspect-card, .beh-card, .role-item, .char-card, .eco-card, .soc-card, .mc, .src-card {
+      padding: 14px 16px !important;
+    }
+    .drucker-box, .intra-def {
+      padding: 14px 16px !important;
+      font-size: 15px !important;
+    }
+    .pstep-desc {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: right !important;
+      max-width: 100% !important;
+    }
+    #s1 .cover-num {
+      font-size: 100px !important;
+      opacity: 0.15 !important;
+    }
+    
+    /* Constrain layouts to viewport width */
+    div, section, article, table, tr, td, th, ul, ol, li, p, span, blockquote, iframe, header, footer, img {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+  }
+  
+  /* ══ DYNAMIC CLASS OVERRIDES ══ */
+  html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+html.mobile-view .slide {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+html.mobile-view .shead {
+      height: 60px !important;
+      padding: 0 20px !important;
+      flex-shrink: 0 !important;
+    }
+html.mobile-view .shead .stitle {
+      font-size: 18px !important;
+    }
+html.mobile-view .shead .snum {
+      font-size: 11px !important;
+    }
+html.mobile-view .sbody {
+      height: auto !important;
+      flex-grow: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 15px 20px 30px !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+    }
+html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .aspect-grid, html.mobile-view .toc-grid, html.mobile-view .eco-grid, html.mobile-view .eco-grid-l, html.mobile-view .char-grid, html.mobile-view .soc-grid, html.mobile-view .sum-cols, html.mobile-view .intra-grid, html.mobile-view .beh-row, html.mobile-view .mrow, html.mobile-view .src-grid {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+html.mobile-view p, html.mobile-view li, html.mobile-view td, html.mobile-view .intro-txt, html.mobile-view .card-body, html.mobile-view .item-d, html.mobile-view .b-text, html.mobile-view .sc li, html.mobile-view .merr-d, html.mobile-view .mp-body, html.mobile-view .qa-ans-text, html.mobile-view .tcard-desc, html.mobile-view .cbod, html.mobile-view .lt, html.mobile-view .hbox, html.mobile-view .cex-item, html.mobile-view .toc-text, html.mobile-view .phase-desc, html.mobile-view .calc-desc, html.mobile-view .sec-desc, html.mobile-view .sum-body, html.mobile-view .acc-ans, html.mobile-view .ctext, html.mobile-view .step-desc, html.mobile-view .ilist li, html.mobile-view .intro-box, html.mobile-view .hl-txt, html.mobile-view .ans-text, html.mobile-view .qtable td, html.mobile-view .qrbox .qrl, html.mobile-view .def-block p, html.mobile-view .body-text, html.mobile-view .type-card p, html.mobile-view .crit-item p, html.mobile-view .styled-table td, html.mobile-view .class-table td, html.mobile-view .char-desc, html.mobile-view .ci-text, html.mobile-view .fill-item, html.mobile-view .acc-content, html.mobile-view .pstep-desc, html.mobile-view .cx, html.mobile-view .hl, html.mobile-view .tbl, html.mobile-view .tbl td, html.mobile-view .zx, html.mobile-view .fs, html.mobile-view .def-box, html.mobile-view .nlist li, html.mobile-view .fi .fit, html.mobile-view .r-desc, html.mobile-view .c-desc, html.mobile-view .ec-d, html.mobile-view .soc-desc, html.mobile-view .m-pts {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+html.mobile-view .card-title, html.mobile-view .type-name, html.mobile-view .crit-num, html.mobile-view .char-name, html.mobile-view .sum-title, html.mobile-view .acc-q, html.mobile-view .flow-lbl, html.mobile-view .ctitle, html.mobile-view .step-title, html.mobile-view .sum-label, html.mobile-view .sum-desc, html.mobile-view .acc-head, html.mobile-view .ans-lbl, html.mobile-view .qa, html.mobile-view .zt, html.mobile-view .zx, html.mobile-view .col-t, html.mobile-view .tbl th, html.mobile-view .acc-qtext, html.mobile-view .ctit, html.mobile-view .phase-title, html.mobile-view .compare-head, html.mobile-view .sum-head, html.mobile-view .acc-qtxt, html.mobile-view .item-t, html.mobile-view .sc-h, html.mobile-view .pstep-ar, html.mobile-view .tcard-name, html.mobile-view .merr-t, html.mobile-view .mp-title, html.mobile-view .summary-text, html.mobile-view .qa-q-text, html.mobile-view .ct, html.mobile-view .fl, html.mobile-view .card h3, html.mobile-view .beh-title, html.mobile-view .m-title, html.mobile-view .r-title, html.mobile-view .c-title, html.mobile-view .ec-t, html.mobile-view .soc-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+html.mobile-view #s1 .h-content {
+      height: auto !important;
+      padding: 40px 20px !important;
+      justify-content: flex-start !important;
+    }
+html.mobile-view #s1 .main-t, html.mobile-view #s1 .cover-main, html.mobile-view .s1-title {
+      font-size: 32px !important;
+    }
+html.mobile-view #s1 .en-t, html.mobile-view #s1 .cover-en {
+      font-size: 16px !important;
+    }
+html.mobile-view .card, html.mobile-view .dcard, html.mobile-view .card-gold, html.mobile-view .aspect-card, html.mobile-view .beh-card, html.mobile-view .role-item, html.mobile-view .char-card, html.mobile-view .eco-card, html.mobile-view .soc-card, html.mobile-view .mc, html.mobile-view .src-card {
+      padding: 14px 16px !important;
+    }
+html.mobile-view .drucker-box, html.mobile-view .intra-def {
+      padding: 14px 16px !important;
+      font-size: 15px !important;
+    }
+html.mobile-view .pstep-desc {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: right !important;
+      max-width: 100% !important;
+    }
+html.mobile-view #s1 .cover-num {
+      font-size: 100px !important;
+      opacity: 0.15 !important;
+    }
+html.mobile-view /* Constrain layouts to viewport width */
+    div, html.mobile-view section, html.mobile-view article, html.mobile-view table, html.mobile-view tr, html.mobile-view td, html.mobile-view th, html.mobile-view ul, html.mobile-view ol, html.mobile-view li, html.mobile-view p, html.mobile-view span, html.mobile-view blockquote, html.mobile-view iframe, html.mobile-view header, html.mobile-view footer, html.mobile-view img {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
 
   /* ══ CHAPTER 1 LIGHT MODE OVERRIDES FOR DARK SLIDES ══ */
   html:not(.dark-mode) .sd {
@@ -3246,9 +3510,22 @@ window.__presentationApi = {
   body, html {
     background: transparent !important;
     overflow: hidden !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   /* Ensure the stage is centered inside the iframe and doesn't get clipped */
-  #stage, #deck-wrapper, .presentation, #presentation {
+  #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
+    margin: 0 !important;
+    padding: 0 !important;
+    position: absolute !important;
+    inset: 0 !important;
+    transform: none !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .slide {
     margin: 0 !important;
     padding: 0 !important;
     position: absolute !important;
@@ -3307,6 +3584,210 @@ window.__presentationApi = {
   .pstep-n, .pstep-en, .tcard-en, .tcard-feat, .merr-n, .mp-en, .qa-num, .qa-ans-title, .qa-ans-let, .qa-hint, .badge {
     font-size: 12px !important;
   }
+
+  /* ══ MOBILE RESPONSIVE OVERRIDES (width <= 1024px) ══ */
+  @media (max-width: 1024px) {
+    
+    #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .slide {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    .shead {
+      height: 60px !important;
+      padding: 0 20px !important;
+      flex-shrink: 0 !important;
+    }
+    .shead .stitle {
+      font-size: 18px !important;
+    }
+    .shead .snum {
+      font-size: 11px !important;
+    }
+    .sbody {
+      height: auto !important;
+      flex-grow: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 15px 20px 30px !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+    }
+    .g2, .g3, .aspect-grid, .toc-grid, .eco-grid, .eco-grid-l, .char-grid, .soc-grid, .sum-cols, .intra-grid, .beh-row, .mrow, .src-grid {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+    p, li, td, .intro-txt, .card-body, .item-d, .b-text, .sc li, .merr-d, .mp-body, .qa-ans-text, .tcard-desc,
+    .cbod, .lt, .hbox, .cex-item, .toc-text, .phase-desc, .calc-desc, .sec-desc, .sum-body, .acc-ans,
+    .ctext, .step-desc, .ilist li, .intro-box, .hl-txt, .ans-text, .qtable td, .qrbox .qrl,
+    .def-block p, .body-text, .type-card p, .crit-item p, .styled-table td, .class-table td,
+    .char-desc, .ci-text, .fill-item, .acc-content, .pstep-desc, .cx, .hl, .tbl, .tbl td, .zx, .fs,
+    .def-box, .nlist li, .fi .fit, .r-desc, .c-desc, .ec-d, .soc-desc, .m-pts {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+    .card-title, .type-name, .crit-num, .char-name, .sum-title, .acc-q, .flow-lbl, .ctitle, .step-title,
+    .sum-label, .sum-desc, .acc-head, .ans-lbl, .qa, .zt, .zx, .col-t, .tbl th, .acc-qtext, .ctit,
+    .phase-title, .compare-head, .sum-head, .acc-qtxt, .item-t, .sc-h, .pstep-ar, .tcard-name, .merr-t,
+    .mp-title, .summary-text, .qa-q-text, .ct, .fl, .card h3, .beh-title, .m-title, .r-title, .c-title, .ec-t, .soc-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+    #s1 .h-content {
+      height: auto !important;
+      padding: 40px 20px !important;
+      justify-content: flex-start !important;
+    }
+    #s1 .main-t, #s1 .cover-main, .s1-title {
+      font-size: 32px !important;
+    }
+    #s1 .en-t, #s1 .cover-en {
+      font-size: 16px !important;
+    }
+    .card, .dcard, .card-gold, .aspect-card, .beh-card, .role-item, .char-card, .eco-card, .soc-card, .mc, .src-card {
+      padding: 14px 16px !important;
+    }
+    .drucker-box, .intra-def {
+      padding: 14px 16px !important;
+      font-size: 15px !important;
+    }
+    .pstep-desc {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: right !important;
+      max-width: 100% !important;
+    }
+    #s1 .cover-num {
+      font-size: 100px !important;
+      opacity: 0.15 !important;
+    }
+    
+    /* Constrain layouts to viewport width */
+    div, section, article, table, tr, td, th, ul, ol, li, p, span, blockquote, iframe, header, footer, img {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+  }
+  
+  /* ══ DYNAMIC CLASS OVERRIDES ══ */
+  html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+html.mobile-view .slide {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+html.mobile-view .shead {
+      height: 60px !important;
+      padding: 0 20px !important;
+      flex-shrink: 0 !important;
+    }
+html.mobile-view .shead .stitle {
+      font-size: 18px !important;
+    }
+html.mobile-view .shead .snum {
+      font-size: 11px !important;
+    }
+html.mobile-view .sbody {
+      height: auto !important;
+      flex-grow: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 15px 20px 30px !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+    }
+html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .aspect-grid, html.mobile-view .toc-grid, html.mobile-view .eco-grid, html.mobile-view .eco-grid-l, html.mobile-view .char-grid, html.mobile-view .soc-grid, html.mobile-view .sum-cols, html.mobile-view .intra-grid, html.mobile-view .beh-row, html.mobile-view .mrow, html.mobile-view .src-grid {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+html.mobile-view p, html.mobile-view li, html.mobile-view td, html.mobile-view .intro-txt, html.mobile-view .card-body, html.mobile-view .item-d, html.mobile-view .b-text, html.mobile-view .sc li, html.mobile-view .merr-d, html.mobile-view .mp-body, html.mobile-view .qa-ans-text, html.mobile-view .tcard-desc, html.mobile-view .cbod, html.mobile-view .lt, html.mobile-view .hbox, html.mobile-view .cex-item, html.mobile-view .toc-text, html.mobile-view .phase-desc, html.mobile-view .calc-desc, html.mobile-view .sec-desc, html.mobile-view .sum-body, html.mobile-view .acc-ans, html.mobile-view .ctext, html.mobile-view .step-desc, html.mobile-view .ilist li, html.mobile-view .intro-box, html.mobile-view .hl-txt, html.mobile-view .ans-text, html.mobile-view .qtable td, html.mobile-view .qrbox .qrl, html.mobile-view .def-block p, html.mobile-view .body-text, html.mobile-view .type-card p, html.mobile-view .crit-item p, html.mobile-view .styled-table td, html.mobile-view .class-table td, html.mobile-view .char-desc, html.mobile-view .ci-text, html.mobile-view .fill-item, html.mobile-view .acc-content, html.mobile-view .pstep-desc, html.mobile-view .cx, html.mobile-view .hl, html.mobile-view .tbl, html.mobile-view .tbl td, html.mobile-view .zx, html.mobile-view .fs, html.mobile-view .def-box, html.mobile-view .nlist li, html.mobile-view .fi .fit, html.mobile-view .r-desc, html.mobile-view .c-desc, html.mobile-view .ec-d, html.mobile-view .soc-desc, html.mobile-view .m-pts {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+html.mobile-view .card-title, html.mobile-view .type-name, html.mobile-view .crit-num, html.mobile-view .char-name, html.mobile-view .sum-title, html.mobile-view .acc-q, html.mobile-view .flow-lbl, html.mobile-view .ctitle, html.mobile-view .step-title, html.mobile-view .sum-label, html.mobile-view .sum-desc, html.mobile-view .acc-head, html.mobile-view .ans-lbl, html.mobile-view .qa, html.mobile-view .zt, html.mobile-view .zx, html.mobile-view .col-t, html.mobile-view .tbl th, html.mobile-view .acc-qtext, html.mobile-view .ctit, html.mobile-view .phase-title, html.mobile-view .compare-head, html.mobile-view .sum-head, html.mobile-view .acc-qtxt, html.mobile-view .item-t, html.mobile-view .sc-h, html.mobile-view .pstep-ar, html.mobile-view .tcard-name, html.mobile-view .merr-t, html.mobile-view .mp-title, html.mobile-view .summary-text, html.mobile-view .qa-q-text, html.mobile-view .ct, html.mobile-view .fl, html.mobile-view .card h3, html.mobile-view .beh-title, html.mobile-view .m-title, html.mobile-view .r-title, html.mobile-view .c-title, html.mobile-view .ec-t, html.mobile-view .soc-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+html.mobile-view #s1 .h-content {
+      height: auto !important;
+      padding: 40px 20px !important;
+      justify-content: flex-start !important;
+    }
+html.mobile-view #s1 .main-t, html.mobile-view #s1 .cover-main, html.mobile-view .s1-title {
+      font-size: 32px !important;
+    }
+html.mobile-view #s1 .en-t, html.mobile-view #s1 .cover-en {
+      font-size: 16px !important;
+    }
+html.mobile-view .card, html.mobile-view .dcard, html.mobile-view .card-gold, html.mobile-view .aspect-card, html.mobile-view .beh-card, html.mobile-view .role-item, html.mobile-view .char-card, html.mobile-view .eco-card, html.mobile-view .soc-card, html.mobile-view .mc, html.mobile-view .src-card {
+      padding: 14px 16px !important;
+    }
+html.mobile-view .drucker-box, html.mobile-view .intra-def {
+      padding: 14px 16px !important;
+      font-size: 15px !important;
+    }
+html.mobile-view .pstep-desc {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: right !important;
+      max-width: 100% !important;
+    }
+html.mobile-view #s1 .cover-num {
+      font-size: 100px !important;
+      opacity: 0.15 !important;
+    }
+html.mobile-view /* Constrain layouts to viewport width */
+    div, html.mobile-view section, html.mobile-view article, html.mobile-view table, html.mobile-view tr, html.mobile-view td, html.mobile-view th, html.mobile-view ul, html.mobile-view ol, html.mobile-view li, html.mobile-view p, html.mobile-view span, html.mobile-view blockquote, html.mobile-view iframe, html.mobile-view header, html.mobile-view footer, html.mobile-view img {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
 </style></head>
 <body>
 <div id="deck-wrapper">
@@ -4665,9 +5146,22 @@ html[data-theme="dark"]  .geo-corner{opacity:.14;}
   body, html {
     background: transparent !important;
     overflow: hidden !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   /* Ensure the stage is centered inside the iframe and doesn't get clipped */
-  #stage, #deck-wrapper, .presentation, #presentation {
+  #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
+    margin: 0 !important;
+    padding: 0 !important;
+    position: absolute !important;
+    inset: 0 !important;
+    transform: none !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .slide {
     margin: 0 !important;
     padding: 0 !important;
     position: absolute !important;
@@ -4726,6 +5220,210 @@ html[data-theme="dark"]  .geo-corner{opacity:.14;}
   .pstep-n, .pstep-en, .tcard-en, .tcard-feat, .merr-n, .mp-en, .qa-num, .qa-ans-title, .qa-ans-let, .qa-hint, .badge {
     font-size: 12px !important;
   }
+
+  /* ══ MOBILE RESPONSIVE OVERRIDES (width <= 1024px) ══ */
+  @media (max-width: 1024px) {
+    
+    #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .slide {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    .shead {
+      height: 60px !important;
+      padding: 0 20px !important;
+      flex-shrink: 0 !important;
+    }
+    .shead .stitle {
+      font-size: 18px !important;
+    }
+    .shead .snum {
+      font-size: 11px !important;
+    }
+    .sbody {
+      height: auto !important;
+      flex-grow: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 15px 20px 30px !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+    }
+    .g2, .g3, .aspect-grid, .toc-grid, .eco-grid, .eco-grid-l, .char-grid, .soc-grid, .sum-cols, .intra-grid, .beh-row, .mrow, .src-grid {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+    p, li, td, .intro-txt, .card-body, .item-d, .b-text, .sc li, .merr-d, .mp-body, .qa-ans-text, .tcard-desc,
+    .cbod, .lt, .hbox, .cex-item, .toc-text, .phase-desc, .calc-desc, .sec-desc, .sum-body, .acc-ans,
+    .ctext, .step-desc, .ilist li, .intro-box, .hl-txt, .ans-text, .qtable td, .qrbox .qrl,
+    .def-block p, .body-text, .type-card p, .crit-item p, .styled-table td, .class-table td,
+    .char-desc, .ci-text, .fill-item, .acc-content, .pstep-desc, .cx, .hl, .tbl, .tbl td, .zx, .fs,
+    .def-box, .nlist li, .fi .fit, .r-desc, .c-desc, .ec-d, .soc-desc, .m-pts {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+    .card-title, .type-name, .crit-num, .char-name, .sum-title, .acc-q, .flow-lbl, .ctitle, .step-title,
+    .sum-label, .sum-desc, .acc-head, .ans-lbl, .qa, .zt, .zx, .col-t, .tbl th, .acc-qtext, .ctit,
+    .phase-title, .compare-head, .sum-head, .acc-qtxt, .item-t, .sc-h, .pstep-ar, .tcard-name, .merr-t,
+    .mp-title, .summary-text, .qa-q-text, .ct, .fl, .card h3, .beh-title, .m-title, .r-title, .c-title, .ec-t, .soc-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+    #s1 .h-content {
+      height: auto !important;
+      padding: 40px 20px !important;
+      justify-content: flex-start !important;
+    }
+    #s1 .main-t, #s1 .cover-main, .s1-title {
+      font-size: 32px !important;
+    }
+    #s1 .en-t, #s1 .cover-en {
+      font-size: 16px !important;
+    }
+    .card, .dcard, .card-gold, .aspect-card, .beh-card, .role-item, .char-card, .eco-card, .soc-card, .mc, .src-card {
+      padding: 14px 16px !important;
+    }
+    .drucker-box, .intra-def {
+      padding: 14px 16px !important;
+      font-size: 15px !important;
+    }
+    .pstep-desc {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: right !important;
+      max-width: 100% !important;
+    }
+    #s1 .cover-num {
+      font-size: 100px !important;
+      opacity: 0.15 !important;
+    }
+    
+    /* Constrain layouts to viewport width */
+    div, section, article, table, tr, td, th, ul, ol, li, p, span, blockquote, iframe, header, footer, img {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+  }
+  
+  /* ══ DYNAMIC CLASS OVERRIDES ══ */
+  html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+html.mobile-view .slide {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+html.mobile-view .shead {
+      height: 60px !important;
+      padding: 0 20px !important;
+      flex-shrink: 0 !important;
+    }
+html.mobile-view .shead .stitle {
+      font-size: 18px !important;
+    }
+html.mobile-view .shead .snum {
+      font-size: 11px !important;
+    }
+html.mobile-view .sbody {
+      height: auto !important;
+      flex-grow: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 15px 20px 30px !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+    }
+html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .aspect-grid, html.mobile-view .toc-grid, html.mobile-view .eco-grid, html.mobile-view .eco-grid-l, html.mobile-view .char-grid, html.mobile-view .soc-grid, html.mobile-view .sum-cols, html.mobile-view .intra-grid, html.mobile-view .beh-row, html.mobile-view .mrow, html.mobile-view .src-grid {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+html.mobile-view p, html.mobile-view li, html.mobile-view td, html.mobile-view .intro-txt, html.mobile-view .card-body, html.mobile-view .item-d, html.mobile-view .b-text, html.mobile-view .sc li, html.mobile-view .merr-d, html.mobile-view .mp-body, html.mobile-view .qa-ans-text, html.mobile-view .tcard-desc, html.mobile-view .cbod, html.mobile-view .lt, html.mobile-view .hbox, html.mobile-view .cex-item, html.mobile-view .toc-text, html.mobile-view .phase-desc, html.mobile-view .calc-desc, html.mobile-view .sec-desc, html.mobile-view .sum-body, html.mobile-view .acc-ans, html.mobile-view .ctext, html.mobile-view .step-desc, html.mobile-view .ilist li, html.mobile-view .intro-box, html.mobile-view .hl-txt, html.mobile-view .ans-text, html.mobile-view .qtable td, html.mobile-view .qrbox .qrl, html.mobile-view .def-block p, html.mobile-view .body-text, html.mobile-view .type-card p, html.mobile-view .crit-item p, html.mobile-view .styled-table td, html.mobile-view .class-table td, html.mobile-view .char-desc, html.mobile-view .ci-text, html.mobile-view .fill-item, html.mobile-view .acc-content, html.mobile-view .pstep-desc, html.mobile-view .cx, html.mobile-view .hl, html.mobile-view .tbl, html.mobile-view .tbl td, html.mobile-view .zx, html.mobile-view .fs, html.mobile-view .def-box, html.mobile-view .nlist li, html.mobile-view .fi .fit, html.mobile-view .r-desc, html.mobile-view .c-desc, html.mobile-view .ec-d, html.mobile-view .soc-desc, html.mobile-view .m-pts {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+html.mobile-view .card-title, html.mobile-view .type-name, html.mobile-view .crit-num, html.mobile-view .char-name, html.mobile-view .sum-title, html.mobile-view .acc-q, html.mobile-view .flow-lbl, html.mobile-view .ctitle, html.mobile-view .step-title, html.mobile-view .sum-label, html.mobile-view .sum-desc, html.mobile-view .acc-head, html.mobile-view .ans-lbl, html.mobile-view .qa, html.mobile-view .zt, html.mobile-view .zx, html.mobile-view .col-t, html.mobile-view .tbl th, html.mobile-view .acc-qtext, html.mobile-view .ctit, html.mobile-view .phase-title, html.mobile-view .compare-head, html.mobile-view .sum-head, html.mobile-view .acc-qtxt, html.mobile-view .item-t, html.mobile-view .sc-h, html.mobile-view .pstep-ar, html.mobile-view .tcard-name, html.mobile-view .merr-t, html.mobile-view .mp-title, html.mobile-view .summary-text, html.mobile-view .qa-q-text, html.mobile-view .ct, html.mobile-view .fl, html.mobile-view .card h3, html.mobile-view .beh-title, html.mobile-view .m-title, html.mobile-view .r-title, html.mobile-view .c-title, html.mobile-view .ec-t, html.mobile-view .soc-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+html.mobile-view #s1 .h-content {
+      height: auto !important;
+      padding: 40px 20px !important;
+      justify-content: flex-start !important;
+    }
+html.mobile-view #s1 .main-t, html.mobile-view #s1 .cover-main, html.mobile-view .s1-title {
+      font-size: 32px !important;
+    }
+html.mobile-view #s1 .en-t, html.mobile-view #s1 .cover-en {
+      font-size: 16px !important;
+    }
+html.mobile-view .card, html.mobile-view .dcard, html.mobile-view .card-gold, html.mobile-view .aspect-card, html.mobile-view .beh-card, html.mobile-view .role-item, html.mobile-view .char-card, html.mobile-view .eco-card, html.mobile-view .soc-card, html.mobile-view .mc, html.mobile-view .src-card {
+      padding: 14px 16px !important;
+    }
+html.mobile-view .drucker-box, html.mobile-view .intra-def {
+      padding: 14px 16px !important;
+      font-size: 15px !important;
+    }
+html.mobile-view .pstep-desc {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: right !important;
+      max-width: 100% !important;
+    }
+html.mobile-view #s1 .cover-num {
+      font-size: 100px !important;
+      opacity: 0.15 !important;
+    }
+html.mobile-view /* Constrain layouts to viewport width */
+    div, html.mobile-view section, html.mobile-view article, html.mobile-view table, html.mobile-view tr, html.mobile-view td, html.mobile-view th, html.mobile-view ul, html.mobile-view ol, html.mobile-view li, html.mobile-view p, html.mobile-view span, html.mobile-view blockquote, html.mobile-view iframe, html.mobile-view header, html.mobile-view footer, html.mobile-view img {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
 </style></head>
 <body>
 <div id="stage"><div id="scaler">
@@ -6162,9 +6860,22 @@ body.dark .ibtn:hover { background: rgba(255,255,255,0.10); }
   body, html {
     background: transparent !important;
     overflow: hidden !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   /* Ensure the stage is centered inside the iframe and doesn't get clipped */
-  #stage, #deck-wrapper, .presentation, #presentation {
+  #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
+    margin: 0 !important;
+    padding: 0 !important;
+    position: absolute !important;
+    inset: 0 !important;
+    transform: none !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .slide {
     margin: 0 !important;
     padding: 0 !important;
     position: absolute !important;
@@ -6223,6 +6934,210 @@ body.dark .ibtn:hover { background: rgba(255,255,255,0.10); }
   .pstep-n, .pstep-en, .tcard-en, .tcard-feat, .merr-n, .mp-en, .qa-num, .qa-ans-title, .qa-ans-let, .qa-hint, .badge {
     font-size: 12px !important;
   }
+
+  /* ══ MOBILE RESPONSIVE OVERRIDES (width <= 1024px) ══ */
+  @media (max-width: 1024px) {
+    
+    #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .slide {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    .shead {
+      height: 60px !important;
+      padding: 0 20px !important;
+      flex-shrink: 0 !important;
+    }
+    .shead .stitle {
+      font-size: 18px !important;
+    }
+    .shead .snum {
+      font-size: 11px !important;
+    }
+    .sbody {
+      height: auto !important;
+      flex-grow: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 15px 20px 30px !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+    }
+    .g2, .g3, .aspect-grid, .toc-grid, .eco-grid, .eco-grid-l, .char-grid, .soc-grid, .sum-cols, .intra-grid, .beh-row, .mrow, .src-grid {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+    p, li, td, .intro-txt, .card-body, .item-d, .b-text, .sc li, .merr-d, .mp-body, .qa-ans-text, .tcard-desc,
+    .cbod, .lt, .hbox, .cex-item, .toc-text, .phase-desc, .calc-desc, .sec-desc, .sum-body, .acc-ans,
+    .ctext, .step-desc, .ilist li, .intro-box, .hl-txt, .ans-text, .qtable td, .qrbox .qrl,
+    .def-block p, .body-text, .type-card p, .crit-item p, .styled-table td, .class-table td,
+    .char-desc, .ci-text, .fill-item, .acc-content, .pstep-desc, .cx, .hl, .tbl, .tbl td, .zx, .fs,
+    .def-box, .nlist li, .fi .fit, .r-desc, .c-desc, .ec-d, .soc-desc, .m-pts {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+    .card-title, .type-name, .crit-num, .char-name, .sum-title, .acc-q, .flow-lbl, .ctitle, .step-title,
+    .sum-label, .sum-desc, .acc-head, .ans-lbl, .qa, .zt, .zx, .col-t, .tbl th, .acc-qtext, .ctit,
+    .phase-title, .compare-head, .sum-head, .acc-qtxt, .item-t, .sc-h, .pstep-ar, .tcard-name, .merr-t,
+    .mp-title, .summary-text, .qa-q-text, .ct, .fl, .card h3, .beh-title, .m-title, .r-title, .c-title, .ec-t, .soc-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+    #s1 .h-content {
+      height: auto !important;
+      padding: 40px 20px !important;
+      justify-content: flex-start !important;
+    }
+    #s1 .main-t, #s1 .cover-main, .s1-title {
+      font-size: 32px !important;
+    }
+    #s1 .en-t, #s1 .cover-en {
+      font-size: 16px !important;
+    }
+    .card, .dcard, .card-gold, .aspect-card, .beh-card, .role-item, .char-card, .eco-card, .soc-card, .mc, .src-card {
+      padding: 14px 16px !important;
+    }
+    .drucker-box, .intra-def {
+      padding: 14px 16px !important;
+      font-size: 15px !important;
+    }
+    .pstep-desc {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: right !important;
+      max-width: 100% !important;
+    }
+    #s1 .cover-num {
+      font-size: 100px !important;
+      opacity: 0.15 !important;
+    }
+    
+    /* Constrain layouts to viewport width */
+    div, section, article, table, tr, td, th, ul, ol, li, p, span, blockquote, iframe, header, footer, img {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+  }
+  
+  /* ══ DYNAMIC CLASS OVERRIDES ══ */
+  html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+html.mobile-view .slide {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+html.mobile-view .shead {
+      height: 60px !important;
+      padding: 0 20px !important;
+      flex-shrink: 0 !important;
+    }
+html.mobile-view .shead .stitle {
+      font-size: 18px !important;
+    }
+html.mobile-view .shead .snum {
+      font-size: 11px !important;
+    }
+html.mobile-view .sbody {
+      height: auto !important;
+      flex-grow: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 15px 20px 30px !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+    }
+html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .aspect-grid, html.mobile-view .toc-grid, html.mobile-view .eco-grid, html.mobile-view .eco-grid-l, html.mobile-view .char-grid, html.mobile-view .soc-grid, html.mobile-view .sum-cols, html.mobile-view .intra-grid, html.mobile-view .beh-row, html.mobile-view .mrow, html.mobile-view .src-grid {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+html.mobile-view p, html.mobile-view li, html.mobile-view td, html.mobile-view .intro-txt, html.mobile-view .card-body, html.mobile-view .item-d, html.mobile-view .b-text, html.mobile-view .sc li, html.mobile-view .merr-d, html.mobile-view .mp-body, html.mobile-view .qa-ans-text, html.mobile-view .tcard-desc, html.mobile-view .cbod, html.mobile-view .lt, html.mobile-view .hbox, html.mobile-view .cex-item, html.mobile-view .toc-text, html.mobile-view .phase-desc, html.mobile-view .calc-desc, html.mobile-view .sec-desc, html.mobile-view .sum-body, html.mobile-view .acc-ans, html.mobile-view .ctext, html.mobile-view .step-desc, html.mobile-view .ilist li, html.mobile-view .intro-box, html.mobile-view .hl-txt, html.mobile-view .ans-text, html.mobile-view .qtable td, html.mobile-view .qrbox .qrl, html.mobile-view .def-block p, html.mobile-view .body-text, html.mobile-view .type-card p, html.mobile-view .crit-item p, html.mobile-view .styled-table td, html.mobile-view .class-table td, html.mobile-view .char-desc, html.mobile-view .ci-text, html.mobile-view .fill-item, html.mobile-view .acc-content, html.mobile-view .pstep-desc, html.mobile-view .cx, html.mobile-view .hl, html.mobile-view .tbl, html.mobile-view .tbl td, html.mobile-view .zx, html.mobile-view .fs, html.mobile-view .def-box, html.mobile-view .nlist li, html.mobile-view .fi .fit, html.mobile-view .r-desc, html.mobile-view .c-desc, html.mobile-view .ec-d, html.mobile-view .soc-desc, html.mobile-view .m-pts {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+html.mobile-view .card-title, html.mobile-view .type-name, html.mobile-view .crit-num, html.mobile-view .char-name, html.mobile-view .sum-title, html.mobile-view .acc-q, html.mobile-view .flow-lbl, html.mobile-view .ctitle, html.mobile-view .step-title, html.mobile-view .sum-label, html.mobile-view .sum-desc, html.mobile-view .acc-head, html.mobile-view .ans-lbl, html.mobile-view .qa, html.mobile-view .zt, html.mobile-view .zx, html.mobile-view .col-t, html.mobile-view .tbl th, html.mobile-view .acc-qtext, html.mobile-view .ctit, html.mobile-view .phase-title, html.mobile-view .compare-head, html.mobile-view .sum-head, html.mobile-view .acc-qtxt, html.mobile-view .item-t, html.mobile-view .sc-h, html.mobile-view .pstep-ar, html.mobile-view .tcard-name, html.mobile-view .merr-t, html.mobile-view .mp-title, html.mobile-view .summary-text, html.mobile-view .qa-q-text, html.mobile-view .ct, html.mobile-view .fl, html.mobile-view .card h3, html.mobile-view .beh-title, html.mobile-view .m-title, html.mobile-view .r-title, html.mobile-view .c-title, html.mobile-view .ec-t, html.mobile-view .soc-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+html.mobile-view #s1 .h-content {
+      height: auto !important;
+      padding: 40px 20px !important;
+      justify-content: flex-start !important;
+    }
+html.mobile-view #s1 .main-t, html.mobile-view #s1 .cover-main, html.mobile-view .s1-title {
+      font-size: 32px !important;
+    }
+html.mobile-view #s1 .en-t, html.mobile-view #s1 .cover-en {
+      font-size: 16px !important;
+    }
+html.mobile-view .card, html.mobile-view .dcard, html.mobile-view .card-gold, html.mobile-view .aspect-card, html.mobile-view .beh-card, html.mobile-view .role-item, html.mobile-view .char-card, html.mobile-view .eco-card, html.mobile-view .soc-card, html.mobile-view .mc, html.mobile-view .src-card {
+      padding: 14px 16px !important;
+    }
+html.mobile-view .drucker-box, html.mobile-view .intra-def {
+      padding: 14px 16px !important;
+      font-size: 15px !important;
+    }
+html.mobile-view .pstep-desc {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: right !important;
+      max-width: 100% !important;
+    }
+html.mobile-view #s1 .cover-num {
+      font-size: 100px !important;
+      opacity: 0.15 !important;
+    }
+html.mobile-view /* Constrain layouts to viewport width */
+    div, html.mobile-view section, html.mobile-view article, html.mobile-view table, html.mobile-view tr, html.mobile-view td, html.mobile-view th, html.mobile-view ul, html.mobile-view ol, html.mobile-view li, html.mobile-view p, html.mobile-view span, html.mobile-view blockquote, html.mobile-view iframe, html.mobile-view header, html.mobile-view footer, html.mobile-view img {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
 </style></head>
 <body>
 <div class="pres">
@@ -7390,9 +8305,22 @@ body.dark .tag.t{background:rgba(50,189,168,.15);color:#32BDA8;border-color:rgba
   body, html {
     background: transparent !important;
     overflow: hidden !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   /* Ensure the stage is centered inside the iframe and doesn't get clipped */
-  #stage, #deck-wrapper, .presentation, #presentation {
+  #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
+    margin: 0 !important;
+    padding: 0 !important;
+    position: absolute !important;
+    inset: 0 !important;
+    transform: none !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .slide {
     margin: 0 !important;
     padding: 0 !important;
     position: absolute !important;
@@ -7451,6 +8379,210 @@ body.dark .tag.t{background:rgba(50,189,168,.15);color:#32BDA8;border-color:rgba
   .pstep-n, .pstep-en, .tcard-en, .tcard-feat, .merr-n, .mp-en, .qa-num, .qa-ans-title, .qa-ans-let, .qa-hint, .badge {
     font-size: 12px !important;
   }
+
+  /* ══ MOBILE RESPONSIVE OVERRIDES (width <= 1024px) ══ */
+  @media (max-width: 1024px) {
+    
+    #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .slide {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    .shead {
+      height: 60px !important;
+      padding: 0 20px !important;
+      flex-shrink: 0 !important;
+    }
+    .shead .stitle {
+      font-size: 18px !important;
+    }
+    .shead .snum {
+      font-size: 11px !important;
+    }
+    .sbody {
+      height: auto !important;
+      flex-grow: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 15px 20px 30px !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+    }
+    .g2, .g3, .aspect-grid, .toc-grid, .eco-grid, .eco-grid-l, .char-grid, .soc-grid, .sum-cols, .intra-grid, .beh-row, .mrow, .src-grid {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+    p, li, td, .intro-txt, .card-body, .item-d, .b-text, .sc li, .merr-d, .mp-body, .qa-ans-text, .tcard-desc,
+    .cbod, .lt, .hbox, .cex-item, .toc-text, .phase-desc, .calc-desc, .sec-desc, .sum-body, .acc-ans,
+    .ctext, .step-desc, .ilist li, .intro-box, .hl-txt, .ans-text, .qtable td, .qrbox .qrl,
+    .def-block p, .body-text, .type-card p, .crit-item p, .styled-table td, .class-table td,
+    .char-desc, .ci-text, .fill-item, .acc-content, .pstep-desc, .cx, .hl, .tbl, .tbl td, .zx, .fs,
+    .def-box, .nlist li, .fi .fit, .r-desc, .c-desc, .ec-d, .soc-desc, .m-pts {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+    .card-title, .type-name, .crit-num, .char-name, .sum-title, .acc-q, .flow-lbl, .ctitle, .step-title,
+    .sum-label, .sum-desc, .acc-head, .ans-lbl, .qa, .zt, .zx, .col-t, .tbl th, .acc-qtext, .ctit,
+    .phase-title, .compare-head, .sum-head, .acc-qtxt, .item-t, .sc-h, .pstep-ar, .tcard-name, .merr-t,
+    .mp-title, .summary-text, .qa-q-text, .ct, .fl, .card h3, .beh-title, .m-title, .r-title, .c-title, .ec-t, .soc-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+    #s1 .h-content {
+      height: auto !important;
+      padding: 40px 20px !important;
+      justify-content: flex-start !important;
+    }
+    #s1 .main-t, #s1 .cover-main, .s1-title {
+      font-size: 32px !important;
+    }
+    #s1 .en-t, #s1 .cover-en {
+      font-size: 16px !important;
+    }
+    .card, .dcard, .card-gold, .aspect-card, .beh-card, .role-item, .char-card, .eco-card, .soc-card, .mc, .src-card {
+      padding: 14px 16px !important;
+    }
+    .drucker-box, .intra-def {
+      padding: 14px 16px !important;
+      font-size: 15px !important;
+    }
+    .pstep-desc {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: right !important;
+      max-width: 100% !important;
+    }
+    #s1 .cover-num {
+      font-size: 100px !important;
+      opacity: 0.15 !important;
+    }
+    
+    /* Constrain layouts to viewport width */
+    div, section, article, table, tr, td, th, ul, ol, li, p, span, blockquote, iframe, header, footer, img {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+  }
+  
+  /* ══ DYNAMIC CLASS OVERRIDES ══ */
+  html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+html.mobile-view .slide {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+html.mobile-view .shead {
+      height: 60px !important;
+      padding: 0 20px !important;
+      flex-shrink: 0 !important;
+    }
+html.mobile-view .shead .stitle {
+      font-size: 18px !important;
+    }
+html.mobile-view .shead .snum {
+      font-size: 11px !important;
+    }
+html.mobile-view .sbody {
+      height: auto !important;
+      flex-grow: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 15px 20px 30px !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+    }
+html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .aspect-grid, html.mobile-view .toc-grid, html.mobile-view .eco-grid, html.mobile-view .eco-grid-l, html.mobile-view .char-grid, html.mobile-view .soc-grid, html.mobile-view .sum-cols, html.mobile-view .intra-grid, html.mobile-view .beh-row, html.mobile-view .mrow, html.mobile-view .src-grid {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+html.mobile-view p, html.mobile-view li, html.mobile-view td, html.mobile-view .intro-txt, html.mobile-view .card-body, html.mobile-view .item-d, html.mobile-view .b-text, html.mobile-view .sc li, html.mobile-view .merr-d, html.mobile-view .mp-body, html.mobile-view .qa-ans-text, html.mobile-view .tcard-desc, html.mobile-view .cbod, html.mobile-view .lt, html.mobile-view .hbox, html.mobile-view .cex-item, html.mobile-view .toc-text, html.mobile-view .phase-desc, html.mobile-view .calc-desc, html.mobile-view .sec-desc, html.mobile-view .sum-body, html.mobile-view .acc-ans, html.mobile-view .ctext, html.mobile-view .step-desc, html.mobile-view .ilist li, html.mobile-view .intro-box, html.mobile-view .hl-txt, html.mobile-view .ans-text, html.mobile-view .qtable td, html.mobile-view .qrbox .qrl, html.mobile-view .def-block p, html.mobile-view .body-text, html.mobile-view .type-card p, html.mobile-view .crit-item p, html.mobile-view .styled-table td, html.mobile-view .class-table td, html.mobile-view .char-desc, html.mobile-view .ci-text, html.mobile-view .fill-item, html.mobile-view .acc-content, html.mobile-view .pstep-desc, html.mobile-view .cx, html.mobile-view .hl, html.mobile-view .tbl, html.mobile-view .tbl td, html.mobile-view .zx, html.mobile-view .fs, html.mobile-view .def-box, html.mobile-view .nlist li, html.mobile-view .fi .fit, html.mobile-view .r-desc, html.mobile-view .c-desc, html.mobile-view .ec-d, html.mobile-view .soc-desc, html.mobile-view .m-pts {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+html.mobile-view .card-title, html.mobile-view .type-name, html.mobile-view .crit-num, html.mobile-view .char-name, html.mobile-view .sum-title, html.mobile-view .acc-q, html.mobile-view .flow-lbl, html.mobile-view .ctitle, html.mobile-view .step-title, html.mobile-view .sum-label, html.mobile-view .sum-desc, html.mobile-view .acc-head, html.mobile-view .ans-lbl, html.mobile-view .qa, html.mobile-view .zt, html.mobile-view .zx, html.mobile-view .col-t, html.mobile-view .tbl th, html.mobile-view .acc-qtext, html.mobile-view .ctit, html.mobile-view .phase-title, html.mobile-view .compare-head, html.mobile-view .sum-head, html.mobile-view .acc-qtxt, html.mobile-view .item-t, html.mobile-view .sc-h, html.mobile-view .pstep-ar, html.mobile-view .tcard-name, html.mobile-view .merr-t, html.mobile-view .mp-title, html.mobile-view .summary-text, html.mobile-view .qa-q-text, html.mobile-view .ct, html.mobile-view .fl, html.mobile-view .card h3, html.mobile-view .beh-title, html.mobile-view .m-title, html.mobile-view .r-title, html.mobile-view .c-title, html.mobile-view .ec-t, html.mobile-view .soc-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+html.mobile-view #s1 .h-content {
+      height: auto !important;
+      padding: 40px 20px !important;
+      justify-content: flex-start !important;
+    }
+html.mobile-view #s1 .main-t, html.mobile-view #s1 .cover-main, html.mobile-view .s1-title {
+      font-size: 32px !important;
+    }
+html.mobile-view #s1 .en-t, html.mobile-view #s1 .cover-en {
+      font-size: 16px !important;
+    }
+html.mobile-view .card, html.mobile-view .dcard, html.mobile-view .card-gold, html.mobile-view .aspect-card, html.mobile-view .beh-card, html.mobile-view .role-item, html.mobile-view .char-card, html.mobile-view .eco-card, html.mobile-view .soc-card, html.mobile-view .mc, html.mobile-view .src-card {
+      padding: 14px 16px !important;
+    }
+html.mobile-view .drucker-box, html.mobile-view .intra-def {
+      padding: 14px 16px !important;
+      font-size: 15px !important;
+    }
+html.mobile-view .pstep-desc {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: right !important;
+      max-width: 100% !important;
+    }
+html.mobile-view #s1 .cover-num {
+      font-size: 100px !important;
+      opacity: 0.15 !important;
+    }
+html.mobile-view /* Constrain layouts to viewport width */
+    div, html.mobile-view section, html.mobile-view article, html.mobile-view table, html.mobile-view tr, html.mobile-view td, html.mobile-view th, html.mobile-view ul, html.mobile-view ol, html.mobile-view li, html.mobile-view p, html.mobile-view span, html.mobile-view blockquote, html.mobile-view iframe, html.mobile-view header, html.mobile-view footer, html.mobile-view img {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
 </style></head>
 <body>
 <div class="deck" id="dk">
@@ -8452,9 +9584,22 @@ body{
   body, html {
     background: transparent !important;
     overflow: hidden !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   /* Ensure the stage is centered inside the iframe and doesn't get clipped */
-  #stage, #deck-wrapper, .presentation, #presentation {
+  #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
+    margin: 0 !important;
+    padding: 0 !important;
+    position: absolute !important;
+    inset: 0 !important;
+    transform: none !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .slide {
     margin: 0 !important;
     padding: 0 !important;
     position: absolute !important;
@@ -8513,6 +9658,210 @@ body{
   .pstep-n, .pstep-en, .tcard-en, .tcard-feat, .merr-n, .mp-en, .qa-num, .qa-ans-title, .qa-ans-let, .qa-hint, .badge {
     font-size: 12px !important;
   }
+
+  /* ══ MOBILE RESPONSIVE OVERRIDES (width <= 1024px) ══ */
+  @media (max-width: 1024px) {
+    
+    #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .slide {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    .shead {
+      height: 60px !important;
+      padding: 0 20px !important;
+      flex-shrink: 0 !important;
+    }
+    .shead .stitle {
+      font-size: 18px !important;
+    }
+    .shead .snum {
+      font-size: 11px !important;
+    }
+    .sbody {
+      height: auto !important;
+      flex-grow: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 15px 20px 30px !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+    }
+    .g2, .g3, .aspect-grid, .toc-grid, .eco-grid, .eco-grid-l, .char-grid, .soc-grid, .sum-cols, .intra-grid, .beh-row, .mrow, .src-grid {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+    p, li, td, .intro-txt, .card-body, .item-d, .b-text, .sc li, .merr-d, .mp-body, .qa-ans-text, .tcard-desc,
+    .cbod, .lt, .hbox, .cex-item, .toc-text, .phase-desc, .calc-desc, .sec-desc, .sum-body, .acc-ans,
+    .ctext, .step-desc, .ilist li, .intro-box, .hl-txt, .ans-text, .qtable td, .qrbox .qrl,
+    .def-block p, .body-text, .type-card p, .crit-item p, .styled-table td, .class-table td,
+    .char-desc, .ci-text, .fill-item, .acc-content, .pstep-desc, .cx, .hl, .tbl, .tbl td, .zx, .fs,
+    .def-box, .nlist li, .fi .fit, .r-desc, .c-desc, .ec-d, .soc-desc, .m-pts {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+    .card-title, .type-name, .crit-num, .char-name, .sum-title, .acc-q, .flow-lbl, .ctitle, .step-title,
+    .sum-label, .sum-desc, .acc-head, .ans-lbl, .qa, .zt, .zx, .col-t, .tbl th, .acc-qtext, .ctit,
+    .phase-title, .compare-head, .sum-head, .acc-qtxt, .item-t, .sc-h, .pstep-ar, .tcard-name, .merr-t,
+    .mp-title, .summary-text, .qa-q-text, .ct, .fl, .card h3, .beh-title, .m-title, .r-title, .c-title, .ec-t, .soc-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+    #s1 .h-content {
+      height: auto !important;
+      padding: 40px 20px !important;
+      justify-content: flex-start !important;
+    }
+    #s1 .main-t, #s1 .cover-main, .s1-title {
+      font-size: 32px !important;
+    }
+    #s1 .en-t, #s1 .cover-en {
+      font-size: 16px !important;
+    }
+    .card, .dcard, .card-gold, .aspect-card, .beh-card, .role-item, .char-card, .eco-card, .soc-card, .mc, .src-card {
+      padding: 14px 16px !important;
+    }
+    .drucker-box, .intra-def {
+      padding: 14px 16px !important;
+      font-size: 15px !important;
+    }
+    .pstep-desc {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: right !important;
+      max-width: 100% !important;
+    }
+    #s1 .cover-num {
+      font-size: 100px !important;
+      opacity: 0.15 !important;
+    }
+    
+    /* Constrain layouts to viewport width */
+    div, section, article, table, tr, td, th, ul, ol, li, p, span, blockquote, iframe, header, footer, img {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+  }
+  
+  /* ══ DYNAMIC CLASS OVERRIDES ══ */
+  html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+html.mobile-view .slide {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+html.mobile-view .shead {
+      height: 60px !important;
+      padding: 0 20px !important;
+      flex-shrink: 0 !important;
+    }
+html.mobile-view .shead .stitle {
+      font-size: 18px !important;
+    }
+html.mobile-view .shead .snum {
+      font-size: 11px !important;
+    }
+html.mobile-view .sbody {
+      height: auto !important;
+      flex-grow: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 15px 20px 30px !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+    }
+html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .aspect-grid, html.mobile-view .toc-grid, html.mobile-view .eco-grid, html.mobile-view .eco-grid-l, html.mobile-view .char-grid, html.mobile-view .soc-grid, html.mobile-view .sum-cols, html.mobile-view .intra-grid, html.mobile-view .beh-row, html.mobile-view .mrow, html.mobile-view .src-grid {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+html.mobile-view p, html.mobile-view li, html.mobile-view td, html.mobile-view .intro-txt, html.mobile-view .card-body, html.mobile-view .item-d, html.mobile-view .b-text, html.mobile-view .sc li, html.mobile-view .merr-d, html.mobile-view .mp-body, html.mobile-view .qa-ans-text, html.mobile-view .tcard-desc, html.mobile-view .cbod, html.mobile-view .lt, html.mobile-view .hbox, html.mobile-view .cex-item, html.mobile-view .toc-text, html.mobile-view .phase-desc, html.mobile-view .calc-desc, html.mobile-view .sec-desc, html.mobile-view .sum-body, html.mobile-view .acc-ans, html.mobile-view .ctext, html.mobile-view .step-desc, html.mobile-view .ilist li, html.mobile-view .intro-box, html.mobile-view .hl-txt, html.mobile-view .ans-text, html.mobile-view .qtable td, html.mobile-view .qrbox .qrl, html.mobile-view .def-block p, html.mobile-view .body-text, html.mobile-view .type-card p, html.mobile-view .crit-item p, html.mobile-view .styled-table td, html.mobile-view .class-table td, html.mobile-view .char-desc, html.mobile-view .ci-text, html.mobile-view .fill-item, html.mobile-view .acc-content, html.mobile-view .pstep-desc, html.mobile-view .cx, html.mobile-view .hl, html.mobile-view .tbl, html.mobile-view .tbl td, html.mobile-view .zx, html.mobile-view .fs, html.mobile-view .def-box, html.mobile-view .nlist li, html.mobile-view .fi .fit, html.mobile-view .r-desc, html.mobile-view .c-desc, html.mobile-view .ec-d, html.mobile-view .soc-desc, html.mobile-view .m-pts {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+html.mobile-view .card-title, html.mobile-view .type-name, html.mobile-view .crit-num, html.mobile-view .char-name, html.mobile-view .sum-title, html.mobile-view .acc-q, html.mobile-view .flow-lbl, html.mobile-view .ctitle, html.mobile-view .step-title, html.mobile-view .sum-label, html.mobile-view .sum-desc, html.mobile-view .acc-head, html.mobile-view .ans-lbl, html.mobile-view .qa, html.mobile-view .zt, html.mobile-view .zx, html.mobile-view .col-t, html.mobile-view .tbl th, html.mobile-view .acc-qtext, html.mobile-view .ctit, html.mobile-view .phase-title, html.mobile-view .compare-head, html.mobile-view .sum-head, html.mobile-view .acc-qtxt, html.mobile-view .item-t, html.mobile-view .sc-h, html.mobile-view .pstep-ar, html.mobile-view .tcard-name, html.mobile-view .merr-t, html.mobile-view .mp-title, html.mobile-view .summary-text, html.mobile-view .qa-q-text, html.mobile-view .ct, html.mobile-view .fl, html.mobile-view .card h3, html.mobile-view .beh-title, html.mobile-view .m-title, html.mobile-view .r-title, html.mobile-view .c-title, html.mobile-view .ec-t, html.mobile-view .soc-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+html.mobile-view #s1 .h-content {
+      height: auto !important;
+      padding: 40px 20px !important;
+      justify-content: flex-start !important;
+    }
+html.mobile-view #s1 .main-t, html.mobile-view #s1 .cover-main, html.mobile-view .s1-title {
+      font-size: 32px !important;
+    }
+html.mobile-view #s1 .en-t, html.mobile-view #s1 .cover-en {
+      font-size: 16px !important;
+    }
+html.mobile-view .card, html.mobile-view .dcard, html.mobile-view .card-gold, html.mobile-view .aspect-card, html.mobile-view .beh-card, html.mobile-view .role-item, html.mobile-view .char-card, html.mobile-view .eco-card, html.mobile-view .soc-card, html.mobile-view .mc, html.mobile-view .src-card {
+      padding: 14px 16px !important;
+    }
+html.mobile-view .drucker-box, html.mobile-view .intra-def {
+      padding: 14px 16px !important;
+      font-size: 15px !important;
+    }
+html.mobile-view .pstep-desc {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: right !important;
+      max-width: 100% !important;
+    }
+html.mobile-view #s1 .cover-num {
+      font-size: 100px !important;
+      opacity: 0.15 !important;
+    }
+html.mobile-view /* Constrain layouts to viewport width */
+    div, html.mobile-view section, html.mobile-view article, html.mobile-view table, html.mobile-view tr, html.mobile-view td, html.mobile-view th, html.mobile-view ul, html.mobile-view ol, html.mobile-view li, html.mobile-view p, html.mobile-view span, html.mobile-view blockquote, html.mobile-view iframe, html.mobile-view header, html.mobile-view footer, html.mobile-view img {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
 </style></head>
 <body>
 <div id="stage">
@@ -10275,9 +11624,22 @@ html, body {
   body, html {
     background: transparent !important;
     overflow: hidden !important;
+    width: 100% !important;
+    height: 100% !important;
   }
   /* Ensure the stage is centered inside the iframe and doesn't get clipped */
-  #stage, #deck-wrapper, .presentation, #presentation {
+  #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
+    margin: 0 !important;
+    padding: 0 !important;
+    position: absolute !important;
+    inset: 0 !important;
+    transform: none !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .slide {
     margin: 0 !important;
     padding: 0 !important;
     position: absolute !important;
@@ -10336,6 +11698,210 @@ html, body {
   .pstep-n, .pstep-en, .tcard-en, .tcard-feat, .merr-n, .mp-en, .qa-num, .qa-ans-title, .qa-ans-let, .qa-hint, .badge {
     font-size: 12px !important;
   }
+
+  /* ══ MOBILE RESPONSIVE OVERRIDES (width <= 1024px) ══ */
+  @media (max-width: 1024px) {
+    
+    #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .slide {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+    .shead {
+      height: 60px !important;
+      padding: 0 20px !important;
+      flex-shrink: 0 !important;
+    }
+    .shead .stitle {
+      font-size: 18px !important;
+    }
+    .shead .snum {
+      font-size: 11px !important;
+    }
+    .sbody {
+      height: auto !important;
+      flex-grow: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 15px 20px 30px !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+    }
+    .g2, .g3, .aspect-grid, .toc-grid, .eco-grid, .eco-grid-l, .char-grid, .soc-grid, .sum-cols, .intra-grid, .beh-row, .mrow, .src-grid {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+    p, li, td, .intro-txt, .card-body, .item-d, .b-text, .sc li, .merr-d, .mp-body, .qa-ans-text, .tcard-desc,
+    .cbod, .lt, .hbox, .cex-item, .toc-text, .phase-desc, .calc-desc, .sec-desc, .sum-body, .acc-ans,
+    .ctext, .step-desc, .ilist li, .intro-box, .hl-txt, .ans-text, .qtable td, .qrbox .qrl,
+    .def-block p, .body-text, .type-card p, .crit-item p, .styled-table td, .class-table td,
+    .char-desc, .ci-text, .fill-item, .acc-content, .pstep-desc, .cx, .hl, .tbl, .tbl td, .zx, .fs,
+    .def-box, .nlist li, .fi .fit, .r-desc, .c-desc, .ec-d, .soc-desc, .m-pts {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+    .card-title, .type-name, .crit-num, .char-name, .sum-title, .acc-q, .flow-lbl, .ctitle, .step-title,
+    .sum-label, .sum-desc, .acc-head, .ans-lbl, .qa, .zt, .zx, .col-t, .tbl th, .acc-qtext, .ctit,
+    .phase-title, .compare-head, .sum-head, .acc-qtxt, .item-t, .sc-h, .pstep-ar, .tcard-name, .merr-t,
+    .mp-title, .summary-text, .qa-q-text, .ct, .fl, .card h3, .beh-title, .m-title, .r-title, .c-title, .ec-t, .soc-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+    #s1 .h-content {
+      height: auto !important;
+      padding: 40px 20px !important;
+      justify-content: flex-start !important;
+    }
+    #s1 .main-t, #s1 .cover-main, .s1-title {
+      font-size: 32px !important;
+    }
+    #s1 .en-t, #s1 .cover-en {
+      font-size: 16px !important;
+    }
+    .card, .dcard, .card-gold, .aspect-card, .beh-card, .role-item, .char-card, .eco-card, .soc-card, .mc, .src-card {
+      padding: 14px 16px !important;
+    }
+    .drucker-box, .intra-def {
+      padding: 14px 16px !important;
+      font-size: 15px !important;
+    }
+    .pstep-desc {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: right !important;
+      max-width: 100% !important;
+    }
+    #s1 .cover-num {
+      font-size: 100px !important;
+      opacity: 0.15 !important;
+    }
+    
+    /* Constrain layouts to viewport width */
+    div, section, article, table, tr, td, th, ul, ol, li, p, span, blockquote, iframe, header, footer, img {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+  }
+  
+  /* ══ DYNAMIC CLASS OVERRIDES ══ */
+  html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+html.mobile-view .slide {
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      inset: 0 !important;
+      transform: none !important;
+      left: 0 !important;
+      top: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+html.mobile-view .shead {
+      height: 60px !important;
+      padding: 0 20px !important;
+      flex-shrink: 0 !important;
+    }
+html.mobile-view .shead .stitle {
+      font-size: 18px !important;
+    }
+html.mobile-view .shead .snum {
+      font-size: 11px !important;
+    }
+html.mobile-view .sbody {
+      height: auto !important;
+      flex-grow: 1 !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      padding: 15px 20px 30px !important;
+      -webkit-overflow-scrolling: touch;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+    }
+html.mobile-view .g2, html.mobile-view .g3, html.mobile-view .aspect-grid, html.mobile-view .toc-grid, html.mobile-view .eco-grid, html.mobile-view .eco-grid-l, html.mobile-view .char-grid, html.mobile-view .soc-grid, html.mobile-view .sum-cols, html.mobile-view .intra-grid, html.mobile-view .beh-row, html.mobile-view .mrow, html.mobile-view .src-grid {
+      grid-template-columns: 1fr !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
+html.mobile-view p, html.mobile-view li, html.mobile-view td, html.mobile-view .intro-txt, html.mobile-view .card-body, html.mobile-view .item-d, html.mobile-view .b-text, html.mobile-view .sc li, html.mobile-view .merr-d, html.mobile-view .mp-body, html.mobile-view .qa-ans-text, html.mobile-view .tcard-desc, html.mobile-view .cbod, html.mobile-view .lt, html.mobile-view .hbox, html.mobile-view .cex-item, html.mobile-view .toc-text, html.mobile-view .phase-desc, html.mobile-view .calc-desc, html.mobile-view .sec-desc, html.mobile-view .sum-body, html.mobile-view .acc-ans, html.mobile-view .ctext, html.mobile-view .step-desc, html.mobile-view .ilist li, html.mobile-view .intro-box, html.mobile-view .hl-txt, html.mobile-view .ans-text, html.mobile-view .qtable td, html.mobile-view .qrbox .qrl, html.mobile-view .def-block p, html.mobile-view .body-text, html.mobile-view .type-card p, html.mobile-view .crit-item p, html.mobile-view .styled-table td, html.mobile-view .class-table td, html.mobile-view .char-desc, html.mobile-view .ci-text, html.mobile-view .fill-item, html.mobile-view .acc-content, html.mobile-view .pstep-desc, html.mobile-view .cx, html.mobile-view .hl, html.mobile-view .tbl, html.mobile-view .tbl td, html.mobile-view .zx, html.mobile-view .fs, html.mobile-view .def-box, html.mobile-view .nlist li, html.mobile-view .fi .fit, html.mobile-view .r-desc, html.mobile-view .c-desc, html.mobile-view .ec-d, html.mobile-view .soc-desc, html.mobile-view .m-pts {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+    }
+html.mobile-view .card-title, html.mobile-view .type-name, html.mobile-view .crit-num, html.mobile-view .char-name, html.mobile-view .sum-title, html.mobile-view .acc-q, html.mobile-view .flow-lbl, html.mobile-view .ctitle, html.mobile-view .step-title, html.mobile-view .sum-label, html.mobile-view .sum-desc, html.mobile-view .acc-head, html.mobile-view .ans-lbl, html.mobile-view .qa, html.mobile-view .zt, html.mobile-view .zx, html.mobile-view .col-t, html.mobile-view .tbl th, html.mobile-view .acc-qtext, html.mobile-view .ctit, html.mobile-view .phase-title, html.mobile-view .compare-head, html.mobile-view .sum-head, html.mobile-view .acc-qtxt, html.mobile-view .item-t, html.mobile-view .sc-h, html.mobile-view .pstep-ar, html.mobile-view .tcard-name, html.mobile-view .merr-t, html.mobile-view .mp-title, html.mobile-view .summary-text, html.mobile-view .qa-q-text, html.mobile-view .ct, html.mobile-view .fl, html.mobile-view .card h3, html.mobile-view .beh-title, html.mobile-view .m-title, html.mobile-view .r-title, html.mobile-view .c-title, html.mobile-view .ec-t, html.mobile-view .soc-title {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+    }
+html.mobile-view #s1 .h-content {
+      height: auto !important;
+      padding: 40px 20px !important;
+      justify-content: flex-start !important;
+    }
+html.mobile-view #s1 .main-t, html.mobile-view #s1 .cover-main, html.mobile-view .s1-title {
+      font-size: 32px !important;
+    }
+html.mobile-view #s1 .en-t, html.mobile-view #s1 .cover-en {
+      font-size: 16px !important;
+    }
+html.mobile-view .card, html.mobile-view .dcard, html.mobile-view .card-gold, html.mobile-view .aspect-card, html.mobile-view .beh-card, html.mobile-view .role-item, html.mobile-view .char-card, html.mobile-view .eco-card, html.mobile-view .soc-card, html.mobile-view .mc, html.mobile-view .src-card {
+      padding: 14px 16px !important;
+    }
+html.mobile-view .drucker-box, html.mobile-view .intra-def {
+      padding: 14px 16px !important;
+      font-size: 15px !important;
+    }
+html.mobile-view .pstep-desc {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: right !important;
+      max-width: 100% !important;
+    }
+html.mobile-view #s1 .cover-num {
+      font-size: 100px !important;
+      opacity: 0.15 !important;
+    }
+html.mobile-view /* Constrain layouts to viewport width */
+    div, html.mobile-view section, html.mobile-view article, html.mobile-view table, html.mobile-view tr, html.mobile-view td, html.mobile-view th, html.mobile-view ul, html.mobile-view ol, html.mobile-view li, html.mobile-view p, html.mobile-view span, html.mobile-view blockquote, html.mobile-view iframe, html.mobile-view header, html.mobile-view footer, html.mobile-view img {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
 
   /* Chapter 13 1280x720 canvas scale-down adjustments */
   #s1 .cover-num {
@@ -11543,26 +13109,46 @@ html, body {
 
   function scalePresentation() {
     const s = document.getElementById('scaler');
-    
-    // Slide resolution is exactly 1280x720
-    const activeWidth = 1280;
-    const activeHeight = 720;
-    
-    s.style.width = activeWidth + 'px';
-    s.style.height = activeHeight + 'px';
-    
     const availableWidth = window.innerWidth;
     const controls = document.getElementById('controls');
     const controlsHeight = controls ? controls.offsetHeight : 56;
     const availableHeight = window.innerHeight - controlsHeight;
+    const isMobile = window.innerWidth <= 1024 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
-    const scaleX = availableWidth / activeWidth;
-    const scaleY = availableHeight / activeHeight;
-    const scale = Math.min(scaleX, scaleY);
+    if (isMobile) {
+      // Mobile Responsive Mode: No scale transform!
+      s.style.width = '100%';
+      s.style.height = availableHeight + 'px';
+      s.style.transform = 'none';
+      s.style.left = '0';
+      s.style.top = '0';
+      s.style.borderRadius = '0';
+      s.style.boxShadow = 'none';
+    } else {
+      // Desktop Slides Mode
+      const activeWidth = 1280;
+      const activeHeight = 720;
+      s.style.width = activeWidth + 'px';
+      s.style.height = activeHeight + 'px';
+      
+      const scaleX = availableWidth / activeWidth;
+      const scaleY = availableHeight / activeHeight;
+      const scale = Math.min(scaleX, scaleY);
+      
+      s.style.transform = `scale(${scale})`;
+      s.style.left = `${(availableWidth - activeWidth * scale) / 2}px`;
+      s.style.top = `${(availableHeight - activeHeight * scale) / 2}px`;
+      s.style.borderRadius = '12px';
+      s.style.boxShadow = '0 25px 60px rgba(0,0,0,0.8)';
+    }
     
-    s.style.transform = `scale(${scale})`;
-    s.style.left = `${(availableWidth - activeWidth * scale) / 2}px`;
-    s.style.top = `${(availableHeight - activeHeight * scale) / 2}px`;
+    // Sync responsive mode class to all loaded iframes
+    const iframes = Array.from(document.querySelectorAll('.iframe-slide'));
+    iframes.forEach(iframe => {
+      if (iframe.contentWindow && iframe.contentWindow.document && iframe.contentWindow.document.documentElement) {
+        iframe.contentWindow.document.documentElement.classList.toggle('mobile-view', isMobile);
+      }
+    });
   }
 
   function syncIframeTheme(iframe) {
@@ -11636,10 +13222,18 @@ html, body {
       if (justLoaded || !frame.contentWindow || !frame.contentWindow.__presentationApi) {
         frame.onload = () => {
           syncIframeTheme(frame);
+          const isMobile = window.innerWidth <= 1024 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+          if (frame.contentWindow && frame.contentWindow.document && frame.contentWindow.document.documentElement) {
+            frame.contentWindow.document.documentElement.classList.toggle('mobile-view', isMobile);
+          }
           triggerSlide();
           setTimeout(() => preloadAdjacentChapters(chNum), 100);
         };
       } else {
+        const isMobile = window.innerWidth <= 1024 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (frame.contentWindow && frame.contentWindow.document && frame.contentWindow.document.documentElement) {
+          frame.contentWindow.document.documentElement.classList.toggle('mobile-view', isMobile);
+        }
         triggerSlide();
         preloadAdjacentChapters(chNum);
       }
