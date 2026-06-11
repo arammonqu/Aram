@@ -60,6 +60,42 @@
     }
     
     @media (max-width: 1024px) {
+      #stage {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+      }
+      #scaler {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100% !important;
+        position: relative !important;
+        transform: none !important;
+        left: 0 !important;
+        top: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+      #slide-container {
+        height: auto !important;
+        overflow: visible !important;
+      }
+      .parent-slide {
+        height: auto !important;
+        position: relative !important;
+      }
+      .iframe-slide {
+        position: relative !important;
+        height: auto !important;
+        min-height: 100% !important;
+      }
+      /* TOC and cover height adjustment */
+      .master-cover, .ch-divider {
+        min-height: calc(100vh - 56px) !important;
+        padding: 40px 20px !important;
+      }
+      #slide_toc {
+        min-height: calc(100vh - 56px) !important;
+      }
       .cover-card {
         padding: 30px 20px !important;
         width: 90% !important;
@@ -72,7 +108,7 @@
       }
       .toc-grid {
         grid-template-columns: 1fr !important;
-        max-height: calc(100vh - 180px) !important;
+        max-height: none !important;
         padding: 0 10px !important;
       }
       .toc-btn {
@@ -342,39 +378,7 @@
     .footer-info { font-size: 13px; color: var(--parent-control-text); opacity: 0.7; font-weight: 700; }
     #slideCounter { direction: ltr; unicode-bidi: isolate; }
 
-    /* ══ PORTRAIT ORIENTATION TIP ══ */
-    #portrait-tip {
-      display: none;
-      position: fixed;
-      top: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(11, 114, 104, 0.95);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-size: 13px;
-      font-weight: bold;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-      z-index: 9999;
-      pointer-events: none;
-      align-items: center;
-      gap: 8px;
-      animation: bounceTip 2s infinite;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      direction: rtl;
-    }
-    
-    @keyframes bounceTip {
-      0%, 100% { transform: translate(-50%, 0); }
-      50% { transform: translate(-50%, -6px); }
-    }
-    
-    @media (max-width: 768px) and (orientation: portrait) {
-      #portrait-tip {
-        display: flex;
-      }
-    }
+
 
     @media (max-width: 600px) {
       #controls {
@@ -584,10 +588,7 @@
   </div>
 </div>
 
-<!-- Portrait mode helper tip -->
-<div id="portrait-tip">
-  <span>🔄 يرجى تدوير الهاتف للوضع الأفقي لعرض أفضل</span>
-</div>
+
 
 <!-- Unified Footer Controls outside stage -->
 <div id="controls">
@@ -1847,9 +1848,13 @@ html.dark-mode .nlist li .nn{background:var(--badge-bg);color:var(--badge-c);}
   /* ══ MOBILE RESPONSIVE OVERRIDES (width <= 1024px) ══ */
   @media (max-width: 1024px) {
     
+    html, body {
+      overflow-y: visible !important;
+      height: auto !important;
+    }
     #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       position: relative !important;
       transform: none !important;
       left: 0 !important;
@@ -1859,9 +1864,8 @@ html.dark-mode .nlist li .nn{background:var(--badge-bg);color:var(--badge-c);}
     }
     .slide {
       width: 100% !important;
-      height: 100% !important;
-      position: absolute !important;
-      inset: 0 !important;
+      height: auto !important;
+      position: relative !important;
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
@@ -1885,7 +1889,7 @@ html.dark-mode .nlist li .nn{background:var(--badge-bg);color:var(--badge-c);}
       height: auto !important;
       flex-grow: 1 !important;
       min-height: 0 !important;
-      overflow-y: auto !important;
+      overflow-y: visible !important;
       padding: 15px 20px 30px !important;
       -webkit-overflow-scrolling: touch;
       display: flex !important;
@@ -1966,9 +1970,13 @@ html.dark-mode .nlist li .nn{background:var(--badge-bg);color:var(--badge-c);}
   }
   
   /* ══ DYNAMIC CLASS OVERRIDES ══ */
-  html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
+  html.mobile-view html, html.mobile-view body {
+      overflow-y: visible !important;
+      height: auto !important;
+    }
+html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       position: relative !important;
       transform: none !important;
       left: 0 !important;
@@ -1978,9 +1986,8 @@ html.dark-mode .nlist li .nn{background:var(--badge-bg);color:var(--badge-c);}
     }
 html.mobile-view .slide {
       width: 100% !important;
-      height: 100% !important;
-      position: absolute !important;
-      inset: 0 !important;
+      height: auto !important;
+      position: relative !important;
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
@@ -2004,7 +2011,7 @@ html.mobile-view .sbody {
       height: auto !important;
       flex-grow: 1 !important;
       min-height: 0 !important;
-      overflow-y: auto !important;
+      overflow-y: visible !important;
       padding: 15px 20px 30px !important;
       -webkit-overflow-scrolling: touch;
       display: flex !important;
@@ -3638,9 +3645,13 @@ window.__presentationApi = {
   /* ══ MOBILE RESPONSIVE OVERRIDES (width <= 1024px) ══ */
   @media (max-width: 1024px) {
     
+    html, body {
+      overflow-y: visible !important;
+      height: auto !important;
+    }
     #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       position: relative !important;
       transform: none !important;
       left: 0 !important;
@@ -3650,9 +3661,8 @@ window.__presentationApi = {
     }
     .slide {
       width: 100% !important;
-      height: 100% !important;
-      position: absolute !important;
-      inset: 0 !important;
+      height: auto !important;
+      position: relative !important;
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
@@ -3676,7 +3686,7 @@ window.__presentationApi = {
       height: auto !important;
       flex-grow: 1 !important;
       min-height: 0 !important;
-      overflow-y: auto !important;
+      overflow-y: visible !important;
       padding: 15px 20px 30px !important;
       -webkit-overflow-scrolling: touch;
       display: flex !important;
@@ -3757,9 +3767,13 @@ window.__presentationApi = {
   }
   
   /* ══ DYNAMIC CLASS OVERRIDES ══ */
-  html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
+  html.mobile-view html, html.mobile-view body {
+      overflow-y: visible !important;
+      height: auto !important;
+    }
+html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       position: relative !important;
       transform: none !important;
       left: 0 !important;
@@ -3769,9 +3783,8 @@ window.__presentationApi = {
     }
 html.mobile-view .slide {
       width: 100% !important;
-      height: 100% !important;
-      position: absolute !important;
-      inset: 0 !important;
+      height: auto !important;
+      position: relative !important;
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
@@ -3795,7 +3808,7 @@ html.mobile-view .sbody {
       height: auto !important;
       flex-grow: 1 !important;
       min-height: 0 !important;
-      overflow-y: auto !important;
+      overflow-y: visible !important;
       padding: 15px 20px 30px !important;
       -webkit-overflow-scrolling: touch;
       display: flex !important;
@@ -5305,9 +5318,13 @@ html[data-theme="dark"]  .geo-corner{opacity:.14;}
   /* ══ MOBILE RESPONSIVE OVERRIDES (width <= 1024px) ══ */
   @media (max-width: 1024px) {
     
+    html, body {
+      overflow-y: visible !important;
+      height: auto !important;
+    }
     #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       position: relative !important;
       transform: none !important;
       left: 0 !important;
@@ -5317,9 +5334,8 @@ html[data-theme="dark"]  .geo-corner{opacity:.14;}
     }
     .slide {
       width: 100% !important;
-      height: 100% !important;
-      position: absolute !important;
-      inset: 0 !important;
+      height: auto !important;
+      position: relative !important;
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
@@ -5343,7 +5359,7 @@ html[data-theme="dark"]  .geo-corner{opacity:.14;}
       height: auto !important;
       flex-grow: 1 !important;
       min-height: 0 !important;
-      overflow-y: auto !important;
+      overflow-y: visible !important;
       padding: 15px 20px 30px !important;
       -webkit-overflow-scrolling: touch;
       display: flex !important;
@@ -5424,9 +5440,13 @@ html[data-theme="dark"]  .geo-corner{opacity:.14;}
   }
   
   /* ══ DYNAMIC CLASS OVERRIDES ══ */
-  html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
+  html.mobile-view html, html.mobile-view body {
+      overflow-y: visible !important;
+      height: auto !important;
+    }
+html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       position: relative !important;
       transform: none !important;
       left: 0 !important;
@@ -5436,9 +5456,8 @@ html[data-theme="dark"]  .geo-corner{opacity:.14;}
     }
 html.mobile-view .slide {
       width: 100% !important;
-      height: 100% !important;
-      position: absolute !important;
-      inset: 0 !important;
+      height: auto !important;
+      position: relative !important;
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
@@ -5462,7 +5481,7 @@ html.mobile-view .sbody {
       height: auto !important;
       flex-grow: 1 !important;
       min-height: 0 !important;
-      overflow-y: auto !important;
+      overflow-y: visible !important;
       padding: 15px 20px 30px !important;
       -webkit-overflow-scrolling: touch;
       display: flex !important;
@@ -7046,9 +7065,13 @@ body.dark .ibtn:hover { background: rgba(255,255,255,0.10); }
   /* ══ MOBILE RESPONSIVE OVERRIDES (width <= 1024px) ══ */
   @media (max-width: 1024px) {
     
+    html, body {
+      overflow-y: visible !important;
+      height: auto !important;
+    }
     #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       position: relative !important;
       transform: none !important;
       left: 0 !important;
@@ -7058,9 +7081,8 @@ body.dark .ibtn:hover { background: rgba(255,255,255,0.10); }
     }
     .slide {
       width: 100% !important;
-      height: 100% !important;
-      position: absolute !important;
-      inset: 0 !important;
+      height: auto !important;
+      position: relative !important;
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
@@ -7084,7 +7106,7 @@ body.dark .ibtn:hover { background: rgba(255,255,255,0.10); }
       height: auto !important;
       flex-grow: 1 !important;
       min-height: 0 !important;
-      overflow-y: auto !important;
+      overflow-y: visible !important;
       padding: 15px 20px 30px !important;
       -webkit-overflow-scrolling: touch;
       display: flex !important;
@@ -7165,9 +7187,13 @@ body.dark .ibtn:hover { background: rgba(255,255,255,0.10); }
   }
   
   /* ══ DYNAMIC CLASS OVERRIDES ══ */
-  html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
+  html.mobile-view html, html.mobile-view body {
+      overflow-y: visible !important;
+      height: auto !important;
+    }
+html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       position: relative !important;
       transform: none !important;
       left: 0 !important;
@@ -7177,9 +7203,8 @@ body.dark .ibtn:hover { background: rgba(255,255,255,0.10); }
     }
 html.mobile-view .slide {
       width: 100% !important;
-      height: 100% !important;
-      position: absolute !important;
-      inset: 0 !important;
+      height: auto !important;
+      position: relative !important;
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
@@ -7203,7 +7228,7 @@ html.mobile-view .sbody {
       height: auto !important;
       flex-grow: 1 !important;
       min-height: 0 !important;
-      overflow-y: auto !important;
+      overflow-y: visible !important;
       padding: 15px 20px 30px !important;
       -webkit-overflow-scrolling: touch;
       display: flex !important;
@@ -8522,9 +8547,13 @@ body.dark .tag.t{background:rgba(50,189,168,.15);color:#32BDA8;border-color:rgba
   /* ══ MOBILE RESPONSIVE OVERRIDES (width <= 1024px) ══ */
   @media (max-width: 1024px) {
     
+    html, body {
+      overflow-y: visible !important;
+      height: auto !important;
+    }
     #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       position: relative !important;
       transform: none !important;
       left: 0 !important;
@@ -8534,9 +8563,8 @@ body.dark .tag.t{background:rgba(50,189,168,.15);color:#32BDA8;border-color:rgba
     }
     .slide {
       width: 100% !important;
-      height: 100% !important;
-      position: absolute !important;
-      inset: 0 !important;
+      height: auto !important;
+      position: relative !important;
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
@@ -8560,7 +8588,7 @@ body.dark .tag.t{background:rgba(50,189,168,.15);color:#32BDA8;border-color:rgba
       height: auto !important;
       flex-grow: 1 !important;
       min-height: 0 !important;
-      overflow-y: auto !important;
+      overflow-y: visible !important;
       padding: 15px 20px 30px !important;
       -webkit-overflow-scrolling: touch;
       display: flex !important;
@@ -8641,9 +8669,13 @@ body.dark .tag.t{background:rgba(50,189,168,.15);color:#32BDA8;border-color:rgba
   }
   
   /* ══ DYNAMIC CLASS OVERRIDES ══ */
-  html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
+  html.mobile-view html, html.mobile-view body {
+      overflow-y: visible !important;
+      height: auto !important;
+    }
+html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       position: relative !important;
       transform: none !important;
       left: 0 !important;
@@ -8653,9 +8685,8 @@ body.dark .tag.t{background:rgba(50,189,168,.15);color:#32BDA8;border-color:rgba
     }
 html.mobile-view .slide {
       width: 100% !important;
-      height: 100% !important;
-      position: absolute !important;
-      inset: 0 !important;
+      height: auto !important;
+      position: relative !important;
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
@@ -8679,7 +8710,7 @@ html.mobile-view .sbody {
       height: auto !important;
       flex-grow: 1 !important;
       min-height: 0 !important;
-      overflow-y: auto !important;
+      overflow-y: visible !important;
       padding: 15px 20px 30px !important;
       -webkit-overflow-scrolling: touch;
       display: flex !important;
@@ -9832,9 +9863,13 @@ body{
   /* ══ MOBILE RESPONSIVE OVERRIDES (width <= 1024px) ══ */
   @media (max-width: 1024px) {
     
+    html, body {
+      overflow-y: visible !important;
+      height: auto !important;
+    }
     #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       position: relative !important;
       transform: none !important;
       left: 0 !important;
@@ -9844,9 +9879,8 @@ body{
     }
     .slide {
       width: 100% !important;
-      height: 100% !important;
-      position: absolute !important;
-      inset: 0 !important;
+      height: auto !important;
+      position: relative !important;
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
@@ -9870,7 +9904,7 @@ body{
       height: auto !important;
       flex-grow: 1 !important;
       min-height: 0 !important;
-      overflow-y: auto !important;
+      overflow-y: visible !important;
       padding: 15px 20px 30px !important;
       -webkit-overflow-scrolling: touch;
       display: flex !important;
@@ -9951,9 +9985,13 @@ body{
   }
   
   /* ══ DYNAMIC CLASS OVERRIDES ══ */
-  html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
+  html.mobile-view html, html.mobile-view body {
+      overflow-y: visible !important;
+      height: auto !important;
+    }
+html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       position: relative !important;
       transform: none !important;
       left: 0 !important;
@@ -9963,9 +10001,8 @@ body{
     }
 html.mobile-view .slide {
       width: 100% !important;
-      height: 100% !important;
-      position: absolute !important;
-      inset: 0 !important;
+      height: auto !important;
+      position: relative !important;
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
@@ -9989,7 +10026,7 @@ html.mobile-view .sbody {
       height: auto !important;
       flex-grow: 1 !important;
       min-height: 0 !important;
-      overflow-y: auto !important;
+      overflow-y: visible !important;
       padding: 15px 20px 30px !important;
       -webkit-overflow-scrolling: touch;
       display: flex !important;
@@ -11893,9 +11930,13 @@ html, body {
   /* ══ MOBILE RESPONSIVE OVERRIDES (width <= 1024px) ══ */
   @media (max-width: 1024px) {
     
+    html, body {
+      overflow-y: visible !important;
+      height: auto !important;
+    }
     #stage, #deck-wrapper, .presentation, #presentation, #scaler, .deck-wrapper, .scaler {
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       position: relative !important;
       transform: none !important;
       left: 0 !important;
@@ -11905,9 +11946,8 @@ html, body {
     }
     .slide {
       width: 100% !important;
-      height: 100% !important;
-      position: absolute !important;
-      inset: 0 !important;
+      height: auto !important;
+      position: relative !important;
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
@@ -11931,7 +11971,7 @@ html, body {
       height: auto !important;
       flex-grow: 1 !important;
       min-height: 0 !important;
-      overflow-y: auto !important;
+      overflow-y: visible !important;
       padding: 15px 20px 30px !important;
       -webkit-overflow-scrolling: touch;
       display: flex !important;
@@ -12012,9 +12052,13 @@ html, body {
   }
   
   /* ══ DYNAMIC CLASS OVERRIDES ══ */
-  html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
+  html.mobile-view html, html.mobile-view body {
+      overflow-y: visible !important;
+      height: auto !important;
+    }
+html.mobile-view #stage, html.mobile-view #deck-wrapper, html.mobile-view .presentation, html.mobile-view #presentation, html.mobile-view #scaler, html.mobile-view .deck-wrapper, html.mobile-view .scaler {
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
       position: relative !important;
       transform: none !important;
       left: 0 !important;
@@ -12024,9 +12068,8 @@ html, body {
     }
 html.mobile-view .slide {
       width: 100% !important;
-      height: 100% !important;
-      position: absolute !important;
-      inset: 0 !important;
+      height: auto !important;
+      position: relative !important;
       transform: none !important;
       left: 0 !important;
       top: 0 !important;
@@ -12050,7 +12093,7 @@ html.mobile-view .sbody {
       height: auto !important;
       flex-grow: 1 !important;
       min-height: 0 !important;
-      overflow-y: auto !important;
+      overflow-y: visible !important;
       padding: 15px 20px 30px !important;
       -webkit-overflow-scrolling: touch;
       display: flex !important;
@@ -13317,7 +13360,7 @@ html.mobile-view /* Constrain layouts to viewport width */
     if (isMobile) {
       // Mobile Responsive Mode: No scale transform!
       s.style.width = '100%';
-      s.style.height = availableHeight + 'px';
+      s.style.height = 'auto';
       s.style.transform = 'none';
       s.style.left = '0';
       s.style.top = '0';
@@ -13390,6 +13433,10 @@ html.mobile-view /* Constrain layouts to viewport width */
 
   function goToSlide(n) {
     if (n < 0 || n >= total) return;
+    
+    // Reset vertical scroll position on slide change
+    const stage = document.getElementById('stage');
+    if (stage) stage.scrollTop = 0;
     
     // Hide previous state
     const oldMapping = slideMapping[cur];
