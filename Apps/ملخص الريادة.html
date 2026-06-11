@@ -1935,22 +1935,35 @@ html.dark-mode .nlist li .nn{background:var(--badge-bg);color:var(--badge-c);}
     .slide.s-hero, #s1.slide, #s0.slide {
       overflow: auto !important;
     }
+    /* Header: show title clearly on mobile */
     .shead, .slide-header, .hdr, .sh {
       height: auto !important;
-      min-height: 52px !important;
-      max-height: 80px !important;
+      min-height: 55px !important;
+      max-height: none !important;  /* never clip the title */
       padding: 8px 16px !important;
       flex-shrink: 0 !important;
       display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;  /* stack number over title */
+      justify-content: center !important;
+      overflow: visible !important;  /* ensure no clipping */
+      gap: 2px !important;
     }
+    /* Slide number (small, on top) */
+    .snum, .sh-tag, .sh-num, .eye, .en-sub, .hsub, .sh-en, .slide-header .en-title, .slide-header .sub-en, .hdr .badge {
+      font-size: 10px !important;
+      opacity: 0.65 !important;
+      order: -1 !important;
+      line-height: 1.2 !important;
+    }
+    .sep { display: none !important; }
+    /* Slide title (prominent, main line) */
     .shead .stitle, .slide-header h2, .hdr h2, .sh-title, .stitle, .ht {
-      font-size: 17px !important;
+      font-size: 15px !important;
       line-height: 1.3 !important;
-    }
-    .shead .snum, .slide-header .en-title, .slide-header .sub-en, .hdr .badge, .sh-tag, .eye, .en-sub, .hsub, .sh-en, .sh-num, .sep {
-      font-size: 11px !important;
+      font-weight: 700 !important;
+      order: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
     /* THE SCROLL CONTAINER */
     .sbody, .slide-body, .body, .sb {
@@ -2102,22 +2115,35 @@ html.mobile-view /* Cover slides that are not the standard shead/sbody layout */
     .slide.s-hero, html.mobile-view #s1.slide, html.mobile-view #s0.slide {
       overflow: auto !important;
     }
-html.mobile-view .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
+html.mobile-view /* Header: show title clearly on mobile */
+    .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
       height: auto !important;
-      min-height: 52px !important;
-      max-height: 80px !important;
+      min-height: 55px !important;
+      max-height: none !important;  /* never clip the title */
       padding: 8px 16px !important;
       flex-shrink: 0 !important;
       display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;  /* stack number over title */
+      justify-content: center !important;
+      overflow: visible !important;  /* ensure no clipping */
+      gap: 2px !important;
     }
-html.mobile-view .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
-      font-size: 17px !important;
+html.mobile-view /* Slide number (small, html.mobile-view on top) */
+    .snum, html.mobile-view .sh-tag, html.mobile-view .sh-num, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge {
+      font-size: 10px !important;
+      opacity: 0.65 !important;
+      order: -1 !important;
+      line-height: 1.2 !important;
+    }
+html.mobile-view .sep { display: none !important; }
+html.mobile-view /* Slide title (prominent, html.mobile-view main line) */
+    .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
+      font-size: 15px !important;
       line-height: 1.3 !important;
-    }
-html.mobile-view .shead .snum, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge, html.mobile-view .sh-tag, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .sh-num, html.mobile-view .sep {
-      font-size: 11px !important;
+      font-weight: 700 !important;
+      order: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
 html.mobile-view /* THE SCROLL CONTAINER */
     .sbody, html.mobile-view .slide-body, html.mobile-view .body, html.mobile-view .sb {
@@ -2606,6 +2632,9 @@ html.mobile-view #s1 {
   }, true); // capture phase!
 
   // ── Forward swipe gestures to parent (horizontal only) ────────────────
+  // IMPORTANT: We use capture phase (true) so we intercept BEFORE internal
+  // chapter listeners. Any horizontal movement > 20px blocks internal nav
+  // to prevent sync issues. Clear horizontal swipes are forwarded to parent.
   let _tX = null, _tY = null;
   window.addEventListener('touchstart', e => {
     _tX = e.changedTouches[0].clientX;
@@ -2615,17 +2644,27 @@ html.mobile-view #s1 {
     if (_tX === null) return;
     const dx = e.changedTouches[0].clientX - _tX;
     const dy = e.changedTouches[0].clientY - _tY;
-    // Only forward horizontal swipes (not vertical scrolling)
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      e.stopImmediatePropagation();
-      e.preventDefault();
-      try {
-        if (window.parent && window.parent.handleGlobalSwipe) {
-          window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
-        }
-      } catch (err) {}
-    }
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
     _tX = null; _tY = null;
+
+    if (absDx > 20) {
+      // Any notable horizontal movement: block internal chapter swipe handlers
+      // This prevents internal go()/goTo() from firing and desyncing the parent
+      e.stopImmediatePropagation();
+      // Only forward to parent if it is clearly a horizontal swipe
+      if (absDx > 40 && absDx > absDy * 1.5) {
+        e.preventDefault();
+        try {
+          if (window.parent && window.parent.handleGlobalSwipe) {
+            window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
+          }
+        } catch (err) {}
+      }
+      // Diagonal swipes (absDx > 20 but not clearly horizontal): blocked internally,
+      // not forwarded to parent — avoids navigation on scroll attempts
+    }
+    // absDx <= 20: tap or pure vertical scroll → let everything propagate normally
   }, true); // capture phase
 <\/script>
 <div class="presentation" id="presentation">
@@ -4007,22 +4046,35 @@ window.__presentationApi = {
     .slide.s-hero, #s1.slide, #s0.slide {
       overflow: auto !important;
     }
+    /* Header: show title clearly on mobile */
     .shead, .slide-header, .hdr, .sh {
       height: auto !important;
-      min-height: 52px !important;
-      max-height: 80px !important;
+      min-height: 55px !important;
+      max-height: none !important;  /* never clip the title */
       padding: 8px 16px !important;
       flex-shrink: 0 !important;
       display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;  /* stack number over title */
+      justify-content: center !important;
+      overflow: visible !important;  /* ensure no clipping */
+      gap: 2px !important;
     }
+    /* Slide number (small, on top) */
+    .snum, .sh-tag, .sh-num, .eye, .en-sub, .hsub, .sh-en, .slide-header .en-title, .slide-header .sub-en, .hdr .badge {
+      font-size: 10px !important;
+      opacity: 0.65 !important;
+      order: -1 !important;
+      line-height: 1.2 !important;
+    }
+    .sep { display: none !important; }
+    /* Slide title (prominent, main line) */
     .shead .stitle, .slide-header h2, .hdr h2, .sh-title, .stitle, .ht {
-      font-size: 17px !important;
+      font-size: 15px !important;
       line-height: 1.3 !important;
-    }
-    .shead .snum, .slide-header .en-title, .slide-header .sub-en, .hdr .badge, .sh-tag, .eye, .en-sub, .hsub, .sh-en, .sh-num, .sep {
-      font-size: 11px !important;
+      font-weight: 700 !important;
+      order: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
     /* THE SCROLL CONTAINER */
     .sbody, .slide-body, .body, .sb {
@@ -4174,22 +4226,35 @@ html.mobile-view /* Cover slides that are not the standard shead/sbody layout */
     .slide.s-hero, html.mobile-view #s1.slide, html.mobile-view #s0.slide {
       overflow: auto !important;
     }
-html.mobile-view .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
+html.mobile-view /* Header: show title clearly on mobile */
+    .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
       height: auto !important;
-      min-height: 52px !important;
-      max-height: 80px !important;
+      min-height: 55px !important;
+      max-height: none !important;  /* never clip the title */
       padding: 8px 16px !important;
       flex-shrink: 0 !important;
       display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;  /* stack number over title */
+      justify-content: center !important;
+      overflow: visible !important;  /* ensure no clipping */
+      gap: 2px !important;
     }
-html.mobile-view .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
-      font-size: 17px !important;
+html.mobile-view /* Slide number (small, html.mobile-view on top) */
+    .snum, html.mobile-view .sh-tag, html.mobile-view .sh-num, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge {
+      font-size: 10px !important;
+      opacity: 0.65 !important;
+      order: -1 !important;
+      line-height: 1.2 !important;
+    }
+html.mobile-view .sep { display: none !important; }
+html.mobile-view /* Slide title (prominent, html.mobile-view main line) */
+    .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
+      font-size: 15px !important;
       line-height: 1.3 !important;
-    }
-html.mobile-view .shead .snum, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge, html.mobile-view .sh-tag, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .sh-num, html.mobile-view .sep {
-      font-size: 11px !important;
+      font-weight: 700 !important;
+      order: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
 html.mobile-view /* THE SCROLL CONTAINER */
     .sbody, html.mobile-view .slide-body, html.mobile-view .body, html.mobile-view .sb {
@@ -4429,6 +4494,9 @@ html.mobile-view #s1 {
   }, true); // capture phase!
 
   // ── Forward swipe gestures to parent (horizontal only) ────────────────
+  // IMPORTANT: We use capture phase (true) so we intercept BEFORE internal
+  // chapter listeners. Any horizontal movement > 20px blocks internal nav
+  // to prevent sync issues. Clear horizontal swipes are forwarded to parent.
   let _tX = null, _tY = null;
   window.addEventListener('touchstart', e => {
     _tX = e.changedTouches[0].clientX;
@@ -4438,17 +4506,27 @@ html.mobile-view #s1 {
     if (_tX === null) return;
     const dx = e.changedTouches[0].clientX - _tX;
     const dy = e.changedTouches[0].clientY - _tY;
-    // Only forward horizontal swipes (not vertical scrolling)
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      e.stopImmediatePropagation();
-      e.preventDefault();
-      try {
-        if (window.parent && window.parent.handleGlobalSwipe) {
-          window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
-        }
-      } catch (err) {}
-    }
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
     _tX = null; _tY = null;
+
+    if (absDx > 20) {
+      // Any notable horizontal movement: block internal chapter swipe handlers
+      // This prevents internal go()/goTo() from firing and desyncing the parent
+      e.stopImmediatePropagation();
+      // Only forward to parent if it is clearly a horizontal swipe
+      if (absDx > 40 && absDx > absDy * 1.5) {
+        e.preventDefault();
+        try {
+          if (window.parent && window.parent.handleGlobalSwipe) {
+            window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
+          }
+        } catch (err) {}
+      }
+      // Diagonal swipes (absDx > 20 but not clearly horizontal): blocked internally,
+      // not forwarded to parent — avoids navigation on scroll attempts
+    }
+    // absDx <= 20: tap or pure vertical scroll → let everything propagate normally
   }, true); // capture phase
 <\/script>
 <div id="deck-wrapper">
@@ -5959,22 +6037,35 @@ html[data-theme="dark"]  .geo-corner{opacity:.14;}
     .slide.s-hero, #s1.slide, #s0.slide {
       overflow: auto !important;
     }
+    /* Header: show title clearly on mobile */
     .shead, .slide-header, .hdr, .sh {
       height: auto !important;
-      min-height: 52px !important;
-      max-height: 80px !important;
+      min-height: 55px !important;
+      max-height: none !important;  /* never clip the title */
       padding: 8px 16px !important;
       flex-shrink: 0 !important;
       display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;  /* stack number over title */
+      justify-content: center !important;
+      overflow: visible !important;  /* ensure no clipping */
+      gap: 2px !important;
     }
+    /* Slide number (small, on top) */
+    .snum, .sh-tag, .sh-num, .eye, .en-sub, .hsub, .sh-en, .slide-header .en-title, .slide-header .sub-en, .hdr .badge {
+      font-size: 10px !important;
+      opacity: 0.65 !important;
+      order: -1 !important;
+      line-height: 1.2 !important;
+    }
+    .sep { display: none !important; }
+    /* Slide title (prominent, main line) */
     .shead .stitle, .slide-header h2, .hdr h2, .sh-title, .stitle, .ht {
-      font-size: 17px !important;
+      font-size: 15px !important;
       line-height: 1.3 !important;
-    }
-    .shead .snum, .slide-header .en-title, .slide-header .sub-en, .hdr .badge, .sh-tag, .eye, .en-sub, .hsub, .sh-en, .sh-num, .sep {
-      font-size: 11px !important;
+      font-weight: 700 !important;
+      order: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
     /* THE SCROLL CONTAINER */
     .sbody, .slide-body, .body, .sb {
@@ -6126,22 +6217,35 @@ html.mobile-view /* Cover slides that are not the standard shead/sbody layout */
     .slide.s-hero, html.mobile-view #s1.slide, html.mobile-view #s0.slide {
       overflow: auto !important;
     }
-html.mobile-view .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
+html.mobile-view /* Header: show title clearly on mobile */
+    .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
       height: auto !important;
-      min-height: 52px !important;
-      max-height: 80px !important;
+      min-height: 55px !important;
+      max-height: none !important;  /* never clip the title */
       padding: 8px 16px !important;
       flex-shrink: 0 !important;
       display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;  /* stack number over title */
+      justify-content: center !important;
+      overflow: visible !important;  /* ensure no clipping */
+      gap: 2px !important;
     }
-html.mobile-view .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
-      font-size: 17px !important;
+html.mobile-view /* Slide number (small, html.mobile-view on top) */
+    .snum, html.mobile-view .sh-tag, html.mobile-view .sh-num, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge {
+      font-size: 10px !important;
+      opacity: 0.65 !important;
+      order: -1 !important;
+      line-height: 1.2 !important;
+    }
+html.mobile-view .sep { display: none !important; }
+html.mobile-view /* Slide title (prominent, html.mobile-view main line) */
+    .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
+      font-size: 15px !important;
       line-height: 1.3 !important;
-    }
-html.mobile-view .shead .snum, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge, html.mobile-view .sh-tag, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .sh-num, html.mobile-view .sep {
-      font-size: 11px !important;
+      font-weight: 700 !important;
+      order: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
 html.mobile-view /* THE SCROLL CONTAINER */
     .sbody, html.mobile-view .slide-body, html.mobile-view .body, html.mobile-view .sb {
@@ -6381,6 +6485,9 @@ html.mobile-view #s1 {
   }, true); // capture phase!
 
   // ── Forward swipe gestures to parent (horizontal only) ────────────────
+  // IMPORTANT: We use capture phase (true) so we intercept BEFORE internal
+  // chapter listeners. Any horizontal movement > 20px blocks internal nav
+  // to prevent sync issues. Clear horizontal swipes are forwarded to parent.
   let _tX = null, _tY = null;
   window.addEventListener('touchstart', e => {
     _tX = e.changedTouches[0].clientX;
@@ -6390,17 +6497,27 @@ html.mobile-view #s1 {
     if (_tX === null) return;
     const dx = e.changedTouches[0].clientX - _tX;
     const dy = e.changedTouches[0].clientY - _tY;
-    // Only forward horizontal swipes (not vertical scrolling)
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      e.stopImmediatePropagation();
-      e.preventDefault();
-      try {
-        if (window.parent && window.parent.handleGlobalSwipe) {
-          window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
-        }
-      } catch (err) {}
-    }
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
     _tX = null; _tY = null;
+
+    if (absDx > 20) {
+      // Any notable horizontal movement: block internal chapter swipe handlers
+      // This prevents internal go()/goTo() from firing and desyncing the parent
+      e.stopImmediatePropagation();
+      // Only forward to parent if it is clearly a horizontal swipe
+      if (absDx > 40 && absDx > absDy * 1.5) {
+        e.preventDefault();
+        try {
+          if (window.parent && window.parent.handleGlobalSwipe) {
+            window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
+          }
+        } catch (err) {}
+      }
+      // Diagonal swipes (absDx > 20 but not clearly horizontal): blocked internally,
+      // not forwarded to parent — avoids navigation on scroll attempts
+    }
+    // absDx <= 20: tap or pure vertical scroll → let everything propagate normally
   }, true); // capture phase
 <\/script>
 <div id="stage"><div id="scaler">
@@ -7989,22 +8106,35 @@ body.dark .ibtn:hover { background: rgba(255,255,255,0.10); }
     .slide.s-hero, #s1.slide, #s0.slide {
       overflow: auto !important;
     }
+    /* Header: show title clearly on mobile */
     .shead, .slide-header, .hdr, .sh {
       height: auto !important;
-      min-height: 52px !important;
-      max-height: 80px !important;
+      min-height: 55px !important;
+      max-height: none !important;  /* never clip the title */
       padding: 8px 16px !important;
       flex-shrink: 0 !important;
       display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;  /* stack number over title */
+      justify-content: center !important;
+      overflow: visible !important;  /* ensure no clipping */
+      gap: 2px !important;
     }
+    /* Slide number (small, on top) */
+    .snum, .sh-tag, .sh-num, .eye, .en-sub, .hsub, .sh-en, .slide-header .en-title, .slide-header .sub-en, .hdr .badge {
+      font-size: 10px !important;
+      opacity: 0.65 !important;
+      order: -1 !important;
+      line-height: 1.2 !important;
+    }
+    .sep { display: none !important; }
+    /* Slide title (prominent, main line) */
     .shead .stitle, .slide-header h2, .hdr h2, .sh-title, .stitle, .ht {
-      font-size: 17px !important;
+      font-size: 15px !important;
       line-height: 1.3 !important;
-    }
-    .shead .snum, .slide-header .en-title, .slide-header .sub-en, .hdr .badge, .sh-tag, .eye, .en-sub, .hsub, .sh-en, .sh-num, .sep {
-      font-size: 11px !important;
+      font-weight: 700 !important;
+      order: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
     /* THE SCROLL CONTAINER */
     .sbody, .slide-body, .body, .sb {
@@ -8156,22 +8286,35 @@ html.mobile-view /* Cover slides that are not the standard shead/sbody layout */
     .slide.s-hero, html.mobile-view #s1.slide, html.mobile-view #s0.slide {
       overflow: auto !important;
     }
-html.mobile-view .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
+html.mobile-view /* Header: show title clearly on mobile */
+    .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
       height: auto !important;
-      min-height: 52px !important;
-      max-height: 80px !important;
+      min-height: 55px !important;
+      max-height: none !important;  /* never clip the title */
       padding: 8px 16px !important;
       flex-shrink: 0 !important;
       display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;  /* stack number over title */
+      justify-content: center !important;
+      overflow: visible !important;  /* ensure no clipping */
+      gap: 2px !important;
     }
-html.mobile-view .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
-      font-size: 17px !important;
+html.mobile-view /* Slide number (small, html.mobile-view on top) */
+    .snum, html.mobile-view .sh-tag, html.mobile-view .sh-num, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge {
+      font-size: 10px !important;
+      opacity: 0.65 !important;
+      order: -1 !important;
+      line-height: 1.2 !important;
+    }
+html.mobile-view .sep { display: none !important; }
+html.mobile-view /* Slide title (prominent, html.mobile-view main line) */
+    .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
+      font-size: 15px !important;
       line-height: 1.3 !important;
-    }
-html.mobile-view .shead .snum, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge, html.mobile-view .sh-tag, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .sh-num, html.mobile-view .sep {
-      font-size: 11px !important;
+      font-weight: 700 !important;
+      order: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
 html.mobile-view /* THE SCROLL CONTAINER */
     .sbody, html.mobile-view .slide-body, html.mobile-view .body, html.mobile-view .sb {
@@ -8411,6 +8554,9 @@ html.mobile-view #s1 {
   }, true); // capture phase!
 
   // ── Forward swipe gestures to parent (horizontal only) ────────────────
+  // IMPORTANT: We use capture phase (true) so we intercept BEFORE internal
+  // chapter listeners. Any horizontal movement > 20px blocks internal nav
+  // to prevent sync issues. Clear horizontal swipes are forwarded to parent.
   let _tX = null, _tY = null;
   window.addEventListener('touchstart', e => {
     _tX = e.changedTouches[0].clientX;
@@ -8420,17 +8566,27 @@ html.mobile-view #s1 {
     if (_tX === null) return;
     const dx = e.changedTouches[0].clientX - _tX;
     const dy = e.changedTouches[0].clientY - _tY;
-    // Only forward horizontal swipes (not vertical scrolling)
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      e.stopImmediatePropagation();
-      e.preventDefault();
-      try {
-        if (window.parent && window.parent.handleGlobalSwipe) {
-          window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
-        }
-      } catch (err) {}
-    }
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
     _tX = null; _tY = null;
+
+    if (absDx > 20) {
+      // Any notable horizontal movement: block internal chapter swipe handlers
+      // This prevents internal go()/goTo() from firing and desyncing the parent
+      e.stopImmediatePropagation();
+      // Only forward to parent if it is clearly a horizontal swipe
+      if (absDx > 40 && absDx > absDy * 1.5) {
+        e.preventDefault();
+        try {
+          if (window.parent && window.parent.handleGlobalSwipe) {
+            window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
+          }
+        } catch (err) {}
+      }
+      // Diagonal swipes (absDx > 20 but not clearly horizontal): blocked internally,
+      // not forwarded to parent — avoids navigation on scroll attempts
+    }
+    // absDx <= 20: tap or pure vertical scroll → let everything propagate normally
   }, true); // capture phase
 <\/script>
 <div class="pres">
@@ -9738,22 +9894,35 @@ body.dark .tag.t{background:rgba(50,189,168,.15);color:#32BDA8;border-color:rgba
     .slide.s-hero, #s1.slide, #s0.slide {
       overflow: auto !important;
     }
+    /* Header: show title clearly on mobile */
     .shead, .slide-header, .hdr, .sh {
       height: auto !important;
-      min-height: 52px !important;
-      max-height: 80px !important;
+      min-height: 55px !important;
+      max-height: none !important;  /* never clip the title */
       padding: 8px 16px !important;
       flex-shrink: 0 !important;
       display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;  /* stack number over title */
+      justify-content: center !important;
+      overflow: visible !important;  /* ensure no clipping */
+      gap: 2px !important;
     }
+    /* Slide number (small, on top) */
+    .snum, .sh-tag, .sh-num, .eye, .en-sub, .hsub, .sh-en, .slide-header .en-title, .slide-header .sub-en, .hdr .badge {
+      font-size: 10px !important;
+      opacity: 0.65 !important;
+      order: -1 !important;
+      line-height: 1.2 !important;
+    }
+    .sep { display: none !important; }
+    /* Slide title (prominent, main line) */
     .shead .stitle, .slide-header h2, .hdr h2, .sh-title, .stitle, .ht {
-      font-size: 17px !important;
+      font-size: 15px !important;
       line-height: 1.3 !important;
-    }
-    .shead .snum, .slide-header .en-title, .slide-header .sub-en, .hdr .badge, .sh-tag, .eye, .en-sub, .hsub, .sh-en, .sh-num, .sep {
-      font-size: 11px !important;
+      font-weight: 700 !important;
+      order: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
     /* THE SCROLL CONTAINER */
     .sbody, .slide-body, .body, .sb {
@@ -9905,22 +10074,35 @@ html.mobile-view /* Cover slides that are not the standard shead/sbody layout */
     .slide.s-hero, html.mobile-view #s1.slide, html.mobile-view #s0.slide {
       overflow: auto !important;
     }
-html.mobile-view .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
+html.mobile-view /* Header: show title clearly on mobile */
+    .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
       height: auto !important;
-      min-height: 52px !important;
-      max-height: 80px !important;
+      min-height: 55px !important;
+      max-height: none !important;  /* never clip the title */
       padding: 8px 16px !important;
       flex-shrink: 0 !important;
       display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;  /* stack number over title */
+      justify-content: center !important;
+      overflow: visible !important;  /* ensure no clipping */
+      gap: 2px !important;
     }
-html.mobile-view .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
-      font-size: 17px !important;
+html.mobile-view /* Slide number (small, html.mobile-view on top) */
+    .snum, html.mobile-view .sh-tag, html.mobile-view .sh-num, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge {
+      font-size: 10px !important;
+      opacity: 0.65 !important;
+      order: -1 !important;
+      line-height: 1.2 !important;
+    }
+html.mobile-view .sep { display: none !important; }
+html.mobile-view /* Slide title (prominent, html.mobile-view main line) */
+    .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
+      font-size: 15px !important;
       line-height: 1.3 !important;
-    }
-html.mobile-view .shead .snum, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge, html.mobile-view .sh-tag, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .sh-num, html.mobile-view .sep {
-      font-size: 11px !important;
+      font-weight: 700 !important;
+      order: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
 html.mobile-view /* THE SCROLL CONTAINER */
     .sbody, html.mobile-view .slide-body, html.mobile-view .body, html.mobile-view .sb {
@@ -10160,6 +10342,9 @@ html.mobile-view #s1 {
   }, true); // capture phase!
 
   // ── Forward swipe gestures to parent (horizontal only) ────────────────
+  // IMPORTANT: We use capture phase (true) so we intercept BEFORE internal
+  // chapter listeners. Any horizontal movement > 20px blocks internal nav
+  // to prevent sync issues. Clear horizontal swipes are forwarded to parent.
   let _tX = null, _tY = null;
   window.addEventListener('touchstart', e => {
     _tX = e.changedTouches[0].clientX;
@@ -10169,17 +10354,27 @@ html.mobile-view #s1 {
     if (_tX === null) return;
     const dx = e.changedTouches[0].clientX - _tX;
     const dy = e.changedTouches[0].clientY - _tY;
-    // Only forward horizontal swipes (not vertical scrolling)
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      e.stopImmediatePropagation();
-      e.preventDefault();
-      try {
-        if (window.parent && window.parent.handleGlobalSwipe) {
-          window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
-        }
-      } catch (err) {}
-    }
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
     _tX = null; _tY = null;
+
+    if (absDx > 20) {
+      // Any notable horizontal movement: block internal chapter swipe handlers
+      // This prevents internal go()/goTo() from firing and desyncing the parent
+      e.stopImmediatePropagation();
+      // Only forward to parent if it is clearly a horizontal swipe
+      if (absDx > 40 && absDx > absDy * 1.5) {
+        e.preventDefault();
+        try {
+          if (window.parent && window.parent.handleGlobalSwipe) {
+            window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
+          }
+        } catch (err) {}
+      }
+      // Diagonal swipes (absDx > 20 but not clearly horizontal): blocked internally,
+      // not forwarded to parent — avoids navigation on scroll attempts
+    }
+    // absDx <= 20: tap or pure vertical scroll → let everything propagate normally
   }, true); // capture phase
 <\/script>
 <div class="deck" id="dk">
@@ -11321,22 +11516,35 @@ body{
     .slide.s-hero, #s1.slide, #s0.slide {
       overflow: auto !important;
     }
+    /* Header: show title clearly on mobile */
     .shead, .slide-header, .hdr, .sh {
       height: auto !important;
-      min-height: 52px !important;
-      max-height: 80px !important;
+      min-height: 55px !important;
+      max-height: none !important;  /* never clip the title */
       padding: 8px 16px !important;
       flex-shrink: 0 !important;
       display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;  /* stack number over title */
+      justify-content: center !important;
+      overflow: visible !important;  /* ensure no clipping */
+      gap: 2px !important;
     }
+    /* Slide number (small, on top) */
+    .snum, .sh-tag, .sh-num, .eye, .en-sub, .hsub, .sh-en, .slide-header .en-title, .slide-header .sub-en, .hdr .badge {
+      font-size: 10px !important;
+      opacity: 0.65 !important;
+      order: -1 !important;
+      line-height: 1.2 !important;
+    }
+    .sep { display: none !important; }
+    /* Slide title (prominent, main line) */
     .shead .stitle, .slide-header h2, .hdr h2, .sh-title, .stitle, .ht {
-      font-size: 17px !important;
+      font-size: 15px !important;
       line-height: 1.3 !important;
-    }
-    .shead .snum, .slide-header .en-title, .slide-header .sub-en, .hdr .badge, .sh-tag, .eye, .en-sub, .hsub, .sh-en, .sh-num, .sep {
-      font-size: 11px !important;
+      font-weight: 700 !important;
+      order: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
     /* THE SCROLL CONTAINER */
     .sbody, .slide-body, .body, .sb {
@@ -11488,22 +11696,35 @@ html.mobile-view /* Cover slides that are not the standard shead/sbody layout */
     .slide.s-hero, html.mobile-view #s1.slide, html.mobile-view #s0.slide {
       overflow: auto !important;
     }
-html.mobile-view .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
+html.mobile-view /* Header: show title clearly on mobile */
+    .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
       height: auto !important;
-      min-height: 52px !important;
-      max-height: 80px !important;
+      min-height: 55px !important;
+      max-height: none !important;  /* never clip the title */
       padding: 8px 16px !important;
       flex-shrink: 0 !important;
       display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;  /* stack number over title */
+      justify-content: center !important;
+      overflow: visible !important;  /* ensure no clipping */
+      gap: 2px !important;
     }
-html.mobile-view .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
-      font-size: 17px !important;
+html.mobile-view /* Slide number (small, html.mobile-view on top) */
+    .snum, html.mobile-view .sh-tag, html.mobile-view .sh-num, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge {
+      font-size: 10px !important;
+      opacity: 0.65 !important;
+      order: -1 !important;
+      line-height: 1.2 !important;
+    }
+html.mobile-view .sep { display: none !important; }
+html.mobile-view /* Slide title (prominent, html.mobile-view main line) */
+    .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
+      font-size: 15px !important;
       line-height: 1.3 !important;
-    }
-html.mobile-view .shead .snum, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge, html.mobile-view .sh-tag, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .sh-num, html.mobile-view .sep {
-      font-size: 11px !important;
+      font-weight: 700 !important;
+      order: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
 html.mobile-view /* THE SCROLL CONTAINER */
     .sbody, html.mobile-view .slide-body, html.mobile-view .body, html.mobile-view .sb {
@@ -11743,6 +11964,9 @@ html.mobile-view #s1 {
   }, true); // capture phase!
 
   // ── Forward swipe gestures to parent (horizontal only) ────────────────
+  // IMPORTANT: We use capture phase (true) so we intercept BEFORE internal
+  // chapter listeners. Any horizontal movement > 20px blocks internal nav
+  // to prevent sync issues. Clear horizontal swipes are forwarded to parent.
   let _tX = null, _tY = null;
   window.addEventListener('touchstart', e => {
     _tX = e.changedTouches[0].clientX;
@@ -11752,17 +11976,27 @@ html.mobile-view #s1 {
     if (_tX === null) return;
     const dx = e.changedTouches[0].clientX - _tX;
     const dy = e.changedTouches[0].clientY - _tY;
-    // Only forward horizontal swipes (not vertical scrolling)
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      e.stopImmediatePropagation();
-      e.preventDefault();
-      try {
-        if (window.parent && window.parent.handleGlobalSwipe) {
-          window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
-        }
-      } catch (err) {}
-    }
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
     _tX = null; _tY = null;
+
+    if (absDx > 20) {
+      // Any notable horizontal movement: block internal chapter swipe handlers
+      // This prevents internal go()/goTo() from firing and desyncing the parent
+      e.stopImmediatePropagation();
+      // Only forward to parent if it is clearly a horizontal swipe
+      if (absDx > 40 && absDx > absDy * 1.5) {
+        e.preventDefault();
+        try {
+          if (window.parent && window.parent.handleGlobalSwipe) {
+            window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
+          }
+        } catch (err) {}
+      }
+      // Diagonal swipes (absDx > 20 but not clearly horizontal): blocked internally,
+      // not forwarded to parent — avoids navigation on scroll attempts
+    }
+    // absDx <= 20: tap or pure vertical scroll → let everything propagate normally
   }, true); // capture phase
 <\/script>
 <div id="stage">
@@ -13677,22 +13911,35 @@ html, body {
     .slide.s-hero, #s1.slide, #s0.slide {
       overflow: auto !important;
     }
+    /* Header: show title clearly on mobile */
     .shead, .slide-header, .hdr, .sh {
       height: auto !important;
-      min-height: 52px !important;
-      max-height: 80px !important;
+      min-height: 55px !important;
+      max-height: none !important;  /* never clip the title */
       padding: 8px 16px !important;
       flex-shrink: 0 !important;
       display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;  /* stack number over title */
+      justify-content: center !important;
+      overflow: visible !important;  /* ensure no clipping */
+      gap: 2px !important;
     }
+    /* Slide number (small, on top) */
+    .snum, .sh-tag, .sh-num, .eye, .en-sub, .hsub, .sh-en, .slide-header .en-title, .slide-header .sub-en, .hdr .badge {
+      font-size: 10px !important;
+      opacity: 0.65 !important;
+      order: -1 !important;
+      line-height: 1.2 !important;
+    }
+    .sep { display: none !important; }
+    /* Slide title (prominent, main line) */
     .shead .stitle, .slide-header h2, .hdr h2, .sh-title, .stitle, .ht {
-      font-size: 17px !important;
+      font-size: 15px !important;
       line-height: 1.3 !important;
-    }
-    .shead .snum, .slide-header .en-title, .slide-header .sub-en, .hdr .badge, .sh-tag, .eye, .en-sub, .hsub, .sh-en, .sh-num, .sep {
-      font-size: 11px !important;
+      font-weight: 700 !important;
+      order: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
     /* THE SCROLL CONTAINER */
     .sbody, .slide-body, .body, .sb {
@@ -13844,22 +14091,35 @@ html.mobile-view /* Cover slides that are not the standard shead/sbody layout */
     .slide.s-hero, html.mobile-view #s1.slide, html.mobile-view #s0.slide {
       overflow: auto !important;
     }
-html.mobile-view .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
+html.mobile-view /* Header: show title clearly on mobile */
+    .shead, html.mobile-view .slide-header, html.mobile-view .hdr, html.mobile-view .sh {
       height: auto !important;
-      min-height: 52px !important;
-      max-height: 80px !important;
+      min-height: 55px !important;
+      max-height: none !important;  /* never clip the title */
       padding: 8px 16px !important;
       flex-shrink: 0 !important;
       display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
+      flex-direction: column !important;  /* stack number over title */
+      justify-content: center !important;
+      overflow: visible !important;  /* ensure no clipping */
+      gap: 2px !important;
     }
-html.mobile-view .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
-      font-size: 17px !important;
+html.mobile-view /* Slide number (small, html.mobile-view on top) */
+    .snum, html.mobile-view .sh-tag, html.mobile-view .sh-num, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge {
+      font-size: 10px !important;
+      opacity: 0.65 !important;
+      order: -1 !important;
+      line-height: 1.2 !important;
+    }
+html.mobile-view .sep { display: none !important; }
+html.mobile-view /* Slide title (prominent, html.mobile-view main line) */
+    .shead .stitle, html.mobile-view .slide-header h2, html.mobile-view .hdr h2, html.mobile-view .sh-title, html.mobile-view .stitle, html.mobile-view .ht {
+      font-size: 15px !important;
       line-height: 1.3 !important;
-    }
-html.mobile-view .shead .snum, html.mobile-view .slide-header .en-title, html.mobile-view .slide-header .sub-en, html.mobile-view .hdr .badge, html.mobile-view .sh-tag, html.mobile-view .eye, html.mobile-view .en-sub, html.mobile-view .hsub, html.mobile-view .sh-en, html.mobile-view .sh-num, html.mobile-view .sep {
-      font-size: 11px !important;
+      font-weight: 700 !important;
+      order: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
     }
 html.mobile-view /* THE SCROLL CONTAINER */
     .sbody, html.mobile-view .slide-body, html.mobile-view .body, html.mobile-view .sb {
@@ -14123,6 +14383,9 @@ html.mobile-view #s1 {
   }, true); // capture phase!
 
   // ── Forward swipe gestures to parent (horizontal only) ────────────────
+  // IMPORTANT: We use capture phase (true) so we intercept BEFORE internal
+  // chapter listeners. Any horizontal movement > 20px blocks internal nav
+  // to prevent sync issues. Clear horizontal swipes are forwarded to parent.
   let _tX = null, _tY = null;
   window.addEventListener('touchstart', e => {
     _tX = e.changedTouches[0].clientX;
@@ -14132,17 +14395,27 @@ html.mobile-view #s1 {
     if (_tX === null) return;
     const dx = e.changedTouches[0].clientX - _tX;
     const dy = e.changedTouches[0].clientY - _tY;
-    // Only forward horizontal swipes (not vertical scrolling)
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      e.stopImmediatePropagation();
-      e.preventDefault();
-      try {
-        if (window.parent && window.parent.handleGlobalSwipe) {
-          window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
-        }
-      } catch (err) {}
-    }
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
     _tX = null; _tY = null;
+
+    if (absDx > 20) {
+      // Any notable horizontal movement: block internal chapter swipe handlers
+      // This prevents internal go()/goTo() from firing and desyncing the parent
+      e.stopImmediatePropagation();
+      // Only forward to parent if it is clearly a horizontal swipe
+      if (absDx > 40 && absDx > absDy * 1.5) {
+        e.preventDefault();
+        try {
+          if (window.parent && window.parent.handleGlobalSwipe) {
+            window.parent.handleGlobalSwipe(dx > 0 ? -1 : 1);
+          }
+        } catch (err) {}
+      }
+      // Diagonal swipes (absDx > 20 but not clearly horizontal): blocked internally,
+      // not forwarded to parent — avoids navigation on scroll attempts
+    }
+    // absDx <= 20: tap or pure vertical scroll → let everything propagate normally
   }, true); // capture phase
 <\/script>
 <div id="prog"></div>
