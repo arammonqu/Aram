@@ -1367,17 +1367,7 @@
           document.documentElement.classList.add('mobile-view');
         }
       })();
-    
-
-window.__presentationApi = {
-  getSlideCount: () => typeof total !== 'undefined' ? total : slides.length,
-  getCurrentSlideIndex: () => typeof cur !== 'undefined' ? cur : 0,
-  goToSlide: (index) => { if (typeof goTo !== 'undefined') goTo(index); },
-  setDark: (isDark) => {
-    document.documentElement.classList.toggle('dark-mode', isDark);
-  }
-};
-<\/script>
+    <\/script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>الفصل الأول: الريادة — الريادة وإدارة الأعمال الصغيرة</title>
@@ -3004,7 +2994,7 @@ pres.addEventListener('touchend', e => {
 }, { passive: true });
 
 /* ══ SCALE PRESENTATION ══ */
-function scaleP() {
+function scaleP() { if (document.documentElement.classList.contains('mobile-view')) return;
   const p = document.getElementById('presentation');
   const sc = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
   const ox = (window.innerWidth  - 1280 * sc) / 2;
@@ -3062,6 +3052,16 @@ function toggleAcc(el) {
     body.style.maxHeight = body.scrollHeight + 'px';
   }
 }
+
+
+window.__presentationApi = {
+  getSlideCount: () => typeof total !== 'undefined' ? total : slides.length,
+  getCurrentSlideIndex: () => typeof cur !== 'undefined' ? cur : 0,
+  goToSlide: (index) => { if (typeof goTo !== 'undefined') goTo(index); },
+  setDark: (isDark) => {
+    document.documentElement.classList.toggle('dark-mode', isDark);
+  }
+};
 <\/script>
 <script>
   // Forward keyboard events to parent
@@ -3101,21 +3101,7 @@ function toggleAcc(el) {
           document.documentElement.classList.add('mobile-view');
         }
       })();
-    
-
-window.__presentationApi = {
-  getSlideCount: () => typeof total !== 'undefined' ? total : slides.length,
-  getCurrentSlideIndex: () => typeof current !== 'undefined' ? current : 0,
-  goToSlide: (index) => { if (typeof goTo !== 'undefined') goTo(index); },
-  setDark: (isDark) => {
-    if (isDark) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-    }
-  }
-};
-<\/script>
+    <\/script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>الريادة الدولية — الفصل الثاني</title>
@@ -4696,7 +4682,7 @@ html.mobile-view /* Constrain layouts to viewport width */
     } catch (e) { console.warn('Fullscreen error:', e); }
   });
 
-  function scaleWrapper() {
+  function scaleWrapper() { if (document.documentElement.classList.contains('mobile-view')) return;
     if (document.fullscreenElement) {
       const scaleX = window.innerWidth  / 1280;
       const scaleY = window.innerHeight / 720;
@@ -4778,6 +4764,20 @@ html.mobile-view /* Constrain layouts to viewport width */
 
   /* Init */
   goTo(0);
+
+
+window.__presentationApi = {
+  getSlideCount: () => typeof total !== 'undefined' ? total : slides.length,
+  getCurrentSlideIndex: () => typeof current !== 'undefined' ? current : 0,
+  goToSlide: (index) => { if (typeof goTo !== 'undefined') goTo(index); },
+  setDark: (isDark) => {
+    if (isDark) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  }
+};
 <\/script>
 <script>
   // Forward keyboard events to parent
@@ -4817,21 +4817,7 @@ html.mobile-view /* Constrain layouts to viewport width */
           document.documentElement.classList.add('mobile-view');
         }
       })();
-    
-
-window.__presentationApi = {
-  getSlideCount: () => typeof TOTAL !== 'undefined' ? TOTAL : 12,
-  getCurrentSlideIndex: () => typeof current !== 'undefined' ? current - 1 : 0,
-  goToSlide: (index) => { if (typeof goto !== 'undefined') goto(index + 1); },
-  setDark: (isDark) => {
-    if (isDark) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'light');
-    }
-  }
-};
-<\/script>
+    <\/script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>الفصل الثالث – نظرة عامة إلى الأعمال الصغيرة</title>
@@ -6291,7 +6277,7 @@ html.mobile-view /* Constrain layouts to viewport width */
   let isDark = false;
 
   /* ── Scale to fit viewport ── */
-  function rescale() {
+  function rescale() { if (document.documentElement.classList.contains('mobile-view')) return;
     const sw = 1280, sh = 720;
     const vw = window.innerWidth, vh = window.innerHeight;
     const scale = Math.min(vw / sw, vh / sh);
@@ -6380,6 +6366,20 @@ html.mobile-view /* Constrain layouts to viewport width */
 
   // init progress
   document.getElementById('progress-fill').style.width = (1 / TOTAL * 100) + '%';
+
+
+window.__presentationApi = {
+  getSlideCount: () => typeof TOTAL !== 'undefined' ? TOTAL : 12,
+  getCurrentSlideIndex: () => typeof current !== 'undefined' ? current - 1 : 0,
+  goToSlide: (index) => { if (typeof goto !== 'undefined') goto(index + 1); },
+  setDark: (isDark) => {
+    if (isDark) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  }
+};
 <\/script>
 <script>
   // Forward keyboard events to parent
@@ -6419,17 +6419,7 @@ html.mobile-view /* Constrain layouts to viewport width */
           document.documentElement.classList.add('mobile-view');
         }
       })();
-    
-
-window.__presentationApi = {
-  getSlideCount: () => typeof N !== 'undefined' ? N : 11,
-  getCurrentSlideIndex: () => typeof cur !== 'undefined' ? cur - 1 : 0,
-  goToSlide: (index) => { if (typeof goTo !== 'undefined') goTo(index + 1); },
-  setDark: (isDark) => {
-    document.body.classList.toggle('dark', isDark);
-  }
-};
-<\/script>
+    <\/script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>الفصل الرابع — تأسيس الأعمال الصغيرة</title>
@@ -8017,6 +8007,16 @@ function toggleAcc(btn) {
   // open clicked item if it was closed
   if (!isOpen) item.classList.add('open');
 }
+
+
+window.__presentationApi = {
+  getSlideCount: () => typeof N !== 'undefined' ? N : 11,
+  getCurrentSlideIndex: () => typeof cur !== 'undefined' ? cur - 1 : 0,
+  goToSlide: (index) => { if (typeof goTo !== 'undefined') goTo(index + 1); },
+  setDark: (isDark) => {
+    document.body.classList.toggle('dark', isDark);
+  }
+};
 <\/script>
 <script>
   // Forward keyboard events to parent
@@ -8056,17 +8056,7 @@ function toggleAcc(btn) {
           document.documentElement.classList.add('mobile-view');
         }
       })();
-    
-
-window.__presentationApi = {
-  getSlideCount: () => typeof N !== 'undefined' ? N : 14,
-  getCurrentSlideIndex: () => typeof cur !== 'undefined' ? cur - 1 : 0,
-  goToSlide: (index) => { if (typeof set !== 'undefined') set(index + 1); },
-  setDark: (isDark) => {
-    document.body.classList.toggle('dark', isDark);
-  }
-};
-<\/script>
+    <\/script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>موقع المشروع الصغير — الفصل الخامس</title>
@@ -9446,6 +9436,16 @@ function toggleAcc(id) {
    Init
 ────────────────────────────────────────────────────── */
 upd();
+
+
+window.__presentationApi = {
+  getSlideCount: () => typeof N !== 'undefined' ? N : 14,
+  getCurrentSlideIndex: () => typeof cur !== 'undefined' ? cur - 1 : 0,
+  goToSlide: (index) => { if (typeof set !== 'undefined') set(index + 1); },
+  setDark: (isDark) => {
+    document.body.classList.toggle('dark', isDark);
+  }
+};
 <\/script>
 <script>
   // Forward keyboard events to parent
@@ -9485,17 +9485,7 @@ upd();
           document.documentElement.classList.add('mobile-view');
         }
       })();
-    
-
-window.__presentationApi = {
-  getSlideCount: () => typeof total !== 'undefined' ? total : 24,
-  getCurrentSlideIndex: () => typeof cur !== 'undefined' ? cur : 0,
-  goToSlide: (index) => { if (typeof go !== 'undefined') go(index); },
-  setDark: (isDark) => {
-    document.body.classList.toggle('dark', isDark);
-  }
-};
-<\/script>
+    <\/script>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>الفصل الثامن – تمويل الأعمال الصغيرة</title>
@@ -11219,7 +11209,7 @@ document.addEventListener('keydown',e=>{
 });
 
 /* ── Scaling ── */
-function scale(){
+function scale() { if (document.documentElement.classList.contains('mobile-view')) return;
   const s = document.getElementById('stage');
   const wR = window.innerWidth/1280;
   const hR = window.innerHeight/720;
@@ -11280,6 +11270,16 @@ function toggleAcc(header){
   col.querySelectorAll('.acc-item.open').forEach(el=>el.classList.remove('open'));
   if(!isOpen) item.classList.add('open');
 }
+
+
+window.__presentationApi = {
+  getSlideCount: () => typeof total !== 'undefined' ? total : 24,
+  getCurrentSlideIndex: () => typeof cur !== 'undefined' ? cur : 0,
+  goToSlide: (index) => { if (typeof go !== 'undefined') go(index); },
+  setDark: (isDark) => {
+    document.body.classList.toggle('dark', isDark);
+  }
+};
 <\/script>
 <script>
   // Forward keyboard events to parent
@@ -13211,7 +13211,7 @@ html.mobile-view /* Constrain layouts to viewport width */
   });
 
   /* ── SCALE STAGE ───────────────────── */
-  function scale(){
+  function scale() { if (document.documentElement.classList.contains('mobile-view')) return;
     const stage = document.getElementById('stage');
     const W = window.innerWidth;
     const H = window.innerHeight;
@@ -13277,8 +13277,34 @@ html.mobile-view /* Constrain layouts to viewport width */
     }
   };
 
+  
+  window.__goToAbsolute = function(n) {
+    if (n < 0 || n >= total || n === cur) return;
+    slides[cur].classList.remove('active', 'out');
+    cur = n;
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === cur);
+      s.classList.remove('out');
+      s.style.transform = '';
+      s.style.opacity = '';
+    });
+    update();
+  };
+  window.__presentationApi = {
+    getSlideCount: () => total,
+    getCurrentSlideIndex: () => cur,
+    goToSlide: (index) => window.__goToAbsolute(index),
+    setDark: (isDark) => {
+      if (isDark) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    }
+  };
   update();
 })();
+
 <\/script>
 <script>
   // Forward keyboard events to parent
