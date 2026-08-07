@@ -1,0 +1,154 @@
+/*
+  Shared site-level components — filled in per IMPLEMENTATION_PLAN.md
+  §4.2/4.3 (progress UI + reset control). Exercise-only chrome (the
+  Check-answer button, activity cards) lives in css/exercises.css instead
+  — see that file's own header comment for why the split falls there.
+
+  Everything below is consumed by js/render/progressRenderer.js, which
+  decorates DOM already built by navRenderer.js (unit-tab / section-tab
+  elements) or injects a standalone block (home progress summary, reset
+  control). Interactive/accent colors read the same --tab-color custom
+  property navRenderer.js already sets inline per unit (falling back to
+  --color-unit1), matching the convention established in layout.css and
+  exercises.css, so nothing here needs a per-unit override.
+*/
+
+/* ---------- Accessibility utility ---------- */
+
+/* Visually hides content while keeping it in the accessibility tree —
+   used for the percent-complete / "(complete)" text that accompanies
+   the progress bar and checkmark icons (icon + text together, never
+   color/shape alone, per plan §8.2). Standard clip-based pattern so it
+   survives zoom/text-resize without the old width:1px approach clipping
+   longer strings. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Unit-tab progress bar (decorateUnitNav) ---------- */
+
+.unit-tab__progress {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 0 0 2px 2px;
+  background: color-mix(in srgb, var(--tab-color, var(--color-unit1)) 18%, transparent);
+}
+
+.unit-tab__progress-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--tab-color, var(--color-unit1));
+  transition: width 0.2s ease;
+}
+
+/* ---------- Section-tab completion checkmark (decorateSectionNav) ---------- */
+
+.section-tab__check {
+  margin-inline-start: var(--space-3xs);
+  color: var(--color-correct);
+  font-weight: 700;
+}
+
+/* ---------- Home-view progress summary (homeProgressSummaryHTML) ---------- */
+
+.home-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+}
+
+.home-progress__row {
+  list-style: none;
+}
+
+.home-progress__unit {
+  display: grid;
+  grid-template-columns: 10rem 1fr auto;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.home-progress__unit:hover {
+  border-color: var(--tab-color, var(--color-unit1));
+  background: color-mix(in srgb, var(--tab-color, var(--color-unit1)) 6%, var(--color-surface-raised));
+}
+
+.home-progress__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.home-progress__bar {
+  display: block;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--tab-color, var(--color-unit1)) 15%, var(--color-paper-line));
+}
+
+.home-progress__bar-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--tab-color, var(--color-unit1));
+  transition: width 0.2s ease;
+}
+
+.home-progress__pct {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-ink-soft);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .home-progress__unit {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xs);
+  }
+}
+
+/* ---------- Reset-my-progress control (renderResetControl) ---------- */
+
+.reset-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding-top: var(--space-sm);
+}
+
+.btn--reset {
+  background: var(--color-surface);
+  color: var(--color-red-pen);
+  border: 1px solid var(--color-red-pen-soft);
+}
+
+.btn--reset:hover:not(:disabled) {
+  background: var(--color-red-pen-soft);
+}
+
+.reset-status {
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+  min-height: 1.2em;
+}

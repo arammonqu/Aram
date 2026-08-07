@@ -1,0 +1,276 @@
+/*
+  Layout shell.
+  Signature element: the unit nav reads as binder tabs clipped into the
+  header — the active tab pops forward in its unit color, inactive tabs
+  sit flush and muted. Content pages borrow a worksheet-paper motif (a
+  thin red margin rule down the left edge) to stay in the same visual
+  world without repeating the tab device.
+*/
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: -9999px;
+  top: 0;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  padding: var(--space-2xs) var(--space-sm);
+  z-index: 100;
+  border-radius: var(--radius-sm);
+}
+
+.skip-link:focus {
+  inset-inline-start: var(--space-sm);
+  top: var(--space-sm);
+}
+
+/* ---------- Header / binder-tab nav ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--color-surface);
+  border-bottom: 3px solid var(--color-ink);
+}
+
+.site-header__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-sm) var(--space-md) 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding-bottom: var(--space-sm);
+}
+
+.brand__mark {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--color-surface);
+  background: var(--color-red-pen);
+  padding: 0.2rem 0.4rem;
+  border-radius: var(--radius-sm);
+  transform: rotate(-4deg);
+}
+
+.brand__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.brand__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.brand__subtitle {
+  font-size: 0.75rem;
+  color: var(--color-ink-soft);
+}
+
+.header-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-md);
+}
+
+.unit-nav {
+  display: flex;
+  gap: var(--space-2xs);
+}
+
+.btn--theme {
+  background: transparent;
+  border: none;
+  color: var(--color-ink-soft);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: var(--space-3xs);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease, background 0.15s ease;
+  margin-block-end: var(--space-3xs); /* visually aligns with the binder tabs */
+}
+
+.btn--theme:hover {
+  color: var(--color-ink);
+  background: var(--color-surface-raised);
+}
+
+.unit-tab {
+  position: relative; /* anchors .unit-tab__progress (render/progressRenderer.js, 4.2) */
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-tab);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-bottom: none;
+  color: var(--color-ink-soft);
+  transform: translateY(2px);
+  transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.unit-tab:hover {
+  color: var(--color-ink);
+}
+
+.unit-tab.is-active {
+  background: var(--tab-color, var(--color-unit1));
+  color: var(--color-surface);
+  transform: translateY(0);
+  box-shadow: var(--shadow-tab);
+}
+
+.section-nav {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.section-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.section-tab {
+  position: relative;
+  padding: var(--space-xs) var(--space-3xs);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-ink-soft);
+  white-space: nowrap;
+}
+
+.section-tab::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  height: 3px;
+  background: transparent;
+  border-radius: 2px 2px 0 0;
+}
+
+.section-tab:hover {
+  color: var(--color-ink);
+}
+
+.section-tab.is-active {
+  color: var(--color-ink);
+}
+
+.section-tab.is-active::after {
+  background: var(--tab-color, var(--color-unit1));
+}
+
+/* ---------- Main content ---------- */
+
+.app-root {
+  flex: 1;
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-md) var(--space-xl);
+}
+
+.app-root:focus {
+  outline: none;
+}
+
+.page {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg) var(--space-lg) var(--space-lg) calc(var(--space-lg) + 10px);
+  box-shadow: var(--shadow-card);
+}
+
+.page::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: var(--space-md);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--color-red-pen-soft);
+}
+
+.page h1 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  margin-bottom: var(--space-2xs);
+}
+
+.page h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-sm);
+}
+
+.page p {
+  max-width: 60ch;
+}
+
+.site-footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+  padding: var(--space-md);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+  .site-header__inner {
+    align-items: flex-start;
+  }
+
+  .header-controls {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .unit-nav {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .app-root {
+    padding: var(--space-md) var(--space-sm) var(--space-lg);
+  }
+
+  .page {
+    padding: var(--space-md) var(--space-md) var(--space-md) calc(var(--space-md) + 10px);
+  }
+}

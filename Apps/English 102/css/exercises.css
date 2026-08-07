@@ -1,0 +1,1068 @@
+/*
+  Exercise engine styles (3.13).
+
+  Covers the shared `.activity` card chrome (per engine/mcq.js's header-
+  comment convention: .activity, .activity__group/hint/feedback/
+  explanation, .is-correct/.is-incorrect) plus every type-specific block
+  the 11 engine modules built in 3.1-3.12 actually render. Class names
+  below are copied verbatim from each module's own className/classList
+  calls (re-read off disk before writing this file, not assumed from
+  memory) -- including the naming-convention inconsistencies already
+  present in the JS (e.g. .activity--vowelTickbox/--transcriptionSpelling/
+  --diphthongMatch are camelCase modifiers, while --truefalse/--fillblank/
+  --anagram/--hangman/--phoneticsymbol/--openresponse are lowercase) --
+  this file does not "fix" that drift, since selectors must match the
+  strings the JS actually sets.
+
+  Where multiple modules share an identical DOM shape by design (mcq.js/
+  trueFalse.js/diphthongMatch.js's fieldset+radiogroup; the text-input
+  trio anagram.js/phoneticSymbol.js/transcriptionSpelling.js), their
+  header comments already say so explicitly and ask this file to share
+  base rules across them -- done below via combined selectors instead of
+  repeating each block 3x.
+
+  `.btn`/`.btn--check` (the Check-answer/Check-answers button every
+  engine module renders) lives here rather than in components.css: it's
+  exercise-only chrome, not a general site component, matching how
+  components.css itself describes its own scope as "Phase 4 progress UI
+  and Phase 8 polish."
+
+  Design choice: interactive accents (option hover/selected borders,
+  chip fills, the check button, focus rings) read `--tab-color` (set
+  inline per active unit by navRenderer.js, falling back to
+  --color-unit1) rather than a fixed color, so exercises pick up
+  whichever unit's accent is active without per-unit overrides here.
+  `color-mix()` is used for a few proportionate tint backgrounds (chip/
+  option "selected" states, the vowel tick-box target-cell highlight) so
+  those tints work correctly against all three unit accents without
+  needing a hand-authored "-soft" variable per state -- this assumes an
+  evergreen-browser baseline (Chrome/Edge/Firefox 2023+), consistent
+  with the project's Phase 9.2 cross-browser target and the ES-module/
+  IPA-input baseline the app already requires elsewhere.
+
+  A single Phase-8.1-scale responsive pass is explicitly deferred to
+  that phase; the one exception here is collapsing `.matching__columns`
+  to a single column under 640px (matching layout.css's own breakpoint),
+  since two side-by-side columns of long text (Unit 3's job-posting
+  matching activity) is unusable, not just suboptimal, on a narrow
+  viewport without it.
+*/
+
+/* ---------- Base activity card + shared elements ---------- */
+
+.activity {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+  box-shadow: var(--shadow-card);
+}
+
+.activity:last-child {
+  margin-bottom: 0;
+}
+
+.activity__group {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-2xs);
+}
+
+.activity__title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  margin-bottom: var(--space-2xs);
+}
+
+.activity__instructions {
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-sm);
+}
+
+.activity__hint {
+  color: var(--color-red-pen);
+  background: var(--color-red-pen-soft);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  margin: var(--space-sm) 0;
+}
+
+.activity__feedback {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3xs);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: var(--space-sm) 0 0;
+}
+
+.activity__feedback.is-correct {
+  color: var(--color-correct);
+  background: var(--color-correct-soft);
+}
+
+.activity__feedback.is-incorrect {
+  color: var(--color-incorrect);
+  background: var(--color-incorrect-soft);
+}
+
+.activity__explanation {
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+  font-style: italic;
+  margin-top: var(--space-2xs);
+}
+
+/* Fieldsets used by mcq.js/trueFalse.js/diphthongMatch.js — reset the
+   browser default fieldset border/padding and the flex/grid min-width
+   quirk fieldsets otherwise impose on their children. */
+.mcq,
+.truefalse,
+.diphthongMatch__fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+/* ---------- Shared check button ---------- */
+
+.btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: var(--space-2xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: filter 0.15s ease, opacity 0.15s ease;
+}
+
+.btn--check {
+  background: var(--tab-color, var(--color-unit1));
+  color: var(--color-surface);
+}
+
+.btn--check:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.btn--check:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* ---------- Shared radiogroup: mcq.js / trueFalse.js / diphthongMatch.js ---------- */
+
+.mcq__prompt,
+.truefalse__prompt,
+.diphthongMatch__prompt {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: var(--space-sm);
+}
+
+.mcq__options,
+.truefalse__options,
+.diphthongMatch__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.mcq__option,
+.truefalse__option,
+.diphthongMatch__option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.mcq__option:has(input:disabled),
+.truefalse__option:has(input:disabled),
+.diphthongMatch__option:has(input:disabled) {
+  cursor: default;
+}
+
+.mcq__option:hover,
+.truefalse__option:hover,
+.diphthongMatch__option:hover {
+  border-color: var(--tab-color, var(--color-unit1));
+}
+
+.mcq__option input[type="radio"],
+.truefalse__option input[type="radio"],
+.diphthongMatch__option input[type="radio"] {
+  accent-color: var(--tab-color, var(--color-unit1));
+}
+
+.mcq__option.is-correct,
+.truefalse__option.is-correct,
+.diphthongMatch__option.is-correct {
+  border-color: var(--color-correct);
+  background: var(--color-correct-soft);
+}
+
+.mcq__option.is-incorrect,
+.truefalse__option.is-incorrect,
+.diphthongMatch__option.is-incorrect {
+  border-color: var(--color-incorrect);
+  background: var(--color-incorrect-soft);
+}
+
+/* ---------- matching.js ---------- */
+
+.matching__columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.matching__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.matching__item {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  text-align: start;
+  padding: var(--space-xs) var(--space-sm);
+  padding-inline-start: calc(var(--space-sm) + 1.75rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.matching__item:disabled {
+  cursor: default;
+}
+
+.matching__item:not(:disabled):hover {
+  border-color: var(--tab-color, var(--color-unit1));
+}
+
+.matching__item.is-selected {
+  border-color: var(--tab-color, var(--color-unit1));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--tab-color, var(--color-unit1)) 35%, transparent);
+}
+
+.matching__item.is-paired {
+  border-color: var(--tab-color, var(--color-unit1));
+  background: color-mix(in srgb, var(--tab-color, var(--color-unit1)) 10%, var(--color-surface-raised));
+}
+
+.matching__item.is-correct {
+  border-color: var(--color-correct);
+  background: var(--color-correct-soft);
+}
+
+.matching__item.is-incorrect {
+  border-color: var(--color-incorrect);
+  background: var(--color-incorrect-soft);
+}
+
+.matching__badge {
+  position: absolute;
+  inset-inline-start: var(--space-xs);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--tab-color, var(--color-unit1));
+  color: var(--color-surface);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.matching__item-feedback {
+  flex-basis: 100%;
+  font-size: 0.85rem;
+  margin-top: var(--space-3xs);
+}
+
+.matching__item-feedback.is-correct {
+  color: var(--color-correct);
+}
+
+.matching__item-feedback.is-incorrect {
+  color: var(--color-incorrect);
+}
+
+@media (max-width: 640px) {
+  .matching__columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- fillBlank.js ---------- */
+
+.fillblank__sentence {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: var(--space-sm);
+}
+
+.fillblank__blank {
+  display: inline-block;
+  min-width: 6ch;
+  padding: 0 var(--space-2xs);
+  border-bottom: 2px solid var(--color-ink-soft);
+  font-weight: 600;
+  text-align: center;
+}
+
+.fillblank__blank.is-filled {
+  border-bottom-color: var(--tab-color, var(--color-unit1));
+  color: var(--tab-color, var(--color-unit1));
+}
+
+.fillblank__blank.is-correct {
+  border-bottom-color: var(--color-correct);
+  color: var(--color-correct);
+}
+
+.fillblank__blank.is-incorrect {
+  border-bottom-color: var(--color-incorrect);
+  color: var(--color-incorrect);
+}
+
+.fillblank__bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin-bottom: var(--space-sm);
+}
+
+.fillblank__chip {
+  padding: var(--space-3xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface-raised);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.fillblank__chip:disabled {
+  cursor: default;
+}
+
+.fillblank__chip:not(:disabled):hover {
+  border-color: var(--tab-color, var(--color-unit1));
+}
+
+.fillblank__chip.is-selected {
+  border-color: var(--tab-color, var(--color-unit1));
+  background: color-mix(in srgb, var(--tab-color, var(--color-unit1)) 15%, var(--color-surface-raised));
+}
+
+.fillblank__chip.is-correct {
+  border-color: var(--color-correct);
+  background: var(--color-correct-soft);
+}
+
+.fillblank__chip.is-incorrect {
+  border-color: var(--color-incorrect);
+  background: var(--color-incorrect-soft);
+}
+
+/* ---------- Shared text-input trio: anagram.js / phoneticSymbol.js / transcriptionSpelling.js ---------- */
+
+.anagram__label,
+.phoneticsymbol__label,
+.transcriptionSpelling__label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-3xs);
+}
+
+.anagram__input,
+.phoneticsymbol__input,
+.transcriptionSpelling__input {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  padding: var(--space-2xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  width: 100%;
+  max-width: 20rem;
+}
+
+.anagram__input:focus,
+.phoneticsymbol__input:focus,
+.transcriptionSpelling__input:focus {
+  border-color: var(--tab-color, var(--color-unit1));
+}
+
+.anagram__input.is-correct,
+.phoneticsymbol__input.is-correct,
+.transcriptionSpelling__input.is-correct {
+  border-color: var(--color-correct);
+  background: var(--color-correct-soft);
+}
+
+.anagram__input.is-incorrect,
+.phoneticsymbol__input.is-incorrect,
+.transcriptionSpelling__input.is-incorrect {
+  border-color: var(--color-incorrect);
+  background: var(--color-incorrect-soft);
+}
+
+/* ---------- anagram.js ---------- */
+
+.anagram__jumbled {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  letter-spacing: 0.25em;
+  font-weight: 700;
+  color: var(--tab-color, var(--color-unit1));
+  margin-bottom: var(--space-2xs);
+}
+
+.anagram__definition {
+  font-style: italic;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-sm);
+}
+
+/* ---------- phoneticSymbol.js ---------- */
+
+.phoneticsymbol__word {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: var(--space-sm);
+}
+
+.phoneticsymbol__answer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3xs);
+  margin-bottom: var(--space-sm);
+}
+
+.phoneticsymbol__slash {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: var(--color-ink-soft);
+}
+
+.phoneticsymbol__picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3xs);
+  margin-bottom: var(--space-sm);
+}
+
+.phoneticsymbol__key {
+  min-width: 2.25rem;
+  padding: var(--space-3xs) var(--space-2xs);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+}
+
+.phoneticsymbol__key:disabled {
+  cursor: default;
+}
+
+.phoneticsymbol__key:not(:disabled):hover {
+  border-color: var(--tab-color, var(--color-unit1));
+  background: color-mix(in srgb, var(--tab-color, var(--color-unit1)) 10%, var(--color-surface-raised));
+}
+
+/* ---------- transcriptionSpelling.js ---------- */
+
+.transcriptionSpelling__ipa {
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  color: var(--tab-color, var(--color-unit1));
+  margin-bottom: var(--space-sm);
+}
+
+/* ---------- hangman.js ---------- */
+
+.hangman__clue {
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+}
+
+.hangman__figure {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-sm);
+}
+
+.hangman__svg {
+  width: 100px;
+  height: 120px;
+}
+
+.hangman__gallows {
+  stroke: var(--color-ink);
+  stroke-width: 3;
+}
+
+.hangman__part {
+  stroke: var(--color-red-pen);
+  stroke-width: 3;
+}
+
+circle.hangman__part {
+  fill: none;
+}
+
+.hangman__word {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2xs);
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+}
+
+.hangman__letter {
+  min-width: 1ch;
+  border-bottom: 2px solid var(--color-ink-soft);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.hangman__letter.is-revealed {
+  color: var(--color-incorrect);
+}
+
+.hangman__status {
+  text-align: center;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-sm);
+}
+
+.hangman__keyboard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3xs);
+  justify-content: center;
+  margin-bottom: var(--space-sm);
+}
+
+.hangman__key {
+  min-width: 2rem;
+  padding: var(--space-3xs) var(--space-2xs);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  font-weight: 600;
+}
+
+.hangman__key:disabled {
+  cursor: default;
+}
+
+.hangman__key:not(:disabled):hover {
+  border-color: var(--tab-color, var(--color-unit1));
+}
+
+.hangman__key.is-correct {
+  border-color: var(--color-correct);
+  background: var(--color-correct-soft);
+  color: var(--color-correct);
+}
+
+.hangman__key.is-incorrect {
+  border-color: var(--color-incorrect);
+  background: var(--color-incorrect-soft);
+  color: var(--color-incorrect);
+}
+
+/* ---------- vowelTickbox.js ---------- */
+
+.vowelTickbox__instructions {
+  margin-bottom: var(--space-sm);
+  color: var(--color-ink-soft);
+}
+
+.vowelTickbox__scroll {
+  overflow-x: auto;
+  margin-bottom: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.vowelTickbox__table {
+  width: 100%;
+  font-size: 0.85rem;
+}
+
+.vowelTickbox__table th,
+.vowelTickbox__table td {
+  border: 1px solid var(--color-paper-line);
+  padding: var(--space-3xs) var(--space-2xs);
+  text-align: center;
+}
+
+.vowelTickbox__table thead th {
+  background: var(--color-surface-raised);
+  font-family: var(--font-mono);
+}
+
+.vowelTickbox__word {
+  text-align: start;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--color-surface-raised);
+}
+
+.vowelTickbox__cell.is-target {
+  background: color-mix(in srgb, var(--color-correct) 14%, var(--color-surface));
+}
+
+.vowelTickbox__checkbox {
+  accent-color: var(--tab-color, var(--color-unit1));
+}
+
+.vowelTickbox__checkbox.is-correct {
+  accent-color: var(--color-correct);
+}
+
+.vowelTickbox__checkbox.is-incorrect {
+  accent-color: var(--color-incorrect);
+}
+
+.vowelTickbox__feedbackRow td {
+  border: none;
+  padding: 0;
+}
+
+.vowelTickbox__rowFeedback {
+  text-align: start;
+  font-size: 0.85rem;
+  padding: var(--space-3xs) 0;
+}
+
+.vowelTickbox__rowFeedback.is-correct {
+  color: var(--color-correct);
+}
+
+.vowelTickbox__rowFeedback.is-incorrect {
+  color: var(--color-incorrect);
+}
+
+.vowelTickbox__summary {
+  font-weight: 600;
+}
+
+/* ---------- openResponse.js ---------- */
+
+.openresponse__prompt {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: var(--space-2xs);
+}
+
+.openresponse__guidance {
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-sm);
+}
+
+.openresponse__guidance p {
+  margin-bottom: var(--space-3xs);
+}
+
+.openresponse__label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-ink-soft);
+  margin-bottom: var(--space-3xs);
+}
+
+.openresponse__textarea {
+  width: 100%;
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.openresponse__textarea:focus {
+  border-color: var(--tab-color, var(--color-unit1));
+}
+
+.openresponse__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-2xs);
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+}
+
+.openresponse__status.is-correct {
+  color: var(--color-correct);
+}
+
+.openresponse__status.is-incorrect {
+  color: var(--color-incorrect);
+}
+
+/* ---------- dialogueFillBlank.js (3.15, added after the initial 3.13 pass —
+   this type was a discovered gap in the original Phase 3 step list, found
+   while building state.js in Phase 4; see TRACKER.md's 3.15 entry) ---------- */
+
+.dialogueFillBlank__wordBank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin-bottom: var(--space-sm);
+}
+
+.dialogueFillBlank__wordBankItem {
+  padding: var(--space-3xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface-raised);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-ink-soft);
+}
+
+.dialogueFillBlank__dialogue {
+  margin-bottom: var(--space-sm);
+}
+
+.dialogueFillBlank__line {
+  line-height: 1.7;
+  margin-bottom: var(--space-sm);
+}
+
+.dialogueFillBlank__speaker {
+  font-weight: 600;
+}
+
+.dialogueFillBlank__blank {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: var(--space-3xs) var(--space-2xs);
+  margin: 0 var(--space-3xs);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+}
+
+.dialogueFillBlank__blank:focus {
+  border-color: var(--tab-color, var(--color-unit1));
+}
+
+.dialogueFillBlank__blank:disabled {
+  cursor: default;
+}
+
+.dialogueFillBlank__blank.is-correct {
+  border-color: var(--color-correct);
+  background: var(--color-correct-soft);
+}
+
+.dialogueFillBlank__blank.is-incorrect {
+  border-color: var(--color-incorrect);
+  background: var(--color-incorrect-soft);
+}
+
+.dialogueFillBlank__blankFeedback {
+  display: inline-block;
+  margin-inline-start: var(--space-2xs);
+  font-size: 0.8rem;
+}
+
+.dialogueFillBlank__blankFeedback.is-incorrect {
+  color: var(--color-incorrect);
+}
+
+.dialogueFillBlank__summary {
+  font-weight: 600;
+}
+
+
+/* ==========================================================================
+   Section renderer components (sectionRenderer.js — Phase 5)
+   ========================================================================== */
+
+/* Section heading */
+.section-heading {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  color: var(--tab-color, var(--color-unit1));
+  margin-block-end: var(--space-md);
+  padding-block-end: var(--space-xs);
+  border-bottom: 2px solid var(--color-rule);
+}
+
+/* Section intro (grammar/pronunciation/writing reference content) */
+.section-intro {
+  background: var(--color-paper-warm);
+  border-inline-start: 4px solid var(--tab-color, var(--color-unit1));
+  border-radius: var(--radius-md);
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  padding: var(--space-md) var(--space-lg);
+  margin-block-end: var(--space-xl);
+  font-size: 0.97rem;
+  line-height: 1.75;
+}
+.section-intro h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--tab-color, var(--color-unit1));
+  margin-block: var(--space-sm) var(--space-xs);
+}
+.section-intro h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--color-ink-secondary);
+  margin-block: var(--space-xs) var(--space-2xs);
+}
+.section-intro p { margin-block-end: var(--space-xs); }
+.section-intro strong { color: var(--color-ink); font-weight: 600; }
+.section-intro ul { margin-block: var(--space-2xs) var(--space-xs); padding-inline-start: 1.5em; }
+.section-intro li { margin-block-end: var(--space-2xs); }
+.section-intro .intro__table-wrap { overflow-x: auto; margin-block: var(--space-xs); }
+.section-intro .intro__table { border-collapse: collapse; width: 100%; font-family: var(--font-mono); font-size: 0.9rem; }
+.section-intro .intro__table th,
+.section-intro .intro__table td { border: 1px solid var(--color-rule); padding: var(--space-2xs) var(--space-xs); text-align: start; }
+.section-intro .intro__table th { background: var(--tab-color, var(--color-unit1)); color: #fff; font-weight: 600; }
+
+/* Activity slot */
+.activity-slot + .activity-slot { margin-block-start: var(--space-lg); }
+
+/* Reading passages */
+.reading-passage {
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  border-top: 4px solid var(--tab-color, var(--color-unit1));
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  margin-block-end: var(--space-xl);
+  box-shadow: var(--shadow-sm);
+}
+.reading-passage__title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--tab-color, var(--color-unit1));
+  margin-block-end: var(--space-md);
+}
+.reading-passage__text { max-width: 72ch; line-height: 1.8; }
+.reading-passage__text p + p { margin-block-start: var(--space-sm); }
+.reading-passage__questions {
+  margin-block-start: var(--space-xl);
+  padding-block-start: var(--space-md);
+  border-top: 1px solid var(--color-rule);
+}
+.reading-passage__questions-heading {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--color-ink-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-block-end: var(--space-md);
+}
+
+/* Listening transcripts */
+.listening-transcript {
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  border-top: 4px solid var(--tab-color, var(--color-unit1));
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  margin-block-end: var(--space-xl);
+  box-shadow: var(--shadow-sm);
+}
+.listening-transcript__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-block-end: var(--space-md);
+}
+.listening-transcript__title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--tab-color, var(--color-unit1));
+}
+.btn--toggle-transcript {
+  background: color-mix(in oklch, var(--tab-color, var(--color-unit1)) 12%, transparent);
+  color: var(--tab-color, var(--color-unit1));
+  border: 1.5px solid var(--tab-color, var(--color-unit1));
+  border-radius: var(--radius-sm);
+  padding: var(--space-2xs) var(--space-sm);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn--toggle-transcript:hover {
+  background: color-mix(in oklch, var(--tab-color, var(--color-unit1)) 22%, transparent);
+}
+.listening-transcript__dialogue {
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  background: var(--color-paper-warm);
+  margin-block-end: var(--space-md);
+}
+.listening-transcript__dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-2xs) var(--space-md);
+  margin: 0;
+}
+.listening-transcript__speaker {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--tab-color, var(--color-unit1));
+  white-space: nowrap;
+  padding-block: var(--space-2xs);
+}
+.listening-transcript__line {
+  margin: 0;
+  padding-block: var(--space-2xs);
+  line-height: 1.65;
+}
+.listening-transcript__note {
+  font-style: italic;
+  color: var(--color-ink-secondary);
+  margin-block: var(--space-sm);
+}
+.listening-transcript__questions {
+  padding-block-start: var(--space-md);
+  border-top: 1px solid var(--color-rule);
+}
+
+/* Word List glossary */
+.wordlist__search-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-block-end: var(--space-md);
+  flex-wrap: wrap;
+}
+.wordlist__search-label { font-weight: 600; color: var(--color-ink-secondary); }
+.wordlist__search {
+  flex: 1;
+  min-width: 12rem;
+  padding: var(--space-2xs) var(--space-sm);
+  border: 1.5px solid var(--color-rule);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  transition: border-color 0.15s;
+}
+.wordlist__search:focus { outline: none; border-color: var(--tab-color, var(--color-unit1)); }
+.wordlist__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-md);
+}
+.wordlist__card {
+  perspective: 800px;
+  cursor: pointer;
+  height: 8rem;
+  border-radius: var(--radius-md);
+  outline-offset: 3px;
+}
+.wordlist__card:focus-visible { outline: 2.5px solid var(--tab-color, var(--color-unit1)); }
+.wordlist__card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.wordlist__card.is-flipped .wordlist__card-inner { transform: rotateY(180deg); }
+.wordlist__card-front,
+.wordlist__card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--color-rule);
+  box-shadow: var(--shadow-sm);
+}
+.wordlist__card-front { background: var(--color-paper); }
+.wordlist__card-back {
+  background: color-mix(in oklch, var(--tab-color, var(--color-unit1)) 10%, var(--color-paper));
+  color: var(--color-ink);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  transform: rotateY(180deg);
+}
+.wordlist__term {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--tab-color, var(--color-unit1));
+  font-weight: 700;
+}
+.wordlist__pos { font-style: italic; color: var(--color-ink-secondary); font-size: 0.85rem; margin-block-start: var(--space-2xs); }
+.wordlist__arabic-translation { font-family: system-ui, -apple-system, sans-serif; font-size: 1.05rem; margin-block-start: var(--space-2xs); color: var(--color-ink); }
+.wordlist__no-results { color: var(--color-ink-secondary); font-style: italic; grid-column: 1 / -1; }
+
+/* Injected Styles for Audio Button Integration */
+.play-audio-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-inline-start: var(--space-2xs);
+  vertical-align: middle;
+  transition: transform 0.15s ease;
+}
+.play-audio-btn:hover {
+  transform: scale(1.15);
+}
+.listening-transcript__audio-wrap {
+  width: 100%;
+  margin-block-start: var(--space-2xs);
+}

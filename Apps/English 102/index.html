@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>English 102 — Interactive Practice</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/exercises.css" />
+</head>
+<body>
+  <a class="skip-link" href="#app-root">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="#/" aria-label="English 102 home">
+        <span class="brand__mark" aria-hidden="true">102</span>
+        <span class="brand__text">
+          <span class="brand__title">English 102</span>
+          <span class="brand__subtitle">Interactive Practice</span>
+        </span>
+      </a>
+      <div class="header-controls">
+        <nav class="unit-nav" id="unit-nav" aria-label="Units"></nav>
+        <button id="theme-toggle" class="btn--theme" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+      </div>
+    </div>
+    <nav class="section-nav" id="section-nav" aria-label="Sections"></nav>
+  </header>
+
+  <main id="app-root" class="app-root" tabindex="-1">
+    <!-- Views are rendered here by js/app.js -->
+  </main>
+
+  <footer class="site-footer">
+    <p>Balqa Applied English 2 — practice companion. Progress is saved on this device only.</p>
+    <div id="footer-actions"></div>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
