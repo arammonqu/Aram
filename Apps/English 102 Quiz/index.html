@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Mastery Quiz</title>
+    <!-- Google Fonts: Outfit & Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <a href="../../index.html" class="control-btn" title="Back to Portal" style="text-decoration: none;"><i class="fas fa-arrow-left"></i> <span style="margin-left: 6px; font-size: 0.9rem;">Portal</span></a>
+            <h1 id="app-title">English Quiz</h1>
+        </div>
+        <div class="controls">
+            <!-- Voice Selector Dropdown (Hidden until voices load) -->
+            <select id="voice-select" class="control-btn hidden" title="Choose Voice"></select>
+            
+            <button id="btn-lang" class="control-btn" title="Toggle Arabic Translation">ع / EN</button>
+            <button id="btn-theme" class="control-btn" title="Toggle Theme"><i class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main id="app-container">
+        <!-- Home Screen -->
+        <section id="home-screen" class="screen">
+            <h2 id="menu-title">Select a Stream</h2>
+            
+            <!-- NEW: Quiz Length Selector -->
+            <div class="length-selector card-box">
+                <h4 id="length-title" style="margin-bottom: 10px; text-align: center;">Quiz Length</h4>
+                <div class="toggle-group">
+                    <input type="radio" id="mode-short" name="quiz-length" value="15" checked>
+                    <label for="mode-short" id="lbl-short">Short (15 Qs)</label>
+                    
+                    <input type="radio" id="mode-full" name="quiz-length" value="full">
+                    <label for="mode-full" id="lbl-full">Full Track</label>
+                </div>
+            </div>
+
+            <div class="menu-grid">
+                <button class="stream-btn" data-stream="vocab">Vocabulary</button>
+                <button class="stream-btn" data-stream="grammar">Grammar</button>
+                <button class="stream-btn" data-stream="pronunciation">Pronunciation</button>
+                <button class="stream-btn" data-stream="wordlist">Word List</button>
+                <!-- NEW: Mixed Mode Button -->
+                <button class="stream-btn mixed-btn" data-stream="mixed" id="btn-mixed">Mixed Quiz (40 Qs)</button>
+            </div>
+        </section>
+
+        <!-- Quiz Screen -->
+        <section id="quiz-screen" class="screen hidden">
+            <div class="quiz-header">
+                <button id="btn-home" class="outline-btn" title="Quit to Home"><i class="fas fa-home"></i> Quit</button>
+                <span id="question-counter">1 / 10</span>
+            </div>
+            
+            <div class="progress-bar-container">
+                <div id="progress-bar"></div>
+            </div>
+
+            <!-- Question Area -->
+            <div id="question-container" class="card-box">
+                <div class="flex-between">
+                    <h3 id="question-text">Question goes here?</h3>
+                    <button id="btn-audio-q" class="audio-btn out-btn" title="Listen to Question"><i class="fas fa-volume-up"></i></button>
+                </div>
+            </div>
+
+            <!-- Options Area -->
+            <div id="options-container" class="options-grid"></div>
+
+            <!-- Explanation Box -->
+            <div id="explanation-container" class="hidden">
+                <div class="explanation-box card-box">
+                    <div class="flex-between">
+                        <h4 id="exp-title">Explanation</h4>
+                        <button id="btn-audio-exp" class="audio-btn out-btn" title="Listen to Explanation"><i class="fas fa-volume-up"></i></button>
+                    </div>
+                    <p id="explanation-text" class="mt-10"></p>
+                </div>
+            </div>
+
+            <!-- Navigation Area -->
+            <div class="nav-buttons">
+                <button id="btn-prev" class="secondary-btn" disabled><i class="fas fa-arrow-left"></i> Prev</button>
+                <button id="btn-next" class="primary-btn">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+        
+        <!-- Results Screen -->
+        <section id="results-screen" class="screen hidden">
+            <h2 id="results-title">Quiz Completed!</h2>
+            <p id="score-text">Your score: 0 / 0</p>
+            <button id="btn-restart" class="primary-btn">Back to Menu</button>
+        </section>
+    </main>
+
+    <!-- Interactive Dictionary Tooltip -->
+    <div id="word-tooltip" class="hidden">
+        <span id="tooltip-en" class="text-en"></span> = <span id="tooltip-ar" class="text-ar" dir="rtl"></span>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
