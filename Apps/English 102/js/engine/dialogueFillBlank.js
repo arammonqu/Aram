@@ -188,6 +188,34 @@ export function render(container, activity, onAnswered) {
   checkButton.className = "btn btn--check";
   checkButton.textContent = "Check answers";
 
+  const editButton = document.createElement("button");
+  editButton.type = "button";
+  editButton.className = "btn btn--secondary";
+  editButton.textContent = "Edit answers";
+  editButton.hidden = true;
+  editButton.style.marginInlineStart = "var(--space-sm)";
+  
+  editButton.addEventListener("click", () => {
+    answered = false;
+    editButton.hidden = true;
+    checkButton.hidden = false;
+    checkButton.disabled = false;
+    
+    summary.hidden = true;
+    summary.className = "activity__feedback dialogueFillBlank__summary";
+    
+    activity.blanks.forEach((b) => {
+      const select = selectsById.get(b.id);
+      select.disabled = false;
+      select.classList.remove("is-correct", "is-incorrect");
+      
+      const feedback = select.nextElementSibling;
+      if (feedback && feedback.classList.contains("dialogueFillBlank__blankFeedback")) {
+        feedback.remove();
+      }
+    });
+  });
+
   const summary = document.createElement("p");
   summary.className = "activity__feedback dialogueFillBlank__summary";
   summary.setAttribute("role", "status");
@@ -238,12 +266,18 @@ export function render(container, activity, onAnswered) {
       ? `<span aria-hidden="true">\u2713</span> All ${activity.blanks.length} of ${activity.blanks.length} correct.`
       : `<span aria-hidden="true">\u2717</span> ${correctCount} of ${activity.blanks.length} blanks correct.`;
 
-    checkButton.disabled = true;
+    if (allCorrect) {
+      checkButton.disabled = true;
+    } else {
+      checkButton.hidden = true;
+      editButton.hidden = false;
+    }
     onAnswered(activity.id, allCorrect);
   });
 
   card.appendChild(hint);
   card.appendChild(checkButton);
+  card.appendChild(editButton);
   card.appendChild(summary);
 
   container.appendChild(card);

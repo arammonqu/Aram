@@ -91,6 +91,26 @@ export function render(container, activity, onAnswered) {
   checkButton.className = "btn btn--check";
   checkButton.textContent = "Check answer";
 
+  const editButton = document.createElement("button");
+  editButton.type = "button";
+  editButton.className = "btn btn--secondary";
+  editButton.textContent = "Edit answer";
+  editButton.hidden = true;
+  editButton.style.marginInlineStart = "var(--space-sm)";
+  
+  editButton.addEventListener("click", () => {
+    answered = false;
+    editButton.hidden = true;
+    checkButton.hidden = false;
+    checkButton.disabled = false;
+    
+    input.disabled = false;
+    input.classList.remove("is-correct", "is-incorrect");
+    
+    feedback.hidden = true;
+    feedback.className = "activity__feedback";
+  });
+
   const feedback = document.createElement("p");
   feedback.className = "activity__feedback";
   feedback.setAttribute("role", "status");
@@ -121,7 +141,13 @@ export function render(container, activity, onAnswered) {
       ? '<span aria-hidden="true">\u2713</span> Correct.'
       : `<span aria-hidden="true">\u2717</span> Not quite \u2014 the correct answer is "${activity.correctAnswer}".`;
 
-    checkButton.disabled = true;
+    if (isCorrect) {
+      checkButton.disabled = true;
+    } else {
+      checkButton.hidden = true;
+      editButton.hidden = false;
+    }
+    
     onAnswered(activity.id, isCorrect);
   }
 
@@ -140,6 +166,7 @@ export function render(container, activity, onAnswered) {
 
   card.appendChild(hint);
   card.appendChild(checkButton);
+  card.appendChild(editButton);
   card.appendChild(feedback);
 
   container.appendChild(card);

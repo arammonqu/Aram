@@ -106,6 +106,26 @@ export function render(container, activity, onAnswered) {
 
     wrapper.appendChild(radio);
     wrapper.appendChild(text);
+    
+    if (!optionText.startsWith('/')) {
+      const optionPlayBtn = document.createElement("button");
+      optionPlayBtn.type = "button";
+      optionPlayBtn.className = "play-audio-btn";
+      optionPlayBtn.setAttribute("aria-label", `Listen to ${optionText}`);
+      optionPlayBtn.innerHTML = "🔊";
+      // Prevent clicking the button from selecting the radio option
+      optionPlayBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (currentAudio) {
+          currentAudio.pause();
+          currentAudio.currentTime = 0;
+        }
+        currentAudio = new Audio(`assets/audio/words/${optionText.toLowerCase()}.mp3`);
+        currentAudio.play().catch(err => console.error('Audio play failed:', err));
+      });
+      wrapper.appendChild(optionPlayBtn);
+    }
+
     optionsWrap.appendChild(wrapper);
 
     return radio;
@@ -124,6 +144,29 @@ export function render(container, activity, onAnswered) {
   checkButton.type = "button";
   checkButton.className = "btn btn--check";
   checkButton.textContent = "Check answer";
+
+  const editButton = document.createElement("button");
+  editButton.type = "button";
+  editButton.className = "btn btn--secondary";
+  editButton.textContent = "Edit answer";
+  editButton.hidden = true;
+  editButton.style.marginInlineStart = "var(--space-sm)";
+  
+  editButton.addEventListener("click", () => {
+    answered = false;
+    editButton.hidden = true;
+    checkButton.hidden = false;
+    checkButton.disabled = false;
+    
+    radios.forEach((radio) => {
+      radio.disabled = false;
+      const label = radio.closest("label");
+      label.classList.remove("is-correct", "is-incorrect");
+    });
+    
+    feedback.hidden = true;
+    feedback.className = "activity__feedback";
+  });
 
   const feedback = document.createElement("p");
   feedback.className = "activity__feedback";
@@ -164,7 +207,12 @@ export function render(container, activity, onAnswered) {
       ? '<span aria-hidden="true">\u2713</span> Correct.'
       : `<span aria-hidden="true">\u2717</span> Not quite \u2014 the correct answer is "${activity.options[activity.correctIndex]}".`;
 
-    checkButton.disabled = true;
+    if (isCorrect) {
+      checkButton.disabled = true;
+    } else {
+      checkButton.hidden = true;
+      editButton.hidden = false;
+    }
     onAnswered(activity.id, isCorrect);
   }
 
@@ -172,6 +220,7 @@ export function render(container, activity, onAnswered) {
 
   card.appendChild(hint);
   card.appendChild(checkButton);
+  card.appendChild(editButton);
   card.appendChild(feedback);
 
   container.appendChild(card);

@@ -240,6 +240,35 @@ export function render(container, activity, onAnswered) {
   checkButton.className = "btn btn--check";
   checkButton.textContent = "Check answers";
 
+  const editButton = document.createElement("button");
+  editButton.type = "button";
+  editButton.className = "btn btn--secondary";
+  editButton.textContent = "Edit answers";
+  editButton.hidden = true;
+  editButton.style.marginInlineStart = "var(--space-sm)";
+  
+  editButton.addEventListener("click", () => {
+    answered = false;
+    editButton.hidden = true;
+    checkButton.hidden = false;
+    checkButton.disabled = false;
+    
+    leftEls.forEach((el) => {
+      el.disabled = false;
+      el.classList.remove("is-correct", "is-incorrect");
+      const itemFeedback = el.querySelector(".matching__item-feedback");
+      if (itemFeedback) itemFeedback.remove();
+    });
+    
+    rightEls.forEach((el) => {
+      el.disabled = false;
+      el.classList.remove("is-correct", "is-incorrect");
+    });
+    
+    feedback.hidden = true;
+    feedback.className = "activity__feedback";
+  });
+
   const feedback = document.createElement("p");
   feedback.className = "activity__feedback";
   feedback.setAttribute("role", "status");
@@ -295,12 +324,19 @@ export function render(container, activity, onAnswered) {
       ? '<span aria-hidden="true">\u2713</span> Correct \u2014 all pairs match.'
       : `<span aria-hidden="true">\u2717</span> ${correctCount} of ${leftIndices.length} pairs correct \u2014 see the notes above for the rest.`;
 
-    checkButton.disabled = true;
+    if (isCorrect) {
+      checkButton.disabled = true;
+    } else {
+      checkButton.hidden = true;
+      editButton.hidden = false;
+    }
+    
     onAnswered(activity.id, isCorrect);
   });
 
   card.appendChild(hint);
   card.appendChild(checkButton);
+  card.appendChild(editButton);
   card.appendChild(feedback);
 
   container.appendChild(card);

@@ -94,6 +94,8 @@ export function render(container, activity, onAnswered) {
 
   // rowState[rowIndex] = { checkboxesByColumn: Map(symbol -> input), feedbackEl }
   const rowStates = [];
+  
+  let currentAudio = null;
 
   activity.rows.forEach((rowData, rowIndex) => {
     const tr = document.createElement("tr");
@@ -103,6 +105,22 @@ export function render(container, activity, onAnswered) {
     wordTh.scope = "row";
     wordTh.className = "vowelTickbox__word";
     wordTh.textContent = rowData.word;
+    
+    const playBtn = document.createElement("button");
+    playBtn.type = "button";
+    playBtn.className = "play-audio-btn";
+    playBtn.setAttribute("aria-label", `Listen to ${rowData.word}`);
+    playBtn.innerHTML = "🔊";
+    playBtn.addEventListener("click", () => {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+      currentAudio = new Audio(`assets/audio/words/${rowData.word.toLowerCase()}.mp3`);
+      currentAudio.play().catch(err => console.error('Audio play failed:', err));
+    });
+    wordTh.appendChild(playBtn);
+    
     tr.appendChild(wordTh);
 
     const checkboxesByColumn = new Map();
@@ -156,6 +174,33 @@ export function render(container, activity, onAnswered) {
   checkButton.type = "button";
   checkButton.className = "btn btn--check";
   checkButton.textContent = "Check answers";
+
+  const editButton = document.createElement("button");
+  editButton.type = "button";
+  editButton.className = "btn btn--secondary";
+  editButton.textContent = "Edit answers";
+  editButton.hidden = true;
+  editButton.style.marginInlineStart = "var(--space-sm)";
+  
+  editButton.addEventListener("click", () => {
+    answered = false;
+    editButton.hidden = true;
+    checkButton.hidden = false;
+    checkButton.disabled = false;
+    summary.hidden = true;
+    summary.className = "activity__feedback vowelTickbox__summary";
+    
+    rowStates.forEach((rowState) => {
+      rowState.rowFeedback.hidden = true;
+      rowState.rowFeedback.className = "vowelTickbox__rowFeedback";
+      
+      rowState.checkboxesByColumn.forEach((checkbox) => {
+        checkbox.disabled = false;
+        checkbox.className = "vowelTickbox__checkbox";
+        checkbox.closest("td").classList.remove("is-target");
+      });
+    });
+  });
 
   const summary = document.createElement("p");
   summary.className = "activity__feedback vowelTickbox__summary";
@@ -229,7 +274,13 @@ export function render(container, activity, onAnswered) {
       ? `<span aria-hidden="true">\u2713</span> All ${rowStates.length} of ${rowStates.length} correct.`
       : `<span aria-hidden="true">\u2717</span> ${correctRowCount} of ${rowStates.length} rows correct.`;
 
-    checkButton.disabled = true;
+    if (allCorrect) {
+      checkButton.disabled = true;
+    } else {
+      checkButton.hidden = true;
+      editButton.hidden = false;
+    }
+
     onAnswered(activity.id, allCorrect);
   }
 
@@ -237,6 +288,7 @@ export function render(container, activity, onAnswered) {
 
   card.appendChild(hint);
   card.appendChild(checkButton);
+  card.appendChild(editButton);
   card.appendChild(summary);
 
   container.appendChild(card);
