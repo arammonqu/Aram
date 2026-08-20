@@ -30,6 +30,7 @@
       <g id="icon-search"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></g>
       <g id="icon-chart"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></g>
       <g id="icon-bookmark"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></g>
+      <g id="icon-translate"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></g>
     </defs>
   </svg>
 
@@ -54,14 +55,11 @@
         <button id="nav-stats-btn" class="header-btn" title="Completion & Study Statistics" aria-label="Statistics">
           <svg class="svg-icon"><use href="#icon-chart"/></svg>
         </button>
-        <button id="toggle-mode-btn" class="header-btn mode-btn" title="Toggle Learning Hub / Quiz Mode" aria-label="Switch Mode">
+        <button id="toggle-mode-btn" class="header-btn mode-btn" title="Switch between Learning Hub and Quiz Mode" aria-label="Switch Mode">
           <span id="mode-icon"><svg class="svg-icon"><use href="#icon-academic"/></svg></span>
-          <span id="mode-label">Learning Hub</span>
         </button>
-        <button id="toggle-trans-btn" class="header-btn pill-btn" title="Toggle Arabic Translation" aria-label="Toggle Arabic">
-          <span class="btn-text-en">EN</span>
-          <span class="btn-divider">/</span>
-          <span class="btn-text-ar">عربي</span>
+        <button id="toggle-trans-btn" class="header-btn" title="Toggle Arabic Translation (EN / عربي)" aria-label="Toggle Arabic">
+          <svg class="svg-icon"><use href="#icon-translate"/></svg>
         </button>
         <button id="audio-settings-btn" class="header-btn" title="Speech Voice Settings" aria-label="Voice Settings">
           <svg class="svg-icon"><use href="#icon-settings"/></svg>

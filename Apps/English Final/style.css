@@ -3420,3 +3420,136 @@ input[type="text"], input[type="search"], select, textarea {
   padding: 1px 4px;
   border-radius: 3px;
 }
+
+
+/* ==========================================================================
+   Phonetics Studio Mobile Optimization: Examples 2nd Column & Zero Side Scroll
+   ========================================================================== */
+.sound-rule-mobile-inline {
+  display: none;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 5px;
+  line-height: 1.35;
+  background: var(--bg-subtle);
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  border-left: 2px solid var(--brand-primary);
+}
+
+@media (max-width: 640px) {
+  .pron-review-table .th-rule,
+  .pron-review-table .cell-rule-compact {
+    display: none !important;
+  }
+
+  .sound-rule-mobile-inline {
+    display: block;
+  }
+
+  .pron-review-table th,
+  .pron-review-table td {
+    padding: 10px 8px !important;
+  }
+
+  .pron-review-table .th-sound,
+  .pron-review-table .cell-sound-compact {
+    width: 40% !important;
+  }
+
+  .pron-review-table .th-examples,
+  .pron-review-table .cell-words-compact {
+    width: 52% !important;
+  }
+
+  .pron-review-table .cell-num {
+    width: 22px !important;
+    font-size: 0.78rem !important;
+    padding: 10px 2px !important;
+  }
+
+  .word-sound-pill-compact {
+    padding: 4px 7px !important;
+    font-size: 0.82rem !important;
+  }
+
+  .pill-ipa-compact {
+    font-size: 0.72rem !important;
+  }
+}
+
+
+/* ==========================================================================
+   Header Buttons: Uniform Icon-Only System (100% Mobile Optimized)
+   ========================================================================== */
+.app-header {
+  padding: 10px 14px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.header-btn {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  padding: 0 !important;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.mode-btn.active-learning {
+  background: var(--brand-primary-light);
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    padding: 8px 10px;
+  }
+
+  .header-actions {
+    gap: 4px;
+  }
+
+  .header-btn {
+    width: 35px;
+    height: 35px;
+    min-width: 35px;
+    min-height: 35px;
+  }
+
+  .svg-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .header-title-wrap {
+    max-width: 130px;
+    overflow: hidden;
+  }
+
+  .header-tag {
+    font-size: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .unit-tag {
+    font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

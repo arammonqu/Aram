@@ -989,7 +989,7 @@ function renderLearningGrammarSection(grammarObj) {
   `;
 }
 
-// 4.5.3 Pronunciation Studio Section Renderer (Clean Quick-Review Table - No Tongue Descriptions)
+// 4.5.3 Pronunciation Studio Section Renderer (Examples in 2nd Column - Phone Optimized)
 function renderLearningPronSection(pronObj) {
   if (!pronObj) {
     return `<div class="empty-state-card"><p>Pronunciation module is being compiled.</p></div>`;
@@ -1006,15 +1006,15 @@ function renderLearningPronSection(pronObj) {
         <h2>${pronObj.titleEn || pronObj.title || 'Phonetics & Pronunciation Studio'}</h2>
       </div>
 
-      <!-- Quick Review Master Table Card -->
+      <!-- Quick Review Master Table Card (Examples in 2nd Column) -->
       <div class="dict-table-wrap">
         <table class="dict-master-table pron-review-table">
           <thead>
             <tr>
-              <th style="width: 40px;" class="cell-num">#</th>
-              <th style="width: 140px;">Sound / IPA</th>
-              <th style="min-width: 220px;">Spelling Rule / Key Trigger</th>
-              <th>Interactive Audio Examples (Click to Listen)</th>
+              <th style="width: 32px;" class="cell-num">#</th>
+              <th class="th-sound">Sound / IPA</th>
+              <th class="th-examples">Interactive Audio Examples (Click to Listen)</th>
+              <th class="th-rule">Spelling Rule / Key Trigger</th>
             </tr>
           </thead>
           <tbody>
@@ -1030,9 +1030,7 @@ function renderLearningPronSection(pronObj) {
                   <td class="cell-sound-compact">
                     <div class="sound-symbol-badge-compact">${symbol}</div>
                     <div class="sound-name-compact">${name}</div>
-                  </td>
-                  <td class="cell-rule-compact">
-                    <div class="sound-rule-compact">${rule || 'Standard pronunciation pattern.'}</div>
+                    ${rule ? `<div class="sound-rule-mobile-inline">${rule}</div>` : ''}
                   </td>
                   <td class="cell-words-compact">
                     <div class="word-pill-grid-compact">
@@ -1047,6 +1045,9 @@ function renderLearningPronSection(pronObj) {
                         `;
                       }).join('')}
                     </div>
+                  </td>
+                  <td class="cell-rule-compact">
+                    <div class="sound-rule-compact">${rule || 'Standard pronunciation pattern.'}</div>
                   </td>
                 </tr>
               `;
@@ -1694,16 +1695,20 @@ if (navStatsBtn) {
 // 7.4 Mode Toggle Button (Learning Hub <-> Quiz Mode)
 const modeBtn = document.getElementById('toggle-mode-btn');
 function updateModeUI() {
-  const label = document.getElementById('mode-label');
   const icon = document.getElementById('mode-icon');
+  const modeButton = document.getElementById('toggle-mode-btn');
   if (state.mode === 'learning') {
-    if (label) label.textContent = 'Quiz Mode';
     if (icon) icon.innerHTML = '<svg class="svg-icon"><use href="#icon-academic"/></svg>';
-    if (modeBtn) modeBtn.classList.add('active-learning');
+    if (modeButton) {
+      modeButton.classList.add('active-learning');
+      modeButton.title = 'Current: Learning Hub (Click to switch to Quiz Mode)';
+    }
   } else {
-    if (label) label.textContent = 'Learning Hub';
     if (icon) icon.innerHTML = '<svg class="svg-icon"><use href="#icon-book"/></svg>';
-    if (modeBtn) modeBtn.classList.remove('active-learning');
+    if (modeButton) {
+      modeButton.classList.remove('active-learning');
+      modeButton.title = 'Current: Quiz Mode (Click to switch to Learning Hub)';
+    }
   }
 }
 
