@@ -2310,3 +2310,1113 @@ input[type="text"], input[type="search"], select, textarea {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   Dictionary Search Bar & Control Bar Fix
+   ========================================================================== */
+.dict-control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.dict-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 240px;
+}
+
+.dict-search-wrap .search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.dict-search-input {
+  width: 100%;
+  padding: 10px 14px 10px 38px !important;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 16px !important;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.dict-search-input:focus {
+  outline: none;
+  border-color: var(--brand-primary);
+}
+
+.dict-counter {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.cell-pill-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.learning-tabs-header {
+  display: flex;
+  background: var(--bg-subtle);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  gap: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.learning-tab-btn.active {
+  background: var(--bg-card);
+  color: var(--brand-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+
+/* ==========================================================================
+   MASTER LEARNING HUB: VOCABULARY DRAWER, GRAMMAR ACADEMY & PHONETICS STUDIO
+   ========================================================================== */
+
+/* --- 1. Master Dictionary Table & Expandable Accordion Drawer --- */
+.dict-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+}
+
+.dict-master-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.dict-master-table th {
+  background: var(--bg-subtle);
+  color: var(--text-main);
+  padding: 14px 16px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--border-color);
+  text-align: left;
+}
+
+.dict-master-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.dict-word-row {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.dict-word-row:hover {
+  background-color: var(--brand-primary-light);
+}
+
+.dict-word-row.active-word-row {
+  background-color: var(--brand-primary-light);
+  border-left: 4px solid var(--brand-primary);
+}
+
+.cell-num {
+  font-weight: 700;
+  color: var(--text-muted);
+  width: 40px;
+  text-align: center;
+}
+
+.cell-term {
+  min-width: 180px;
+}
+
+.term-line {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dict-term-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.dict-pos-tag {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.dict-ipa-line {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.84rem;
+  color: var(--brand-primary);
+  margin-top: 3px;
+}
+
+.cell-mean {
+  min-width: 140px;
+}
+
+.dict-mean-ar {
+  font-family: var(--font-arabic);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-ar);
+}
+
+.cell-action {
+  width: 60px;
+  text-align: center;
+}
+
+/* Accordion Drawer inside Table */
+.dict-detail-row {
+  background: var(--bg-app);
+}
+
+.dict-detail-cell {
+  padding: 0 !important;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.dict-drawer-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin: 12px 16px 16px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-badge-cat {
+  background: var(--brand-primary-light);
+  color: var(--brand-primary);
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.drawer-badge-unit {
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-color);
+}
+
+.drawer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.drawer-col-en {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.drawer-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.drawer-text-en {
+  font-size: 0.98rem;
+  color: var(--text-main);
+  line-height: 1.55;
+  font-weight: 500;
+}
+
+.drawer-example-en {
+  background: var(--bg-subtle);
+  border-left: 3px solid var(--brand-primary);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  color: var(--text-main);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.drawer-col-ar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: right;
+  direction: rtl;
+}
+
+.drawer-label-ar {
+  font-family: var(--font-arabic);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-ar);
+}
+
+.drawer-text-ar {
+  font-family: var(--font-arabic);
+  font-size: 1.05rem;
+  color: var(--text-main);
+  line-height: 1.65;
+}
+
+.drawer-example-ar {
+  font-family: var(--font-arabic);
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  background: var(--bg-subtle);
+  border-right: 3px solid var(--text-ar);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  line-height: 1.6;
+  margin-top: 4px;
+}
+
+.drawer-synonyms-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.dict-syn-pill {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-left: 4px;
+  display: inline-block;
+}
+
+.dict-ant-pill {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-left: 4px;
+  display: inline-block;
+}
+
+
+/* --- 2. Grammar Academy Presentation --- */
+.grammar-academy-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.grammar-unit-hero {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(147, 51, 234, 0.12));
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.grammar-unit-hero h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.grammar-section-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.grammar-sec-header {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.grammar-sec-num {
+  background: var(--brand-primary);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.grammar-sec-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.grammar-topic-en {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+
+.grammar-summary-en {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.grammar-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-app);
+  margin-top: 6px;
+}
+
+.grammar-rule-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.grammar-rule-table th {
+  background: var(--bg-subtle);
+  color: var(--text-main);
+  padding: 12px 14px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--border-color);
+  text-align: left;
+}
+
+.grammar-rule-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+  line-height: 1.5;
+  color: var(--text-main);
+}
+
+.rule-subtext {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 3px;
+}
+
+.grammar-spelling-box {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-top: 6px;
+}
+
+.grammar-spelling-box h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 12px;
+}
+
+.spelling-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 10px;
+}
+
+.spelling-rule-pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.spelling-rule-tag {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--brand-primary);
+}
+
+.spelling-rule-example {
+  font-size: 0.9rem;
+  color: var(--text-main);
+  line-height: 1.4;
+}
+
+.grammar-cases-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.grammar-case-item {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.15s ease;
+}
+
+.grammar-case-item:hover {
+  border-color: var(--brand-primary);
+}
+
+.case-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.case-cat-badge {
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--brand-primary);
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  text-transform: uppercase;
+}
+
+.case-sentence-en {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.case-sentence-ar {
+  font-family: var(--font-arabic);
+  font-size: 0.95rem;
+  color: var(--text-ar);
+  direction: rtl;
+  text-align: right;
+  line-height: 1.5;
+}
+
+
+/* --- 3. Phonetics & Pronunciation Studio Presentation --- */
+.pron-studio-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.pron-unit-hero {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(59, 130, 246, 0.12));
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.pron-unit-hero h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.pron-summary-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pron-summary-card h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.pron-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.pron-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pron-card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sound-symbol-badge {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-md);
+  background: var(--brand-primary-light);
+  color: var(--brand-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.15rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sound-title-wrap h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.pron-guide-box {
+  background: var(--bg-subtle);
+  border-left: 3px solid var(--state-success);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+}
+
+.guide-en {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.pron-words-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.pron-words-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.word-pill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.word-sound-pill {
+  background: var(--bg-subtle);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  transition: all 0.15s ease;
+  color: var(--text-main);
+}
+
+.word-sound-pill:hover {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary-light);
+  color: var(--brand-primary);
+  transform: translateY(-1px);
+}
+
+.pill-spelling {
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.pill-ipa {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--brand-primary);
+  background: rgba(59, 130, 246, 0.1);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.word-sound-mini-pill {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-main);
+  transition: all 0.15s ease;
+  font-family: var(--font-sans);
+}
+
+.word-sound-mini-pill:hover {
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+  background: var(--brand-primary-light);
+}
+
+.pron-decoding-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ipa-decoding-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.ipa-decode-card {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: var(--font-sans);
+  color: var(--text-main);
+}
+
+.ipa-decode-card:hover {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary-light);
+  transform: translateY(-1px);
+}
+
+.decode-ipa {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--brand-primary);
+}
+
+.decode-arrow {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.decode-word {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.mistakes-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+/* ==========================================================================
+   Dynamic Arabic Translation Toggle & Unified Phonetics Master Card
+   ========================================================================== */
+
+/* Full Global Arabic Translation Control (Controlled by EN / عربي button) */
+/* Translation Toggle: Only hides Quiz Arabic and Grammar Academy Case Translations */
+.hide-trans .prompt-text-ar,
+.hide-trans .opt-ar,
+.hide-trans .exp-ar,
+.hide-trans .case-sentence-ar {
+  display: none !important;
+}
+
+/* Master Dictionary ALWAYS displays Arabic meanings */
+.dict-master-table .cell-mean,
+.dict-master-table .th-mean,
+.dict-mean-ar {
+  display: table-cell !important;
+}
+.drawer-col-ar {
+  display: flex !important;
+}
+
+/* Unified Master Phonetics Card */
+.pron-master-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pron-master-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.pron-master-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pron-master-badge {
+  background: var(--brand-primary);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.76rem;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  text-transform: uppercase;
+}
+
+.pron-master-title h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.pron-master-sub {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.cell-sound {
+  vertical-align: top;
+  padding: 16px !important;
+}
+
+.sound-name-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  margin-top: 6px;
+  line-height: 1.3;
+}
+
+.cell-guide {
+  vertical-align: top;
+  padding: 16px !important;
+}
+
+.sound-guide-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.cell-words {
+  vertical-align: top;
+  padding: 16px !important;
+}
+
+.sound-rule-text {
+  font-size: 0.92rem;
+  color: var(--text-main);
+  font-weight: 600;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.sound-rule-text strong {
+  color: var(--brand-primary);
+}
+
+
+/* ==========================================================================
+   Phonetics Studio: Responsive Sound Block Layout (Zero Empty Space)
+   ========================================================================== */
+.pron-sounds-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pron-sound-block {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: border-color 0.15s ease;
+}
+
+.pron-sound-block:hover {
+  border-color: var(--brand-primary);
+}
+
+.sound-block-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sound-badge-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sound-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.sound-block-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.sound-rule-chip {
+  font-size: 0.88rem;
+  color: var(--text-main);
+  line-height: 1.4;
+}
+
+.sound-rule-chip strong {
+  color: var(--brand-primary);
+}
+
+.sound-guide-snippet {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  background: var(--bg-card);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--state-success);
+}
+
+.sound-block-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+}
+
+.sound-ex-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.word-pill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.word-sound-pill {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  transition: all 0.15s ease;
+  color: var(--text-main);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.word-sound-pill:hover {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary-light);
+  color: var(--brand-primary);
+  transform: translateY(-1px);
+}
+
+
+/* ==========================================================================
+   Phonetics Studio: Quick-Review Table Styles (No Tongue Descriptions)
+   ========================================================================== */
+.pron-review-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cell-sound-compact {
+  vertical-align: middle;
+  padding: 12px 14px !important;
+}
+
+.sound-symbol-badge-compact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--brand-primary-light);
+  color: var(--brand-primary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.sound-name-compact {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+.cell-rule-compact {
+  vertical-align: middle;
+  padding: 12px 14px !important;
+}
+
+.sound-rule-compact {
+  font-size: 0.92rem;
+  color: var(--text-main);
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.cell-words-compact {
+  vertical-align: middle;
+  padding: 12px 14px !important;
+}
+
+.word-pill-grid-compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.word-sound-pill-compact {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 5px 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-sans);
+  transition: all 0.15s ease;
+  color: var(--text-main);
+}
+
+.word-sound-pill-compact:hover {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary-light);
+  color: var(--brand-primary);
+  transform: translateY(-1px);
+}
+
+.pill-ipa-compact {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--brand-primary);
+  background: rgba(59, 130, 246, 0.1);
+  padding: 1px 4px;
+  border-radius: 3px;
+}

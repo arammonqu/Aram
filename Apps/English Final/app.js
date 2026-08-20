@@ -75,15 +75,22 @@ class AudioEngine {
     this.stop();
     if (!text || !text.trim()) return;
 
-    // Sanitize non-pronounceable prompt markers
-    const sanitized = text
-      .replace(/[-_]{2,}/g, ' blank ')
+    // Sanitize non-pronounceable prompt markers & parenthesized IPA notations
+    let sanitized = text
       .replace(/<[^>]+>/g, '') // remove HTML tags
-      .replace(/\/([^\/]+)\//g, 'sound $1')
-      .replace(/[/\\]/g, ' ');
+      .replace(/\s*\(\/[^\)]+\/\)/g, '') // remove (/ipa/)
+      .replace(/\s*\([^\)]+\)/g, '') // remove (notes)
+      .replace(/[-_]{2,}/g, ' blank ')
+      .replace(/[\/\\\[\]]/g, ' ')
+      .trim();
+
+    // Fallback if sanitized becomes empty (e.g. pure sound symbol)
+    if (!sanitized) {
+      sanitized = text.replace(/[\/\\\[\]]/g, '').trim();
+    }
 
     try {
-      const utterance = new SpeechSynthesisUtterance(sanitized.trim() || text);
+      const utterance = new SpeechSynthesisUtterance(sanitized || text);
       
       if (this.selectedVoice) {
         utterance.voice = this.selectedVoice;
@@ -697,6 +704,24 @@ function renderStatsView() {
 }
 
 // 4.5 Learning Hub Unit View (3 Sub-Tabs)
+
+function renderTableRowCells(row) {
+  if (Array.isArray(row)) {
+    return row.map(cell => renderTableCellContent(cell)).join('');
+  }
+  if (typeof row === 'object' && row !== null) {
+    return Object.values(row).map(cell => renderTableCellContent(cell)).join('');
+  }
+  return `<td>${row}</td>`;
+}
+
+function renderTableCellContent(cell) {
+  if (Array.isArray(cell)) {
+    return `<td><div class="cell-pill-wrap">${cell.map(w => `<button class="word-sound-mini-pill learn-audio-btn" data-speak-text="${w}">${w}</button>`).join(' ')}</div></td>`;
+  }
+  return `<td>${cell}</td>`;
+}
+
 function renderLearningUnitView(unitNum) {
   state.view = 'learning_unit';
   state.unit = unitNum;
@@ -874,156 +899,177 @@ function renderVocabTableOnly(vocabList, query) {
 
 // 4.5.2 Grammar Academy Section Renderer
 function renderLearningGrammarSection(grammarObj) {
-  if (!grammarObj || !grammarObj.sections) {
+  if (!grammarObj || !grammarObj.sections || grammarObj.sections.length === 0) {
     return `<div class="empty-state-card"><p>Grammar module is being compiled.</p></div>`;
   }
 
   return `
     <div class="grammar-academy-wrap">
       <div class="grammar-unit-hero">
-        <h2>${grammarObj.titleEn}</h2>
+        <h2>${grammarObj.titleEn || grammarObj.title || 'Grammar Academy'}</h2>
       </div>
 
-      ${grammarObj.sections.map((sec, sIdx) => `
-        <div class="grammar-section-card">
-          <div class="grammar-sec-header">
-            <span class="grammar-sec-num">Lesson ${sIdx + 1}</span>
-            <div class="grammar-sec-titles">
-              <h3 class="grammar-topic-en">${sec.topicEn}</h3>
-              <p class="grammar-summary-en">${sec.summaryEn}</p>
-            </div>
-          </div>
+      ${grammarObj.sections.map((sec, sIdx) => {
+        const title = sec.topicEn || sec.title || `Lesson ${sIdx + 1}`;
+        const summary = sec.summaryEn || sec.summary || '';
+        const spellingObj = sec.spellingRules || null;
+        const spellingTitle = spellingObj ? (spellingObj.titleEn || spellingObj.title || 'Spelling Rules') : '';
+        const spellingList = spellingObj ? (spellingObj.items || spellingObj.rules || []) : [];
 
-          ${sec.ruleTable ? `
-            <div class="grammar-table-wrap">
-              <table class="grammar-rule-table">
-                <thead>
-                  <tr>
-                    ${sec.ruleTable.headers.map(h => `<th>${h}</th>`).join('')}
-                  </tr>
-                </thead>
-                <tbody>
-                  ${sec.ruleTable.rows.map(r => `
+        return `
+          <div class="grammar-section-card">
+            <div class="grammar-sec-header">
+              <span class="grammar-sec-num">Lesson ${sIdx + 1}</span>
+              <div class="grammar-sec-titles">
+                <h3 class="grammar-topic-en">${title}</h3>
+                ${summary ? `<p class="grammar-summary-en">${summary}</p>` : ''}
+              </div>
+            </div>
+
+            ${sec.ruleTable ? `
+              <div class="grammar-table-wrap">
+                <table class="grammar-rule-table">
+                  <thead>
                     <tr>
-                      ${r.map(cell => `<td>${cell}</td>`).join('')}
+                      ${(sec.ruleTable.headers || []).map(h => `<th>${h}</th>`).join('')}
                     </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            </div>
-          ` : ''}
+                  </thead>
+                  <tbody>
+                    ${(sec.ruleTable.rows || []).map(r => `
+                      <tr>
+                        ${renderTableRowCells(r)}
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            ` : ''}
 
-          ${sec.spellingRules ? `
-            <div class="grammar-spelling-box">
-              <h4>${sec.spellingRules.titleEn}</h4>
-              <div class="spelling-items-grid">
-                ${sec.spellingRules.items.map(item => `
-                  <div class="spelling-rule-pill">
-                    <span class="spelling-rule-tag">${item.rule}</span>
-                    <span class="spelling-rule-example">${item.examples}</span>
+            ${spellingList.length > 0 ? `
+              <div class="grammar-spelling-box">
+                <h4>${spellingTitle}</h4>
+                <div class="spelling-items-grid">
+                  ${spellingList.map(item => {
+                    const cond = item.rule || item.condition || '';
+                    const ex = item.examples || item.change || '';
+                    return `
+                      <div class="spelling-rule-pill">
+                        <span class="spelling-rule-tag">${cond}</span>
+                        <span class="spelling-rule-example">${ex}</span>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+            ${sec.cases && sec.cases.length > 0 ? `
+              <div class="grammar-cases-list">
+                <div class="section-label" style="margin-top:16px;">Comprehensive Case Examples (${sec.cases.length})</div>
+                ${sec.cases.map(c => `
+                  <div class="grammar-case-item">
+                    <div class="case-badge-row">
+                      <span class="case-cat-badge">${c.category}</span>
+                    </div>
+                    <div class="case-sentence-en">
+                      <span>${c.sentenceEn}</span>
+                      <button class="speaker-btn learn-audio-btn" data-speak-text="${c.sentenceEn}" title="Listen to sentence">
+                        <svg class="svg-icon" style="width:16px;height:16px;"><use href="#icon-volume"/></svg>
+                      </button>
+                    </div>
+                    <div class="case-sentence-ar">${c.sentenceAr}</div>
                   </div>
                 `).join('')}
               </div>
-            </div>
-          ` : ''}
-
-          ${sec.cases && sec.cases.length > 0 ? `
-            <div class="grammar-cases-list">
-              <div class="section-label" style="margin-top:16px;">Comprehensive Case Examples (${sec.cases.length})</div>
-              ${sec.cases.map(c => `
-                <div class="grammar-case-item">
-                  <div class="case-badge-row">
-                    <span class="case-cat-badge">${c.category}</span>
-                  </div>
-                  <div class="case-sentence-en">
-                    <span>${c.sentenceEn}</span>
-                    <button class="speaker-btn learn-audio-btn" data-speak-text="${c.sentenceEn}" title="Listen to sentence">
-                      <svg class="svg-icon" style="width:16px;height:16px;"><use href="#icon-volume"/></svg>
-                    </button>
-                  </div>
-                  <div class="case-sentence-ar">${c.sentenceAr}</div>
-                </div>
-              `).join('')}
-            </div>
-          ` : ''}
-        </div>
-      `).join('')}
+            ` : ''}
+          </div>
+        `;
+      }).join('')}
     </div>
   `;
 }
 
-// 4.5.3 Pronunciation Studio Section Renderer
+// 4.5.3 Pronunciation Studio Section Renderer (Clean Quick-Review Table - No Tongue Descriptions)
 function renderLearningPronSection(pronObj) {
   if (!pronObj) {
     return `<div class="empty-state-card"><p>Pronunciation module is being compiled.</p></div>`;
   }
 
+  const soundsList = pronObj.sounds || pronObj.phoneticCards || [];
+  const decObj = pronObj.broadTranscriptionDecoding;
+  const decTitle = decObj ? (decObj.title || decObj.titleEn || 'Broad IPA Transcription Practice') : '';
+  const decWords = decObj ? (Array.isArray(decObj) ? decObj : (decObj.words || decObj.items || [])) : [];
+
   return `
     <div class="pron-studio-wrap">
       <div class="pron-unit-hero">
-        <h2>${pronObj.titleEn}</h2>
+        <h2>${pronObj.titleEn || pronObj.title || 'Phonetics & Pronunciation Studio'}</h2>
       </div>
 
-      ${pronObj.summaryTable ? `
-        <div class="pron-summary-card">
-          <h3>Phonetics & Sound Overview</h3>
-          <div class="dict-table-wrap">
-            <table class="dict-master-table">
-              <thead>
-                <tr>
-                  ${pronObj.summaryTable.headers.map(h => `<th>${h}</th>`).join('')}
+      <!-- Quick Review Master Table Card -->
+      <div class="dict-table-wrap">
+        <table class="dict-master-table pron-review-table">
+          <thead>
+            <tr>
+              <th style="width: 40px;" class="cell-num">#</th>
+              <th style="width: 140px;">Sound / IPA</th>
+              <th style="min-width: 220px;">Spelling Rule / Key Trigger</th>
+              <th>Interactive Audio Examples (Click to Listen)</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${soundsList.map((s, idx) => {
+              const symbol = s.symbol || s.sound || '';
+              const name = s.name || s.nameEn || '';
+              const rule = s.rule || '';
+              const words = s.words || [];
+
+              return `
+                <tr class="pron-table-row">
+                  <td class="cell-num">${idx + 1}</td>
+                  <td class="cell-sound-compact">
+                    <div class="sound-symbol-badge-compact">${symbol}</div>
+                    <div class="sound-name-compact">${name}</div>
+                  </td>
+                  <td class="cell-rule-compact">
+                    <div class="sound-rule-compact">${rule || 'Standard pronunciation pattern.'}</div>
+                  </td>
+                  <td class="cell-words-compact">
+                    <div class="word-pill-grid-compact">
+                      ${words.map(w => {
+                        const sp = w.spelling || w.en || '';
+                        const ipa = w.ipa || '';
+                        return `
+                          <button class="word-sound-pill-compact learn-audio-btn" data-speak-text="${sp}" title="Listen to ${sp}">
+                            <span class="pill-spelling">${sp}</span>
+                            ${ipa ? `<span class="pill-ipa-compact">${ipa}</span>` : ''}
+                          </button>
+                        `;
+                      }).join('')}
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                ${pronObj.summaryTable.rows.map(r => `
-                  <tr>
-                    ${r.map(cell => `<td>${cell}</td>`).join('')}
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      ` : ''}
-
-      <div class="pron-cards-grid">
-        ${(pronObj.phoneticCards || []).map(card => `
-          <div class="pron-card">
-            <div class="pron-card-top">
-              <div class="sound-symbol-badge">${card.sound}</div>
-              <div class="sound-title-wrap">
-                <h4>${card.nameEn}</h4>
-              </div>
-            </div>
-            <div class="pron-guide-box">
-              <div class="guide-en">${card.mouthGuideEn}</div>
-            </div>
-            <div class="pron-words-section">
-              <div class="pron-words-label">Click Word to Listen:</div>
-              <div class="word-pill-grid">
-                ${card.words.map(w => `
-                  <button class="word-sound-pill learn-audio-btn" data-speak-text="${w.spelling}">
-                    <span class="pill-spelling">${w.spelling}</span>
-                    <span class="pill-ipa">${w.ipa}</span>
-                  </button>
-                `).join('')}
-              </div>
-            </div>
-          </div>
-        `).join('')}
+              `;
+            }).join('')}
+          </tbody>
+        </table>
       </div>
 
-      ${pronObj.broadTranscriptionDecoding ? `
-        <div class="pron-decoding-box" style="margin-top:24px;">
-          <h3>Broad IPA Transcription Decoding Practice</h3>
+      ${decWords.length > 0 ? `
+        <div class="pron-decoding-box" style="margin-top:20px;">
+          <h3>${decTitle}</h3>
           <div class="ipa-decoding-grid">
-            ${pronObj.broadTranscriptionDecoding.map(item => `
-              <button class="ipa-decode-card learn-audio-btn" data-speak-text="${item.standardWord}">
-                <span class="decode-ipa">${item.ipa}</span>
-                <span class="decode-arrow">➔</span>
-                <span class="decode-word">${item.standardWord}</span>
-              </button>
-            `).join('')}
+            ${decWords.map(item => {
+              const word = item.standardWord || item.word || item.en || '';
+              const ipa = item.ipa || '';
+              return `
+                <button class="ipa-decode-card learn-audio-btn" data-speak-text="${word}">
+                  <span class="decode-ipa">${ipa}</span>
+                  <span class="decode-arrow">➔</span>
+                  <span class="decode-word">${word}</span>
+                </button>
+              `;
+            }).join('')}
           </div>
         </div>
       ` : ''}
