@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Balqa Applied English (2) — Mastery & Learning Hub</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- SVG Sprite Definitions -->
+  <svg style="display: none;">
+    <defs>
+      <g id="icon-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></g>
+      <g id="icon-volume"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></g>
+      <g id="icon-sun"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></g>
+      <g id="icon-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></g>
+      <g id="icon-settings"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></g>
+      <g id="icon-chevron-left"><polyline points="15 18 9 12 15 6"/></g>
+      <g id="icon-chevron-right"><polyline points="9 18 15 12 9 6"/></g>
+      <g id="icon-check"><polyline points="20 6 9 17 4 12"/></g>
+      <g id="icon-close"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></g>
+      <g id="icon-book"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></g>
+      <g id="icon-mic"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></g>
+      <g id="icon-rotate"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></g>
+      <g id="icon-academic"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></g>
+      <g id="icon-search"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></g>
+      <g id="icon-chart"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></g>
+      <g id="icon-bookmark"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></g>
+    </defs>
+  </svg>
+
+  <div id="app" class="app-wrapper">
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <button id="nav-home-btn" class="header-btn" title="Home Screen" aria-label="Home">
+          <svg class="svg-icon"><use href="#icon-home"/></svg>
+        </button>
+        <div class="header-title-wrap">
+          <span id="header-stream-tag" class="header-tag">English 102</span>
+          <span id="header-unit-tag" class="header-tag unit-tag">Select Stream</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="nav-mistakes-btn" class="header-btn mistakes-nav-btn" title="Mistake Bank (Previously Missed Questions)" aria-label="Mistake Bank">
+          <svg class="svg-icon"><use href="#icon-bookmark"/></svg>
+          <span id="mistakes-count-badge" class="badge-counter hidden">0</span>
+        </button>
+        <button id="nav-stats-btn" class="header-btn" title="Completion & Study Statistics" aria-label="Statistics">
+          <svg class="svg-icon"><use href="#icon-chart"/></svg>
+        </button>
+        <button id="toggle-mode-btn" class="header-btn mode-btn" title="Toggle Learning Hub / Quiz Mode" aria-label="Switch Mode">
+          <span id="mode-icon"><svg class="svg-icon"><use href="#icon-academic"/></svg></span>
+          <span id="mode-label">Learning Hub</span>
+        </button>
+        <button id="toggle-trans-btn" class="header-btn pill-btn" title="Toggle Arabic Translation" aria-label="Toggle Arabic">
+          <span class="btn-text-en">EN</span>
+          <span class="btn-divider">/</span>
+          <span class="btn-text-ar">عربي</span>
+        </button>
+        <button id="audio-settings-btn" class="header-btn" title="Speech Voice Settings" aria-label="Voice Settings">
+          <svg class="svg-icon"><use href="#icon-settings"/></svg>
+        </button>
+        <button id="toggle-theme-btn" class="header-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+          <svg class="svg-icon theme-sun"><use href="#icon-sun"/></svg>
+          <svg class="svg-icon theme-moon"><use href="#icon-moon"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Dynamic Viewport Container -->
+    <main id="view-container" class="main-content" role="main">
+      <!-- Injected dynamically by Router -->
+    </main>
+
+    <!-- Voice Settings Modal -->
+    <div id="voice-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="voice-modal-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 id="voice-modal-title">Speech Synthesis Audio Settings</h3>
+          <button id="close-modal-btn" class="icon-btn-plain" aria-label="Close modal"><svg class="svg-icon"><use href="#icon-close"/></svg></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="voice-select">English Speaker Voice:</label>
+            <select id="voice-select" class="custom-select"></select>
+          </div>
+          <div class="form-group">
+            <label for="speech-rate">Speaking Speed (<span id="rate-value">0.9x</span>):</label>
+            <input type="range" id="speech-rate" min="0.5" max="1.3" step="0.05" value="0.9">
+          </div>
+          <button id="test-voice-btn" class="btn btn-secondary">Test Voice Pronunciation</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- In-App Confirmation / Action Modal Dialog -->
+    <div id="confirm-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+      <div class="modal-card confirm-modal-card">
+        <div class="confirm-modal-header">
+          <div class="confirm-modal-icon">
+            <svg class="svg-icon" style="width:24px;height:24px;"><use href="#icon-rotate"/></svg>
+          </div>
+          <h3 id="confirm-modal-title">Quit Quiz?</h3>
+        </div>
+        <div class="confirm-modal-body">
+          <p id="confirm-modal-message">Are you sure you want to quit the current quiz and return to Home? Your progress will not be saved.</p>
+        </div>
+        <div class="confirm-modal-footer">
+          <button id="confirm-modal-cancel" class="btn btn-outline">Cancel</button>
+          <button id="confirm-modal-ok" class="btn btn-primary">Quit to Home</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Word Translation Popover Tooltip -->
+    <div id="word-popover" class="word-tooltip hidden" role="tooltip">
+      <div class="tooltip-body">
+        <span id="popover-en" class="tooltip-en"></span>
+        <span id="popover-ar" class="tooltip-ar"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lexicon Dictionary -->
+  <script src="src/data/lexicon/dictionary.js"></script>
+
+  <!-- Quiz Data Files (30 Partitions) -->
+  <!-- Unit 1 -->
+  <script src="src/data/units/unit1/unit1_vocab.js"></script>
+  <script src="src/data/units/unit1/unit1_grammar.js"></script>
+  <script src="src/data/units/unit1/unit1_pronunciation.js"></script>
+  <script src="src/data/units/unit1/unit1_wordlist.js"></script>
+  <script src="src/data/units/unit1/unit1_extra.js"></script>
+
+  <!-- Unit 2 -->
+  <script src="src/data/units/unit2/unit2_vocab.js"></script>
+  <script src="src/data/units/unit2/unit2_grammar.js"></script>
+  <script src="src/data/units/unit2/unit2_pronunciation.js"></script>
+  <script src="src/data/units/unit2/unit2_wordlist.js"></script>
+  <script src="src/data/units/unit2/unit2_extra.js"></script>
+
+  <!-- Unit 3 -->
+  <script src="src/data/units/unit3/unit3_vocab.js"></script>
+  <script src="src/data/units/unit3/unit3_grammar.js"></script>
+  <script src="src/data/units/unit3/unit3_pronunciation.js"></script>
+  <script src="src/data/units/unit3/unit3_wordlist.js"></script>
+  <script src="src/data/units/unit3/unit3_extra.js"></script>
+
+  <!-- Unit 4 -->
+  <script src="src/data/units/unit4/unit4_vocab.js"></script>
+  <script src="src/data/units/unit4/unit4_grammar.js"></script>
+  <script src="src/data/units/unit4/unit4_pronunciation.js"></script>
+  <script src="src/data/units/unit4/unit4_wordlist.js"></script>
+  <script src="src/data/units/unit4/unit4_extra.js"></script>
+
+  <!-- Unit 5 -->
+  <script src="src/data/units/unit5/unit5_vocab.js"></script>
+  <script src="src/data/units/unit5/unit5_grammar.js"></script>
+  <script src="src/data/units/unit5/unit5_pronunciation.js"></script>
+  <script src="src/data/units/unit5/unit5_wordlist.js"></script>
+  <script src="src/data/units/unit5/unit5_extra.js"></script>
+
+  <!-- Unit 6 -->
+  <script src="src/data/units/unit6/unit6_vocab.js"></script>
+  <script src="src/data/units/unit6/unit6_grammar.js"></script>
+  <script src="src/data/units/unit6/unit6_pronunciation.js"></script>
+  <script src="src/data/units/unit6/unit6_wordlist.js"></script>
+  <script src="src/data/units/unit6/unit6_extra.js"></script>
+
+    <!-- Learning Hub Data Files (Units 1-6) -->
+  <!-- Unit 1 -->
+  <script src="src/data/learning/unit1/u1_learning_vocab.js"></script>
+  <script src="src/data/learning/unit1/u1_learning_grammar.js"></script>
+  <script src="src/data/learning/unit1/u1_learning_pronunciation.js"></script>
+
+  <!-- Unit 2 -->
+  <script src="src/data/learning/unit2/u2_learning_vocab.js"></script>
+  <script src="src/data/learning/unit2/u2_learning_grammar.js"></script>
+  <script src="src/data/learning/unit2/u2_learning_pronunciation.js"></script>
+
+  <!-- Unit 3 -->
+  <script src="src/data/learning/unit3/u3_learning_vocab.js"></script>
+  <script src="src/data/learning/unit3/u3_learning_grammar.js"></script>
+  <script src="src/data/learning/unit3/u3_learning_pronunciation.js"></script>
+
+  <!-- Unit 4 -->
+  <script src="src/data/learning/unit4/u4_learning_vocab.js"></script>
+  <script src="src/data/learning/unit4/u4_learning_grammar.js"></script>
+  <script src="src/data/learning/unit4/u4_learning_pronunciation.js"></script>
+
+  <!-- Unit 5 -->
+  <script src="src/data/learning/unit5/u5_learning_vocab.js"></script>
+  <script src="src/data/learning/unit5/u5_learning_grammar.js"></script>
+  <script src="src/data/learning/unit5/u5_learning_pronunciation.js"></script>
+
+  <!-- Unit 6 -->
+  <script src="src/data/learning/unit6/u6_learning_vocab.js"></script>
+  <script src="src/data/learning/unit6/u6_learning_grammar.js"></script>
+  <script src="src/data/learning/unit6/u6_learning_pronunciation.js"></script>
+
+  <!-- Application Engine -->
+  <script src="app.js"></script>
+</body>
+</html>
